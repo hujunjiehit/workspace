@@ -151,6 +151,7 @@ function geToAllCourcesPage()
 	nLog("x = "..x.." y = "..y)
 	if x ~= -1 and y ~= -1 then        --如果在指定区域找到某图片符合条件          
 		touchClick(x+38,y+22);			--那么单击该图片
+		
 		return 0;
 	else                               --如果找不到符合条件的图片
 		os.execute("input keyevent 4");
@@ -201,15 +202,15 @@ function startToXiadan()
 		if color_next == 0x33c774 then
 			--color_next == 0x33c774 绿色按钮，表示可以报名
 			touchClick(510,1230);
-			mSleep(1000)
+			mSleep(2000)
 			color = getColor(540, 1033);
 			if color == 0x666666 then
 				--灰色，表示有弹窗，已经下过单了，直接返回
 				nLog("已经选过课了，返回进行下一个")
 				os.execute("input keyevent 4");
-				mSleep(1000)
+				mSleep(2000)
 				os.execute("input keyevent 4");
-				mSleep(1000)
+				mSleep(2000)
 			else
 				--可以选课
 				touchClick(510,1230); --点击稍后支付，然后循环等待，直到付款成功
@@ -219,13 +220,14 @@ function startToXiadan()
 					nLog("please whait...")
 				until getColor(166, 1136) == 0xffffff 
 				nLog("选课成功")
+				mSleep(2000)
 				os.execute("input keyevent 4");
-				mSleep(1000)
+				mSleep(2000)
 			end
 		elseif color_next == 0xd8d8d8 then
 			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了
 			os.execute("input keyevent 4");
-			mSleep(1000)
+			mSleep(2000)
 			nLog("按钮灰色,已经报名了")
 		else
 			nLog("no more course")
