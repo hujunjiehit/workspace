@@ -3,4 +3,5 @@ more_info.png
 more_info_大神f2.png
 [lib]
 [file]
+TSLib.lua
 main.lua

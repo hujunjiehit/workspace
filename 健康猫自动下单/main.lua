@@ -1,102 +1,35 @@
-function split(str, pat)
-     local t = {}
-     local fpat = "(.-)" .. pat
-     local last_end = 1
-     local s, e, cap = str:find(fpat, 1)
-     while s do
-          if s ~= 1 or cap ~= "" then
-          table.insert(t,cap)
-          end
-          last_end = e+1
-          s, e, cap = str:find(fpat, last_end)
-     end
-     if last_end <= #str then
-          cap = str:sub(last_end)
-          table.insert(t, cap)
-     end
-     return t
-end
+ require "TSLib"
 
-function getRecord()
-	record_file = io.open(path.."/record.txt","r");
-	if record_file ~= nil then
-		r = record_file:read("*l");  --读取一行，但是不保存
-		record_file:close();
-		if r == nil or r == "" then
-			r = 0;
-		end
-	else
-		r = 0;
-	end
-	return r;
-end
-
-function  save_record(value)
-	record_file = io.open(path.."/record.txt","w");
-	record_file:write(value.."\n");
-	record_file:close();
-end
-
-function getUserInfo(record)
-	-- body
-	file = io.open(path.."/info.txt","r");
-	index = tonumber(record);
-	data = {};
-	for line in file:lines() do
-		table.insert(data,line);
-	end
-	
-	if index >= #data then
-		nLog("no more data");
-		result = nil;
-	else
-		--str = split(data[record],",");
-		nLog("data:"..data[index+1]);
-		result = split(data[index+1],",");
-	end
-	
-	file:close();
-	if result == nil then
-		return "","";
-	else
-		return result[1],result[2];
-	end
-end
 function login(userName,passWord)
-	touchClick(626,1227); --点击我的tab，拉起登陆界面 
+	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
 	
+	mSleep(1000);
 	m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
 	nLog(m.."----"..n)
 	isFirst = true;
 	while m == -1 and n == -1 do
 		nLog("flag is false");
 		mSleep(500);
-		touchClick(400,429);  --点击帐号输入框
+		tap(400,429);  --点击帐号输入框
 		mSleep(1000);
-		--[[for var = 1,15 do
-			inputText("\b")       --删除输入框中的文字（假设输入框中已存在文字）
-		end]]
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 
-		mSleep(2000);
+		mSleep(1000);
 		inputText(userName);
 	
 		mSleep(1000);
-		touchClick(400,507);   --点击密码输入框
+		tap(400,507);   --点击密码输入框
 		mSleep(1000);
 		if isFirst == false then
-			--[[for var = 1,15 do
-				inputText("\b");     --删除输入框中的文字(假设输入框中已存在文字)
-			end]]
 			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		end
 		
-		mSleep(2000);
+		mSleep(1000);
 		inputText(passWord);
 	
 		mSleep(1000)
-		touchClick(529,629); 
+		tap(529,629); 
 		
 		repeat
 		mSleep(1000)
@@ -110,34 +43,21 @@ function login(userName,passWord)
 	switchTSInputMethod(false);
 end
 
-function touchClick(x,y)
-	nLog("点击坐标  x = "..x.." y = "..y)
-	wLog("test","点击坐标  x = "..x.." y = "..y); 
-	touchDown(x, y);
-	mSleep(30);
-	touchUp(x, y);
-end
-
 function pull_the_screen(x,y,dy)
-	nLog("下拉屏幕")
-	touchDown(x, y);    --在 (150, 550) 按下
-	mSleep(50);
-	touchMove(x, y+dy);   --移动到 (150, 600)
-	mSleep(50);
-	touchUp(x, y+dy);
+	moveTo(x,y,x,y+dy)
 end
 
 --跳转到所有团课界面
 function geToAllCourcesPage()
-	touchClick(626,1131); --点击我的tab
-	mSleep(2000);
-	touchClick(362,334);	--点击关注
-	mSleep(2000);
-	touchClick(303,203);
+	tap(626,1131); --点击我的tab
+	mSleep(1000);
+	tap(362,334);	--点击关注
+	mSleep(1000);
+	tap(303,203);
 	mSleep(2000);
 	
-	pull_the_screen(100,150,-120);
-	mSleep(3000)
+	pull_the_screen(320,800,-600)
+	mSleep(1000)
 	
 	deviceBrand = getDeviceBrand();
 	deviceModel = getDeviceModel(); 
@@ -150,40 +70,39 @@ function geToAllCourcesPage()
 	
 	nLog("x = "..x.." y = "..y)
 	if x ~= -1 and y ~= -1 then        --如果在指定区域找到某图片符合条件          
-		touchClick(x+38,y+22);			--那么单击该图片
-		
+		tap(x+38,y+22);			--那么单击该图片
 		return 0;
 	else                               --如果找不到符合条件的图片
 		os.execute("input keyevent 4");
-		mSleep(1000)
+		mSleep(2000)
 		os.execute("input keyevent 4");
-		mSleep(1000)
+		mSleep(2000)
 		wLog("test","没找到更多的按钮，返回到我的界面"); 
 		return -1;
 	end
 end
 
 function logout()
-	touchClick(626,1131); --登录状态下，点击我的tab，进入个人资料界面
+	tap(626,1131); --登录状态下，点击我的tab，进入个人资料界面
 	mSleep(1000)
-	touchClick(320,1020);	--进入设置
+	tap(320,1020);	--进入设置
 	mSleep(500)
-	touchClick(350,799);	--点击退出登录
+	tap(350,799);	--点击退出登录
 	mSleep(500)
-	touchClick(513,675);	--点击确定
+	tap(513,675);	--点击确定
 	repeat
 		mSleep(1000)
 	until getColor(501,798) ~= 0x663434  --健康猫logo color
 end
 
-function startToXiadan()
-	for index = 1,7 do	
+function startToXiadan(begin)
+	for index = begin,8 do	
 		nLog("index = "..index.."   y  = "..tostring(207+142*(index-1)));
 		y = 207+142*(index-1);
 		
 		color_current = getColor(510,1230)   --点击之前，该点的颜色
 		
-		touchClick(363,207+142*(index-1));
+		tap(363,207+142*(index-1));
 		mSleep(1000)
 		
 		repeat
@@ -201,7 +120,7 @@ function startToXiadan()
 	
 		if color_next == 0x33c774 then
 			--color_next == 0x33c774 绿色按钮，表示可以报名
-			touchClick(510,1230);
+			tap(510,1230);
 			mSleep(2000)
 			color = getColor(540, 1033);
 			if color == 0x666666 then
@@ -213,14 +132,14 @@ function startToXiadan()
 				mSleep(2000)
 			else
 				--可以选课
-				touchClick(510,1230); --点击稍后支付，然后循环等待，直到付款成功
+				tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
 				repeat
 					-- body
-					mSleep(1000);
+					mSleep(2000);
 					nLog("please whait...")
 				until getColor(166, 1136) == 0xffffff 
 				nLog("选课成功")
-				mSleep(2000)
+				mSleep(4000)
 				os.execute("input keyevent 4");
 				mSleep(2000)
 			end
@@ -243,64 +162,33 @@ function main()
 	showFloatButton(false);
 	
 	path = getSDCardPath();
-	
-	--[[local sz = require("sz")
-	local json = sz.json
-	local w,h = getScreenSize();
-	MyTable = {
-		["style"] = "default",
-		["width"] = w,
-		["height"] = h,
-		["timer"] = 100,
-		views = {
-			{
-				["type"] = "Edit",        --输入框，input1
-				["prompt"] = "请输入帐号",--编辑框中无任何内容时显示的底色文本
-				["text"] = "",        --界面载入时已经存在于编辑框中的文本
-			},
-			{
-				["type"] = "Edit",        --输入框，input2
-				["prompt"] = "请输入密码",--编辑框中无任何内容时显示的底色文本
-				["text"] = "",        --界面载入时已经存在于编辑框中的文本
-			},
-		}
-	}
-	
-	local MyJsonString = json.encode(MyTable);
-	ret, input1, input2 = showUI(MyJsonString);	--返回值ret, input1, input2, input3, input4
-
-
-	if input2 == nil or input2 == "" then
-		input2 = input1
-	end
-
-	mSleep(2000)
-	wLog("test",ret.."  input1="..input1.."  input2="..input2)
-	login(input1,input2);]]
-	
-	record = getRecord();
-	choice = dialogRet("当前进度:"..record..",   是否继续执行 ？","从头开始", "继续执行","",0);
-	nLog("choice = "..choice);
-	if choice == 0 then
-		--从头开始
-		record = 0;
-	end
-	nLog("record = "..record);
-	userName,passWord = getUserInfo(record);
-	
-	if userName == nil or passWord == nil then
-		--没有更多帐号
-		dialog("没有更多帐号了！", 2)
-		lua_exit();
+	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
+	str = "";
+	for i = 1,#data do
+		--nLog(i..":"..data[i])
+		result = strSplit(data[i],",")
+		if result ~= nill then
+			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
+		end
 	end
 	
-		
-	wLog("test","userName="..userName.."  passWord="..passWord);
+	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
+	UIShow();
 	
-	nLog("userName="..userName.."  passWord="..passWord);
-	mSleep(2000)
+	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
 	
-	login(userName,passWord)
+	index = tonumber(strSplit(choice_name)[1]);
+	
+	info = strSplit(data[index],",");
+	userName = info[1];
+	passWord = info[2];
+	
+	nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
+	
+	mSleep(500)
+	login(userName,passWord)	--登录
 	
 	r = geToAllCourcesPage();
 	nLog("r == "..r);
@@ -314,37 +202,19 @@ function main()
 		lua_exit();
 	end
 
-	mSleep(2000)
-	startToXiadan(363,207)
+	mSleep(1000)
+	startToXiadan(1)
 
-	pull_the_screen(100,150,-150);
-	mSleep(3000)
-	startToXiadan(363,207)
-	
-	--[[
-	pull_the_screen(100,150,-100);
+	pull_the_screen(320,800,-600)
 	mSleep(2000)
-	startToXiadan(363,207)
-	
-	pull_the_screen(100,150,-100);
-	mSleep(2000)
-	startToXiadan(363,207)
-	
-	pull_the_screen(100,150,-100);
-	mSleep(2000)
-	startToXiadan(363,207)
-	]]
+	startToXiadan(5)
 	
 	os.execute("input keyevent 4");
-	mSleep(1000)
+	mSleep(2000)
 	os.execute("input keyevent 4");
-	mSleep(1000)
+	mSleep(2000)
 	os.execute("input keyevent 4");
-	mSleep(1000)
-	
-	if userName ~= "" and passWord ~= "" then
-		save_record(record+1);
-	end
+	mSleep(2000)
 	
 	for var = 1,5 do
 		--playAudio("alert.mp3"); --播放警报铃声

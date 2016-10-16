@@ -2,4 +2,5 @@
 私教团购订单.png
 [lib]
 [file]
+TSLib.lua
 main.lua
