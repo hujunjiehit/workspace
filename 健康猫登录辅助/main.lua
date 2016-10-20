@@ -3,58 +3,56 @@
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
-	
 	mSleep(1000);
-	m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
 	
-	nLog(m.."----"..n)
+	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
+	nLog("target_color = 0x"..string.format("%X",target_color));
+	
 	isFirst = true;
-	while m == -1 and n == -1 do
-		nLog("flag is false");
+	while  target_color ==  0x3aab47 do
+		nLog("now begin to login");
 		mSleep(500);
 		tap(400,429);  --点击帐号输入框
 		mSleep(1000);
-		--[[for var = 1,15 do
-			inputText("\b")       --删除输入框中的文字（假设输入框中已存在文字）
-		end]]
+		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-
+		
 		mSleep(1000);
 		inputText(userName);
-	
+		
 		mSleep(1000);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
 		if isFirst == false then
-			--[[for var = 1,15 do
-				inputText("\b");     --删除输入框中的文字(假设输入框中已存在文字)
-			end]]
 			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		end
 		
 		mSleep(1000);
 		inputText(passWord);
-	
+		
 		mSleep(1000)
-		tap(529,629); 
+		tap(450,629); --点击登陆按钮
 		
 		repeat
-		mSleep(1000)
-		until getColor(408,205) ~= 0x17441c   --健康猫logo color
+			mSleep(1000)
+			nLog("loging now...")
+		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
 		mSleep(2000)
-		m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
 		isFirst = false;
+		target_color = getColor(400,211) --获取健康猫logo的背景颜色
 	end
-	nLog(m.."----"..n)
+	nLog("login sucess!");
 	nLog(userName.."登录成功");
 	switchTSInputMethod(false);
 end
 
 function main(...)
 	-- body
+	init(0)
 	nLog("hello ui test");
-	path = getSDCardPath();
+	showFloatButton(false);
 	
+	path = getSDCardPath();
 	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
 	str = "";
 	for i = 1,#data do
@@ -72,23 +70,37 @@ function main(...)
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
 	
-	nLog("name = "..name);
+	if name == nil then
+		lua_exit();
+	else
+		nLog("name = "..name);
 	
-	index = strSplit(name)[1];
-	nLog("index = "..index);
-	
-	info = strSplit(data[tonumber(index)],",");
-	
-	userName = info[1];
-	passWord = info[2];
-	
-	nLog("userName = "..userName.."   passWord = "..passWord);
-	
-	mSleep(1000)
-	login(userName,passWord);
-	
-	toast("登陆成功",1)
-	
+		index = strSplit(name)[1];
+		nLog("index = "..index);
+		
+		info = strSplit(data[tonumber(index)],",");
+		
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("userName = "..userName.."   passWord = "..passWord);
+		
+		mSleep(1000)
+		
+		setScreenScale(true, 720, 1280)
+		
+		login(userName,passWord);
+		
+		toast("登陆成功",1)
+		
+		setScreenScale(false, 720, 1280)
+	end
+end
+
+function beforeUserExit()
+    nLog("before user exit");
+	switchTSInputMethod(false);
+	setScreenScale(false, 720, 1280)
 end
 
 main()

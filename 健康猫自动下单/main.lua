@@ -100,9 +100,12 @@ function startToXiadan(begin)
 		nLog("index = "..index.."   y  = "..tostring(207+142*(index-1)));
 		y = 207+142*(index-1);
 		
-		color_current = getColor(510,1230)   --点击之前，该点的颜色
+		repeat
+			mSleep(1000);
+        until getColor(470,207+142*(index-1)) == 0xffffff or getColor(470,207+142*(index-1)) == 0xfafafa
 		
-		tap(363,207+142*(index-1));
+		color_current = getColor(510,1230)   --点击之前，该点的颜色
+		tap(470,207+142*(index-1));
 		mSleep(1000)
 		
 		repeat
@@ -139,7 +142,7 @@ function startToXiadan(begin)
 					nLog("please whait...")
 				until getColor(166, 1136) == 0xffffff 
 				nLog("选课成功")
-				mSleep(4000)
+				mSleep(2000)
 				os.execute("input keyevent 4");
 				mSleep(2000)
 			end
