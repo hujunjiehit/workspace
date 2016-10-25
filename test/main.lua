@@ -5,6 +5,8 @@ function pull_the_screen(x,y,dy)
 end
 
 function main()
+	init(0);
+	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	-- body
 	--[[path = getSDCardPath();
 	deviceBrand = getDeviceBrand();
@@ -16,9 +18,25 @@ function main()
 		nLog("hello,".."S6-nt");
 	end
 	]]
-	pull_the_screen(320,800,-600)
+	nLog("hello,".."S6-nt");
+	setScreenScale(true, 720, 1280);
 	
+	data = {};
+	table.insert(data,7);
 	
+	table.insert(data,8);
+	
+	result = "";
+	for i = 1,#data do
+		result = result..data[i].." ";
+	end
+	
+	mSleep(1000)
+	dialog("可能没选中的课程："..result,0);
+	
+	setScreenScale(false, 720, 1280);
+	
+	closeLog("test");  --关闭日志
 end
 
 main()

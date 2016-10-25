@@ -40,48 +40,45 @@ end
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
-	
 	mSleep(1000);
-	m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
-	nLog(m.."----"..n)
+	
+	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
+	nLog("target_color = 0x"..string.format("%X",target_color));
+	
 	isFirst = true;
-	while m == -1 and n == -1 do
-		nLog("flag is false");
+	while  target_color ==  0x3aab47 do
+		nLog("now begin to login");
 		mSleep(500);
 		tap(400,429);  --点击帐号输入框
 		mSleep(1000);
-		--[[for var = 1,15 do
-			inputText("\b")       --删除输入框中的文字（假设输入框中已存在文字）
-		end]]
+		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-
+		
 		mSleep(1000);
 		inputText(userName);
-	
+		
 		mSleep(1000);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
 		if isFirst == false then
-			--[[for var = 1,15 do
-				inputText("\b");     --删除输入框中的文字(假设输入框中已存在文字)
-			end]]
 			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		end
 		
 		mSleep(1000);
 		inputText(passWord);
-	
+		
 		mSleep(1000)
-		tap(529,629); 
+		tap(450,629); --点击登陆按钮
 		
 		repeat
-		mSleep(1000)
-		until getColor(408,205) ~= 0x17441c   --健康猫logo color
+			mSleep(1000)
+			nLog("loging now...")
+		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
 		mSleep(2000)
-		m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
 		isFirst = false;
+		target_color = getColor(400,211) --获取健康猫logo的背景颜色
 	end
-	nLog(m.."----"..n)
+	nLog("login sucess!");
 	nLog(userName.."登录成功");
 	switchTSInputMethod(false);
 end
@@ -110,13 +107,14 @@ function logout()
 	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
 	mSleep(1000)
 	tap(320,1020);	--进入设置
-	mSleep(500)
+	mSleep(1000)
 	tap(350,799);	--点击退出登录
-	mSleep(500)
-	tap(513,675);	--点击确定
+	mSleep(1000)
+	tap(515,720);	--点击确定
 	repeat
 		mSleep(1000)
 	until getColor(501,798) ~= 0x663434  --健康猫logo color
+	mSleep(1000)
 	nLog(userName.."退出登录");
 end
 
@@ -130,7 +128,7 @@ function startToPingjia(begin)
 	flag_count = 0; 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	m,n = findColorInRegionFuzzy(0x33c774,80,552,150,719,1279);
+	m,n = findColorInRegionFuzzy(0x33c774,80,0,50,720,1280);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
@@ -142,12 +140,15 @@ function startToPingjia(begin)
 	for index = begin,7 do	
 		nLog("index = "..index.."   y  = "..tostring(218+155*(index-1)));
 		y = 207+142*(index-1);
-		tap(350,218+155*(index-1));		
+		tap(350,218+155*(index-1));	
+		
 		repeat
 			mSleep(1000)
-		until getColor(386,668) ~= 0xc2c2c2		--数据加载完毕
+			nLog("正在加载课程详情页 wait...");
+		until getColor(82,194) ~= 0xffffff	--数据加载中的颜色
 		--此处有可能网络出错
 		
+		mSleep(1000);
 		
 		if getColor(282, 1231) == 0x33c774 then  --可以评价
 			tap(282,1231)
@@ -157,9 +158,9 @@ function startToPingjia(begin)
 			mSleep(1000);
 			
 			tap(333,627);	--点击输入框，获取焦点
-			mSleep(1000);
+			mSleep(2000);
 			inputText("很好非常好");
-			mSleep(1000);
+			mSleep(2000);
 			
 			tap(351,1231);	--点击提交评价
 			repeat
@@ -230,6 +231,7 @@ function main()
 	index = tonumber(strSplit(choice_name)[1]);
 	nLog("index = "..index);
 	
+	setScreenScale(true, 720, 1280);
 	
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -262,49 +264,7 @@ function main()
 		logout();
 	end
 	
-	
-	--[[
-	path = getSDCardPath();
-	file = io.open(path.."/info.txt","r");
-	index = 1
-	for line in file:lines() do
-		num = tostring(index)
-		index = index + 1;
-		str = split(line,",")
-		userName = str[1]
-		passWord = str[2]
-		if passWord == nil then
-			break;
-		end
-		
-		nLog("\n\n\n第"..num.."个用户,userName："..userName);
-		wLog("test","第"..num.."个用户,userName："..userName); 
-		login(userName,passWord);
-		mSleep(1000);
-		
-		gotoPingjiaPage();  --跳转到评价页面
-		
-		num1 = startToPingjia();
-		nLog("num1 = "..num1);
-		
-		
-		pull_the_screen(100,550,-110);
-		mSleep(2000)
-		num2 = startToPingjia();
-		nLog("num2 = "..num2);
-		
-		nLog("帐号"..userName.."成功进行了"..num1+num2.."条评价");
-		wLog("test","帐号"..userName.."成功进行了"..num1+num2.."条评价");
-		write_to_log("帐号"..userName.."成功进行了"..num1+num2.."条评价")
-		
-		mSleep(2000)
-		os.execute("input keyevent 4")
-		mSleep(2000)
-		logout();
-	end
-	
-	file:close()]]
-	
+	setScreenScale(false, 720, 1280)
 	closeLog("test");  --关闭日志
 end
 

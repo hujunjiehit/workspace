@@ -3,21 +3,23 @@
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
-	
 	mSleep(1000);
-	m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
-	nLog(m.."----"..n)
+	
+	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
+	nLog("target_color = 0x"..string.format("%X",target_color));
+	
 	isFirst = true;
-	while m == -1 and n == -1 do
-		nLog("flag is false");
+	while  target_color ==  0x3aab47 do
+		nLog("now begin to login");
 		mSleep(500);
 		tap(400,429);  --点击帐号输入框
 		mSleep(1000);
+		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-
+		
 		mSleep(1000);
 		inputText(userName);
-	
+		
 		mSleep(1000);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
@@ -27,18 +29,19 @@ function login(userName,passWord)
 		
 		mSleep(1000);
 		inputText(passWord);
-	
+		
 		mSleep(1000)
-		tap(529,629); 
+		tap(450,629); --点击登陆按钮
 		
 		repeat
-		mSleep(1000)
-		until getColor(408,205) ~= 0x17441c   --健康猫logo color
+			mSleep(1000)
+			nLog("loging now...")
+		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
 		mSleep(2000)
-		m,n = findColorInRegionFuzzy(0xff6bac,80,3,403,710,506);
 		isFirst = false;
+		target_color = getColor(400,211) --获取健康猫logo的背景颜色
 	end
-	nLog(m.."----"..n)
+	nLog("login sucess!");
 	nLog(userName.."登录成功");
 	switchTSInputMethod(false);
 end
@@ -59,7 +62,18 @@ function geToAllCourcesPage()
 	pull_the_screen(320,800,-600)
 	mSleep(1000)
 	
-	deviceBrand = getDeviceBrand();
+	step = 0;
+	repeat
+		-- body
+		tap(647,660+step*20); --每次下滑20px，尝试点击改点坐标
+		mSleep(1000)
+		step = step + 1;
+	until getColor(542,1228) ~= 0x33c774
+	
+	mSleep(1000)
+	return 0; 
+	
+	--[[deviceBrand = getDeviceBrand();
 	deviceModel = getDeviceModel(); 
 	nLog("deviceBrand = "..deviceBrand.."   deviceModel = "..deviceModel);
 	if deviceModel == "Micromax AO5510" then
@@ -79,20 +93,22 @@ function geToAllCourcesPage()
 		mSleep(2000)
 		wLog("test","没找到更多的按钮，返回到我的界面"); 
 		return -1;
-	end
+	end]]
 end
 
 function logout()
-	tap(626,1131); --登录状态下，点击我的tab，进入个人资料界面
+	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
 	mSleep(1000)
 	tap(320,1020);	--进入设置
-	mSleep(500)
+	mSleep(1000)
 	tap(350,799);	--点击退出登录
-	mSleep(500)
-	tap(513,675);	--点击确定
+	mSleep(1000)
+	tap(515,720);	--点击确定
 	repeat
 		mSleep(1000)
 	until getColor(501,798) ~= 0x663434  --健康猫logo color
+	mSleep(1000)
+	nLog(userName.."退出登录");
 end
 
 function startToXiadan(begin)
@@ -100,19 +116,22 @@ function startToXiadan(begin)
 		nLog("index = "..index.."   y  = "..tostring(207+142*(index-1)));
 		y = 207+142*(index-1);
 		
+		flag_index = flag_index + 1;
+		
 		repeat
 			mSleep(1000);
         until getColor(470,207+142*(index-1)) == 0xffffff or getColor(470,207+142*(index-1)) == 0xfafafa
 		
 		color_current = getColor(510,1230)   --点击之前，该点的颜色
+		
 		tap(470,207+142*(index-1));
 		mSleep(1000)
 		
 		repeat
 			nLog("wait for---loading the detail course page");
-			mSleep(1000)
+			mSleep(2000)
 			color_next = getColor(510,1230)		--点击之后，该点的颜色
-		until color_next == color_current or color_next == 0x33c774 or color_next == 0xd8d8d8
+		until color_next == color_current or color_next == 0x33c774 or color_next == 0xd8d8d8 or color_next == 0xfafafa
 		
 		nLog("color_next:"..string.format("%X",color_next));
 		
@@ -130,9 +149,9 @@ function startToXiadan(begin)
 				--灰色，表示有弹窗，已经下过单了，直接返回
 				nLog("已经选过课了，返回进行下一个")
 				os.execute("input keyevent 4");
-				mSleep(2000)
+				mSleep(1000)
 				os.execute("input keyevent 4");
-				mSleep(2000)
+				mSleep(1000)
 			else
 				--可以选课
 				tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
@@ -140,14 +159,30 @@ function startToXiadan(begin)
 					-- body
 					mSleep(2000);
 					nLog("please whait...")
-				until getColor(166, 1136) == 0xffffff 
-				nLog("选课成功")
-				mSleep(2000)
-				os.execute("input keyevent 4");
-				mSleep(2000)
+				until getColor(166, 1136) == 0xffffff
+				
+				mSleep(2000);
+				
+				if getColor(95,1220) == 0xff8282 then  
+					--红色的立即支付，还在当前界面，表示网络可能异常
+					--选课失败
+					os.execute("input keyevent 4");
+					mSleep(1000)
+					os.execute("input keyevent 4");
+					mSleep(1000)	
+				else
+					--选课成功
+					nLog("选课成功")
+					
+					table.insert(results,flag_index);
+					
+					mSleep(1000)
+					os.execute("input keyevent 4");
+					mSleep(1000)
+				end
 			end
-		elseif color_next == 0xd8d8d8 then
-			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了
+		elseif color_next == 0xd8d8d8 or color_next == 0xfafafa then
+			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了 或者 网络出错
 			os.execute("input keyevent 4");
 			mSleep(2000)
 			nLog("按钮灰色,已经报名了")
@@ -190,7 +225,13 @@ function main()
 	
 	nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
 	
+	setScreenScale(true, 720, 1280);	--分辨率缩放
+	
 	mSleep(500)
+	
+	results = {};
+	flag_index = 0;
+	
 	login(userName,passWord)	--登录
 	
 	r = geToAllCourcesPage();
@@ -210,20 +251,32 @@ function main()
 
 	pull_the_screen(320,800,-600)
 	mSleep(2000)
-	startToXiadan(5)
+	startToXiadan(6)
 	
 	os.execute("input keyevent 4");
 	mSleep(2000)
 	os.execute("input keyevent 4");
 	mSleep(2000)
-	os.execute("input keyevent 4");
-	mSleep(2000)
+	--os.execute("input keyevent 4");
+	--mSleep(2000)
 	
-	for var = 1,5 do
+	
+	for var = 1,3 do
 		--playAudio("alert.mp3"); --播放警报铃声
 		vibrator();             --振动
 		mSleep(1000);           --延迟 1 秒
 	end
+	
+	if #results > 0 then
+		str = "";
+		for i = 1,#results do
+			str = str..results[i].." ";
+		end
+		mSleep(1000)
+		dialog("成功选上的课程(从上往下数)：\n"..str,0);
+	end
+
+	setScreenScale(false, 720, 1280);
 	
 	closeLog("test");  --关闭日志
 end
