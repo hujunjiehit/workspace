@@ -154,8 +154,11 @@ function startToPingjia(begin)
 			tap(282,1231)
 			mSleep(2000);
 			
+			tap(457,476);	--点击五星   **************兼容性处理
+			mSleep(1500);
+			
 			tap(457,466);	--点击五星
-			mSleep(1000);
+			mSleep(1500);
 			
 			tap(333,627);	--点击输入框，获取焦点
 			mSleep(2000);
