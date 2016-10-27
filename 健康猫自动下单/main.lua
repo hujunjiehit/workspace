@@ -72,28 +72,6 @@ function geToAllCourcesPage()
 	
 	mSleep(1000)
 	return 0; 
-	
-	--[[deviceBrand = getDeviceBrand();
-	deviceModel = getDeviceModel(); 
-	nLog("deviceBrand = "..deviceBrand.."   deviceModel = "..deviceModel);
-	if deviceModel == "Micromax AO5510" then
-		x, y = findImageInRegionFuzzy("more_info_大神f2.png", 90, 471,  149,  717, 1180, 0xffffff);
-	else
-		x, y = findImageInRegionFuzzy("more_info.png", 90, 471,  149,  717, 1180, 0xffffff);
-	end
-	
-	nLog("x = "..x.." y = "..y)
-	if x ~= -1 and y ~= -1 then        --如果在指定区域找到某图片符合条件          
-		tap(x+38,y+22);			--那么单击该图片
-		return 0;
-	else                               --如果找不到符合条件的图片
-		os.execute("input keyevent 4");
-		mSleep(2000)
-		os.execute("input keyevent 4");
-		mSleep(2000)
-		wLog("test","没找到更多的按钮，返回到我的界面"); 
-		return -1;
-	end]]
 end
 
 function logout()
