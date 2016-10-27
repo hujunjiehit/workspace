@@ -103,6 +103,8 @@ function startToXiadan(begin)
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
 		
+		--todo:  如果已经报名，直接返回
+		
 		tap(483,1085); --点击报名
 		repeat
 			mSleep(500)

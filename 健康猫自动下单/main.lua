@@ -132,32 +132,22 @@ function startToXiadan(begin)
 				mSleep(1000)
 			else
 				--可以选课
-				tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
 				repeat
-					-- body
+					if getColor(95,1220) == 0xff8282 then
+						--红色的立即支付
+						tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
+					end
+					
 					mSleep(2000);
 					nLog("please whait...")
-				until getColor(166, 1136) == 0xffffff
+				until getColor(265, 1223) == 0xffffff 
 				
-				mSleep(2000);
-				
-				if getColor(95,1220) == 0xff8282 then  
-					--红色的立即支付，还在当前界面，表示网络可能异常
-					--选课失败
-					os.execute("input keyevent 4");
-					mSleep(1000)
-					os.execute("input keyevent 4");
-					mSleep(1000)	
-				else
-					--选课成功
-					nLog("选课成功")
-					
-					table.insert(results,flag_index);
-					
-					mSleep(1000)
-					os.execute("input keyevent 4");
-					mSleep(1000)
-				end
+				--选课成功
+				nLog("选课成功")
+				table.insert(results,flag_index);
+				mSleep(1000)
+				os.execute("input keyevent 4");
+				mSleep(1000)
 			end
 		elseif color_next == 0xd8d8d8 or color_next == 0xfafafa then
 			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了 或者 网络出错
@@ -170,40 +160,15 @@ function startToXiadan(begin)
 	end
 end
 
-
-function main()
-	init(0)
-	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
-	wLog("test","[DATE] init log OK!!!"); 
-	showFloatButton(false);
-	
-	path = getSDCardPath();
-	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
-	str = "";
-	for i = 1,#data do
-		--nLog(i..":"..data[i])
-		result = strSplit(data[i],",")
-		if result ~= nill then
-			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
-		end
-	end
-	
-	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
-	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
-	UIShow();
-	
-	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
-	
-	index = tonumber(strSplit(choice_name)[1]);
-	
+function doTheWorkOnce(...)
+	-- body
 	info = strSplit(data[index],",");
 	userName = info[1];
 	passWord = info[2];
 	
 	nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
 	
-	setScreenScale(true, 720, 1280);	--分辨率缩放
+	
 	
 	mSleep(500)
 	
@@ -253,7 +218,91 @@ function main()
 		mSleep(1000)
 		dialog("成功选上的课程(从上往下数)：\n"..str,0);
 	end
+end
 
+function doTheWorkOneByOne(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+
+	
+		nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
+	
+		mSleep(500)
+	
+		results = {};
+		flag_index = 0;
+	
+		login(userName,passWord)	--登录
+	
+		r = geToAllCourcesPage();
+		nLog("r == "..r);
+		if r == 0 then
+			--成功跳转到所有团课界面
+			nLog("go to allcoursees page sucess");
+		else
+			--跳转失败
+			nLog("failed");
+			--logout();
+			lua_exit();
+		end
+
+		mSleep(1000)
+		startToXiadan(1)
+
+		pull_the_screen(320,800,-600)
+		mSleep(2000)
+		startToXiadan(6)
+	
+		os.execute("input keyevent 4");
+		mSleep(2000)
+		os.execute("input keyevent 4");
+		mSleep(2000)
+		--os.execute("input keyevent 4");
+		--mSleep(2000)
+		logout();
+	end
+end
+
+
+function main()
+	init(0)
+	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
+	wLog("test","[DATE] init log OK!!!"); 
+	showFloatButton(false);
+	
+	path = getSDCardPath();
+	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
+	str = "";
+	for i = 1,#data do
+		--nLog(i..":"..data[i])
+		result = strSplit(data[i],",")
+		if result ~= nill then
+			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
+		end
+	end
+	
+	
+	
+	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UIRadio("mode","约完课暂停付款,约完课自动换号")
+	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
+	UIShow();
+	
+	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
+
+	index = tonumber(strSplit(choice_name)[1]);
+	
+	setScreenScale(true, 720, 1280);	--分辨率缩放
+	
+	if mode == "约完课暂停付款" then
+		doTheWorkOnce();
+	else
+		doTheWorkOneByOne();
+	end
 	setScreenScale(false, 720, 1280);
 	
 	closeLog("test");  --关闭日志
