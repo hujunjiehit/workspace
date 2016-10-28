@@ -173,7 +173,7 @@ function logout()
 end
 
 
-function doTheWork(...)
+function doTheWork_pingjia(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -205,6 +205,128 @@ function doTheWork(...)
 	end
 end
 
+--跳转到所有团课界面
+function geToAllCourcesPage()
+	tap(560,1083);	 --点击我的tab，拉起登陆界面 
+	mSleep(500)
+	pull_the_screen(320,560,-50)	--滑动，露出设置按钮
+	mSleep(1000)
+	
+	tap(303,185);	--点击关注
+	repeat
+		mSleep(500)
+	until getColor(264,582) == 0xffffff
+	
+	tap(80,188);	--点击第一个关注的头像
+	repeat
+		mSleep(500)
+	until getColor(478, 1085) == 0x5cd390 
+	
+	mSleep(1000)
+	pull_the_screen(320,560,-50)
+	mSleep(500)
+	step = 0;
+	repeat
+		-- body
+		tap(575,750+step*20); --每次下滑20px，尝试点击改点坐标
+		mSleep(500)
+		step = step + 1;
+	until getColor(478, 1085) ~= 0x5cd390
+	mSleep(1000)
+	nLog("成功进入课程详情页");
+	return 0; 
+end
+
+function startToXiadan(begin)
+	for index = begin,6 do	
+		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
+		y = 208+160*(index-1);
+		
+		tap(344,208+160*(index-1));
+		repeat
+			mSleep(1000)
+			nLog("loading..1")
+		until getColor(392, 478) == 0xffffff  --加载完毕
+		
+		--课程详情加载完毕
+		nLog("课程详情加载完毕")
+		
+		
+		if getColor(469, 1085) == 0xaaaaaa then   --灰色按钮
+			--如果已经报名，直接返回
+			mSleep(500);
+			goBack();
+		elseif getColor(469, 1085) == 0xffffff then
+			--还在当前页面，什么都不做
+		else
+			tap(483,1085); --点击报名
+			repeat
+				mSleep(500)
+				nLog("loading..2")
+			until getColor(580,1084) == 0x459e6c or getColor(580,1084) == 0x33c774 or getColor(608,  588) == 0xbfbfbf  --加载完毕
+			--0x459e6c	 已经报过名了
+			--0x33c774   可以报名
+			if getColor(580,1084) == 0x459e6c or getColor(608,  588) == 0xbfbfbf then
+				nLog("已经选过课了，返回进行下一个")
+				tap(400,724);
+				mSleep(500);
+				goBack();
+			else
+				nLog("可以选课")
+				repeat
+					-- body
+					tap(486,1086);  --点击稍后支付
+					mSleep(1000)
+					m,n = findColorInRegionFuzzy(0x007aff, 90, 53,420, 628,737); 
+					nLog("m = "..m.."   n = "..n);
+				until m ~= -1 and n ~= -1
+				mSleep(500);
+				
+				tap(323,674);   --选课成功，点击我知道了
+				mSleep(1000);
+				goBack();
+			end
+		end
+		
+
+	end
+end
+
+function doTheWork_xiadan(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
+		
+		login(userName,passWord);
+		
+		geToAllCourcesPage();
+		
+		mSleep(1000);
+		
+		startToXiadan(1)
+
+		pull_the_screen(320,560,-240)
+		mSleep(2000)
+	
+		startToXiadan(2)
+		
+		goBack();
+		goBack();
+		goBack();
+		
+		logout();
+		mSleep(1000);
+	end
+end
+
+function write_info(str)
+	-- body
+	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
+end
 
 function main(...)
 	-- body
@@ -226,32 +348,106 @@ function main(...)
 	
 	--nLog("str = "..str);
 	
-	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UINew({titles="脚本配置",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UIRadio({id="mode",list="自动评价,自动约课,自动登录,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
 	
-	
-	if name == nil then
-		nLog("user choose nothing,so exit the lua!");
-		mSleep(1000)
-		lua_exit();
-	else
-		nLog("name = "..name);
-		
-		index = tonumber(strSplit(name)[1]);
-		nLog("index = "..index);
+	if mode == "自动评价" then
+		if name == nil then
+			nLog("user choose nothing,so exit the lua!");
+			mSleep(1000)
+			lua_exit();
+		else
+			nLog("开始评价, name = "..name);
+			
+			index = tonumber(strSplit(name)[1]);
+			nLog("index = "..index);
 
-		setScreenScale(true, 640, 1136) 
+			setScreenScale(true, 640, 1136) 
+			
+			doTheWork_pingjia();
+			
+			setScreenScale(false)
+		end
+	elseif mode == "自动约课" then
+		if name == nil then
+			nLog("user choose nothing,so exit the lua!");
+			mSleep(1000)
+			lua_exit();
+		else
+			nLog("开始下单, name = "..name);
+			
+			index = tonumber(strSplit(name)[1]);
+			nLog("index = "..index);
+
+			setScreenScale(true, 640, 1136) 
+			
+			doTheWork_xiadan();
+			
+			setScreenScale(false)
+		end
+	elseif mode == "自动登录" then
+		if name == nil then
+			nLog("user choose nothing,so exit the lua!");
+			mSleep(1000)
+			lua_exit();
+		else
+			nLog("name = "..name);
 		
-		doTheWork();
-		
-		setScreenScale(false)
-	end
+			index = strSplit(name)[1];
+			nLog("index = "..index);
+			
+			info = strSplit(data[tonumber(index)],",");
+			
+			userName = info[1];
+			passWord = info[2];
+			
+			nLog("userName = "..userName.."   passWord = "..passWord);
+			
+			mSleep(1000)
+			
+			setScreenScale(true, 640, 1136) 
+			
+			login(userName,passWord);
+				
+			setScreenScale(false)
+		end
+	elseif mode == "添加帐号" then
+		repeat
+			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})
+			UILabel("输入帐号：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_username","此处输入您的帐号","",15,"center","0,0,255")
+			UILabel("输入密码：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_password","此处输入您的密码","",15,"center","0,0,255")
+			UIShow();
 	
+			nLog("input_username:"..input_username);
+			nLog("input_password:"..input_password);
+			choice = dialogRet("请确认您要添加的帐号和密码：\n 帐号："..input_username.."\n".."密码："..input_password, "确认添加", "重新输入", "", 0);
+			if choice == 0 then
+				nLog(" now ready to add data");
+				result = write_info(input_username..","..input_password..",");
+				nLog("add result:"..tostring(result));
+				if result == true then
+					dialog("帐号添加成功",0);
+				else
+					dialog("帐号添加失败",0);
+				end
+			end
+		until false
+	end
+
 	width,height = getScreenSize();
 	nLog("[DATE]"..width.."---"..height);
 	closeLog("脚本评价记录");  --关闭日志
 end 
- 
+
+function beforeUserExit(...)
+	-- body
+	showFloatButton(true);
+end
+
 main()

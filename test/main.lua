@@ -87,10 +87,12 @@ function main()
 	init(0);
 	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 
-	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
-	results = {};
-	flag_index = 0;
-	startToXiadan(1)
+	input_username = "13027909110"
+	input_password = "hjj893212"
+	
+	choice = dialogRet("请确认您要添加的帐号和密码：\n 帐号："..input_username.."\n".."密码："..input_password, "确认添加", "重新输入", "", 0);
+	nLog("choice:"..choice);
+	
 	
 	closeLog("脚本评价记录");  --关闭日志
 end

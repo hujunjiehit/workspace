@@ -266,6 +266,11 @@ function doTheWorkOneByOne(...)
 	end
 end
 
+function write_info(str)
+	-- body
+	path = getSDCardPath();
+	return writeFile(path.."/info.txt",{str});
+end
 
 function main()
 	init(0)
@@ -287,7 +292,8 @@ function main()
 	
 	
 	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
-	UIRadio("mode","约完课暂停付款,约完课自动换号")
+	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UIRadio("mode","约完课暂停付款,约完课自动换号,手动添加新帐号")
 	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
@@ -300,8 +306,31 @@ function main()
 	
 	if mode == "约完课暂停付款" then
 		doTheWorkOnce();
-	else
+	elseif mode == "约完课自动换号" then
 		doTheWorkOneByOne();
+	else
+		repeat
+			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})
+			UILabel("输入帐号：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_username","此处输入您的帐号","",15,"center","0,0,255")
+			UILabel("输入密码：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_password","此处输入您的密码","",15,"center","0,0,255")
+			UIShow();
+	
+			nLog("input_username:"..input_username);
+			nLog("input_password:"..input_password);
+			choice = dialogRet("请确认您要添加的帐号和密码：\n 帐号："..input_username.."\n".."密码："..input_password,"重新输入","确认添加","", 0);
+			if choice == 1 then
+				nLog(" now ready to add data");
+				result = write_info(input_username..","..input_password..",");
+				nLog("add result:"..tostring(result));
+				if result == true then
+					dialog("帐号添加成功",0);
+				else
+					dialog("帐号添加失败",0);
+				end
+			end
+		until false
 	end
 	setScreenScale(false, 720, 1280);
 	

@@ -204,39 +204,9 @@ function startToPingjia(begin)
 	return flag_count;
 end
 
-
-function main()
-	init(0)
-	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
-	wLog("test","[DATE] init log OK!!!"); 
-	showFloatButton(false);
-	
-	write_to_log("\n\n\n\n脚本开始时间:"..os.date("%c"))
-	
-	path = getSDCardPath();
-	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
-	str = "";
-	for i = 1,#data do
-		--nLog(i..":"..data[i])
-		result = strSplit(data[i],",")
-		if result ~= nill then
-			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
-		end
-	end
-	
-	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
-	UILabel("请选择从哪一个帐号开始依次往下评价：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
-	UIShow();
-	
-	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
-	
-	index = tonumber(strSplit(choice_name)[1]);
-	nLog("index = "..index);
-	
-	setScreenScale(true, 720, 1280);
-	
-	for i = index,#data do
+function doTheWork_pingjia(...)
+	-- body
+		for i = index,#data do
 		info = strSplit(data[i],",");
 		userName = info[1];
 		passWord = info[2];
@@ -266,7 +236,73 @@ function main()
 		mSleep(2000)
 		logout();
 	end
+end
+
+function write_info(str)
+	-- body
+	path = getSDCardPath();
+	return writeFile(path.."/info.txt",{str});
+end
+
+function main()
+	init(0)
+	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
+	wLog("test","[DATE] init log OK!!!"); 
+	showFloatButton(false);
 	
+	write_to_log("\n\n\n\n脚本开始时间:"..os.date("%c"))
+	
+	path = getSDCardPath();
+	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
+	str = "";
+	for i = 1,#data do
+		--nLog(i..":"..data[i])
+		result = strSplit(data[i],",")
+		if result ~= nill then
+			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
+		end
+	end
+	
+	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UIRadio("mode","自动评价功能,手动添加帐号")
+	UILabel("请选择从哪一个帐号开始依次往下评价：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
+	UIShow();
+	
+	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
+	
+	index = tonumber(strSplit(choice_name)[1]);
+	nLog("index = "..index);
+	
+	setScreenScale(true, 720, 1280);
+	
+	if mode == "手动添加帐号" then
+		repeat
+			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})
+			UILabel("输入帐号：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_username","此处输入您的帐号","",15,"center","0,0,255")
+			UILabel("输入密码：",22,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+			UIEdit("input_password","此处输入您的密码","",15,"center","0,0,255")
+			UIShow();
+	
+			nLog("input_username:"..input_username);
+			nLog("input_password:"..input_password);
+			choice = dialogRet("请确认您要添加的帐号和密码：\n 帐号："..input_username.."\n".."密码："..input_password,"重新输入","确认添加","", 0);
+			if choice == 1 then
+				nLog(" now ready to add data");
+				result = write_info(input_username..","..input_password..",");
+				nLog("add result:"..tostring(result));
+				if result == true then
+					dialog("帐号添加成功",0);
+				else
+					dialog("帐号添加失败",0);
+				end
+			end
+		until false
+	else
+		doTheWork_pingjia();
+	end
 	setScreenScale(false, 720, 1280)
 	closeLog("test");  --关闭日志
 end
