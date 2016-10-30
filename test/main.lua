@@ -71,13 +71,13 @@ function startToXiadan(begin)
 				os.execute("input keyevent 4");
 				mSleep(1000)
 			end
-		elseif color_next == 0xd8d8d8 or color_next == 0xfafafa then
+		elseif color_next == color_current then
+			nLog("未跳转")
+		else
 			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了 或者 网络出错
 			os.execute("input keyevent 4");
 			mSleep(2000)
 			nLog("按钮灰色,已经报名了")
-		else
-			nLog("no more course")
 		end
 	end
 end
@@ -86,13 +86,11 @@ end
 function main()
 	init(0);
 	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
-
-	input_username = "13027909110"
-	input_password = "hjj893212"
 	
-	choice = dialogRet("请确认您要添加的帐号和密码：\n 帐号："..input_username.."\n".."密码："..input_password, "确认添加", "重新输入", "", 0);
-	nLog("choice:"..choice);
+		results = {};
+	flag_index = 0;
 	
+	startToXiadan(1)
 	
 	closeLog("脚本评价记录");  --关闭日志
 end

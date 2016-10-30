@@ -263,13 +263,18 @@ function startToXiadan(begin)
 			repeat
 				mSleep(500)
 				nLog("loading..2")
-			until getColor(580,1084) == 0x459e6c or getColor(580,1084) == 0x33c774 or getColor(608,  588) == 0xbfbfbf  --加载完毕
+			until getColor(580,1084) == 0x459e6c or getColor(580,1084) == 0x33c774 or getColor(608,  588) == 0xbfbfbf or getColor(608,  588) == 0x999999  --加载完毕
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
 			if getColor(580,1084) == 0x459e6c or getColor(608,  588) == 0xbfbfbf then
 				nLog("已经选过课了，返回进行下一个")
 				tap(400,724);
 				mSleep(500);
+				goBack();
+			elseif getColor(608,  588) == 0x999999 then
+				nLog("课程已撤销，返回点击好的")
+				tap(317, 626);
+				mSleep(1000);
 				goBack();
 			else
 				nLog("可以选课")

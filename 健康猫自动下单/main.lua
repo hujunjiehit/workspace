@@ -3,7 +3,7 @@
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
-	mSleep(1000);
+	mSleep(500);
 	
 	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
 	nLog("target_color = 0x"..string.format("%X",target_color));
@@ -13,28 +13,28 @@ function login(userName,passWord)
 		nLog("now begin to login");
 		mSleep(500);
 		tap(400,429);  --点击帐号输入框
-		mSleep(1000);
+		mSleep(500);
 		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		
-		mSleep(1000);
+		mSleep(500);
 		inputText(userName);
 		
-		mSleep(1000);
+		mSleep(500);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
 		if isFirst == false then
 			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		end
 		
-		mSleep(1000);
+		mSleep(500);
 		inputText(passWord);
 		
-		mSleep(1000)
+		mSleep(500)
 		tap(450,629); --点击登陆按钮
 		
 		repeat
-			mSleep(1000)
+			mSleep(500)
 			nLog("loging now...")
 		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
 		mSleep(2000)
@@ -149,13 +149,13 @@ function startToXiadan(begin)
 				os.execute("input keyevent 4");
 				mSleep(1000)
 			end
-		elseif color_next == 0xd8d8d8 or color_next == 0xfafafa then
+		elseif color_next == color_current then
+			nLog("未跳转")
+		else
 			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了 或者 网络出错
 			os.execute("input keyevent 4");
 			mSleep(2000)
 			nLog("按钮灰色,已经报名了")
-		else
-			nLog("no more course")
 		end
 	end
 end
@@ -266,6 +266,28 @@ function doTheWorkOneByOne(...)
 	end
 end
 
+function doTheWorkGoToPay(...)
+	-- 登录，并进入付款界面
+	info = strSplit(data[index],",");
+	userName = info[1];
+	passWord = info[2];
+	
+	nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
+	
+	mSleep(500)
+	
+	login(userName,passWord)	--登录
+	
+	mSleep(500)
+	tap(326,576);
+	repeat
+		nLog("loading...");
+		mSleep(1000);
+	until getColor(385,633) ~= 0xc6c6c6 
+	mSleep(500)
+	tap(51,1230);
+end
+
 function write_info(str)
 	-- body
 	path = getSDCardPath();
@@ -293,7 +315,7 @@ function main()
 	
 	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio("mode","约完课暂停付款,约完课自动换号,手动添加新帐号")
+	UIRadio("mode","约完课暂停付款,约完课自动换号,登录并进入付款界面,手动添加新帐号")
 	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
@@ -308,6 +330,8 @@ function main()
 		doTheWorkOnce();
 	elseif mode == "约完课自动换号" then
 		doTheWorkOneByOne();
+	elseif mode == "登录并进入付款界面" then
+		doTheWorkGoToPay();
 	else
 		repeat
 			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})

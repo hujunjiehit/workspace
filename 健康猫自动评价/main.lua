@@ -40,7 +40,7 @@ end
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
 	switchTSInputMethod(true);
-	mSleep(1000);
+	mSleep(500);
 	
 	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
 	nLog("target_color = 0x"..string.format("%X",target_color));
@@ -50,28 +50,28 @@ function login(userName,passWord)
 		nLog("now begin to login");
 		mSleep(500);
 		tap(400,429);  --点击帐号输入框
-		mSleep(1000);
+		mSleep(500);
 		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		
-		mSleep(1000);
+		mSleep(500);
 		inputText(userName);
 		
-		mSleep(1000);
+		mSleep(500);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
 		if isFirst == false then
 			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 		end
 		
-		mSleep(1000);
+		mSleep(500);
 		inputText(passWord);
 		
-		mSleep(1000)
+		mSleep(500)
 		tap(450,629); --点击登陆按钮
 		
 		repeat
-			mSleep(1000)
+			mSleep(500)
 			nLog("loging now...")
 		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
 		mSleep(2000)
@@ -88,7 +88,7 @@ function gotoPingjiaPage()
 	mSleep(1000)
 	tap(236,456); --点击我的订单
 	repeat
-	mSleep(1000)
+		mSleep(1000)
 	until getColor(386,668) ~= 0xc2c2c2			--加载进度判断
 	
 	mSleep(1000)
