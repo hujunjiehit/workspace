@@ -92,7 +92,7 @@ function gotoPingjiaPage()
 	until getColor(386,668) ~= 0xc2c2c2			--加载进度判断
 	
 	mSleep(1000)
-	tap(351,98); 	 --点击上面的私教订单，展开选项
+	tap(351,86); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
 	tap(357,268); 	 --选择私教团购订单
 	mSleep(1000)
@@ -155,10 +155,13 @@ function startToPingjia(begin)
 			mSleep(2000);
 			
 			tap(457,476);	--点击五星   **************兼容性处理
-			mSleep(1500);
+			mSleep(500);
+			
+			tap(457,453);	--点击五星   **************兼容性处理，兼容模拟器
+			mSleep(500);
 			
 			tap(457,466);	--点击五星
-			mSleep(1500);
+			mSleep(500);
 			
 			tap(333,627);	--点击输入框，获取焦点
 			mSleep(2000);

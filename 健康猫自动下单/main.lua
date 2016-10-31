@@ -142,6 +142,10 @@ function startToXiadan(begin)
 					nLog("please whait...")
 				until getColor(265, 1223) == 0xffffff 
 				
+				repeat 
+					mSleep(1000);
+				until getColor(510, 1230) == 0x33c774
+				
 				--选课成功
 				nLog("选课成功")
 				table.insert(results,flag_index);
@@ -197,11 +201,11 @@ function doTheWorkOnce(...)
 	startToXiadan(6)
 	
 	os.execute("input keyevent 4");
-	mSleep(2000)
+	mSleep(1500)
 	os.execute("input keyevent 4");
-	mSleep(2000)
-	--os.execute("input keyevent 4");
-	--mSleep(2000)
+	mSleep(1500)
+	os.execute("input keyevent 4");
+	mSleep(1500)
 	
 	
 	for var = 1,3 do
@@ -257,11 +261,11 @@ function doTheWorkOneByOne(...)
 		startToXiadan(6)
 	
 		os.execute("input keyevent 4");
-		mSleep(2000)
+		mSleep(1500)
 		os.execute("input keyevent 4");
-		mSleep(2000)
-		--os.execute("input keyevent 4");
-		--mSleep(2000)
+		mSleep(1500)
+		os.execute("input keyevent 4");
+		mSleep(1500)
 		logout();
 	end
 end
@@ -329,6 +333,7 @@ function main()
 	if mode == "约完课暂停付款" then
 		doTheWorkOnce();
 	elseif mode == "约完课自动换号" then
+		--dialog("here", time)
 		doTheWorkOneByOne();
 	elseif mode == "登录并进入付款界面" then
 		doTheWorkGoToPay();
