@@ -142,9 +142,9 @@ function startToXiadan(begin)
 					nLog("please whait...")
 				until getColor(265, 1223) == 0xffffff 
 				
-				repeat 
-					mSleep(1000);
-				until getColor(510, 1230) == 0x33c774
+				--repeat 
+					--mSleep(1000);
+				--until getColor(510, 1230) == 0x33c774
 				
 				--选课成功
 				nLog("选课成功")
