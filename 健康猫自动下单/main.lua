@@ -109,7 +109,7 @@ function startToXiadan(begin)
 			nLog("wait for---loading the detail course page");
 			mSleep(2000)
 			color_next = getColor(510,1230)		--点击之后，该点的颜色
-		until color_next == color_current or color_next == 0x33c774 or color_next == 0xd8d8d8 or color_next == 0xfafafa
+		until color_next == color_current or color_next == 0x33c774 or color_next == 0xd8d8d8 or color_next == 0xfafafa or color_next == 0x53c987
 		
 		nLog("color_next:"..string.format("%X",color_next));
 		
@@ -118,7 +118,7 @@ function startToXiadan(begin)
 		--2.color_next == 0x33c774 绿色按钮，表示可以报名
 		--3.color_next == 0xd8d8d8 灰色按钮，表示已经报名了
 	
-		if color_next == 0x33c774 then
+		if color_next == 0x33c774 or color_next == 0x53c987 then
 			--color_next == 0x33c774 绿色按钮，表示可以报名
 			tap(510,1230);
 			mSleep(2000)

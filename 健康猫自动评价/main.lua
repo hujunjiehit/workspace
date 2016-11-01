@@ -110,7 +110,7 @@ function logout()
 	mSleep(1000)
 	tap(350,799);	--点击退出登录
 	mSleep(1000)
-	tap(515,720);	--点击确定
+	tap(610,720);	--点击确定
 	repeat
 		mSleep(1000)
 	until getColor(501,798) ~= 0x663434  --健康猫logo color
