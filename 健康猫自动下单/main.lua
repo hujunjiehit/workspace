@@ -80,8 +80,18 @@ function logout()
 	tap(320,1020);	--进入设置
 	mSleep(1000)
 	tap(350,799);	--点击退出登录
-	mSleep(1000)
-	tap(515,720);	--点击确定
+	
+	deviceModel = getDeviceModel();
+	write_to_log(deviceModel);
+	if deviceModel == "Meitu M4" then  
+		mSleep(1000)
+		tap(610,806);	--点击确定
+	else
+		mSleep(1000)
+		tap(610,720);	--点击确定
+	end
+
+
 	repeat
 		mSleep(1000)
 	until getColor(501,798) ~= 0x663434  --健康猫logo color

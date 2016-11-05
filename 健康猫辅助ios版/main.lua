@@ -1,4 +1,5 @@
 require "TSLib"
+require "iphone6"
 
 function pull_the_screen(x,y,dy)
 	moveTo(x,y,x,y+dy)
@@ -333,14 +334,8 @@ function write_info(str)
 	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
 end
 
-function main(...)
+function main_iphone5(...)
 	-- body
-	init("0", 0);  --竖屏
-	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
-	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
-	
-	showFloatButton(false);
-	
 	data = readFile("/var/mobile/Media/TouchSprite/res/info.txt") 	--读取文件内容，返回一个table
 	str = "";
 	for i = 1,#data do
@@ -353,7 +348,7 @@ function main(...)
 	
 	--nLog("str = "..str);
 	
-	UINew({titles="脚本配置",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UIRadio({id="mode",list="自动评价,自动约课,自动登录,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
@@ -444,15 +439,31 @@ function main(...)
 			end
 		until false
 	end
-
-	width,height = getScreenSize();
-	nLog("[DATE]"..width.."---"..height);
-	closeLog("脚本评价记录");  --关闭日志
 end 
 
 function beforeUserExit(...)
 	-- body
 	showFloatButton(true);
+end
+
+function main(...)
+	-- body
+	init("0", 0);  --竖屏
+	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
+	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
+	
+	showFloatButton(false);
+	
+	width,height = getScreenSize();
+	nLog("[DATE]"..width.."---"..height);
+	if width == 640 and height == 1136 then
+		main_iphone5();
+	else
+		main_iphone6();
+	end
+	
+	showFloatButton(true);
+	closeLog("脚本评价记录");  --关闭日志
 end
 
 main()

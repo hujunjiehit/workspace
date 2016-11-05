@@ -45,10 +45,9 @@ function login(userName,passWord)
 end
 
  
-function main(...)
+function main_iphone5(...)
 	-- body
-	init("0", 0);  --竖屏
-	showFloatButton(false);
+
 	
 	data = readFile("/var/mobile/Media/TouchSprite/res/info.txt") 	--读取文件内容，返回一个table
 	str = "";
@@ -93,10 +92,19 @@ function main(...)
 			
 		setScreenScale(false)
 	end
+end 
+
+function main(...)
+	-- body
+	init("0", 0);  --竖屏
+	showFloatButton(false);
 	
 	width,height = getScreenSize();
 	nLog("[DATE]"..width.."---"..height);
-
-end 
- 
+	if width == 640 and height == 1136 then
+		main_iphone5();
+	else
+		main_iphone6();
+	end
+end
 main()
