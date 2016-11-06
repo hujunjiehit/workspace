@@ -82,7 +82,6 @@ function logout()
 	tap(350,799);	--点击退出登录
 	
 	deviceModel = getDeviceModel();
-	write_to_log(deviceModel);
 	if deviceModel == "Meitu M4" then  
 		mSleep(1000)
 		tap(610,806);	--点击确定
