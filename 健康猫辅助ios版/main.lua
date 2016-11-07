@@ -89,7 +89,7 @@ function startToPingjia(begin)
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	m,n = findColorInRegionFuzzy(0x33c774,80,448,133,629,1084);
+	m,n = findColorInRegionFuzzy(0x33c774,80,448,133,625,1022);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
@@ -104,7 +104,7 @@ function startToPingjia(begin)
 		repeat
 			mSleep(500)
 			nLog("正在加载课程详情页 wait...");
-		until getColor(262,570) ~= 0x333333
+		until getColor(390,434) == 0xffffff
 		--此处有可能网络出错
 		
 		mSleep(1000);
@@ -117,17 +117,19 @@ function startToPingjia(begin)
 			mSleep(1000);
 			
 			tap(280,600);	--点击输入框，获取焦点
-			mSleep(500);
+			mSleep(1000);
 			inputText("很好非常好");
 			mSleep(500);
 			
 			tap(525,190);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
-			tap(320,1080);	--点击提交评价
 			repeat
-				mSleep(500)
-			until getColor(262,570) ~= 0x333333
+				tap(320,1080);	--点击提交评价
+				mSleep(1000)
+			until getColor(320,1080) ~=  0x5cd390
+			
+			
 			--根据color_next判断下一步动作
 			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
 			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
@@ -140,6 +142,11 @@ function startToPingjia(begin)
 				goBack();
 			else
 				--评价成功
+				repeat
+					mSleep(500)
+					nLog("正在加载课程详情页 wait...");
+				until getColor(390,434) == 0xffffff
+				
 				goBack();
 				nLog("评价成功。");
 				flag_count = flag_count + 1;
