@@ -224,7 +224,7 @@ function startToXiadan_iphone6(begin)
 		repeat
 			mSleep(500)
 			nLog("loading..1")
-		until getColor(379,519) == 0xffffff  --加载完毕
+		until getColor(379,519) == 0xffffff or getColor(458,594) == 0xffffff or getColor(375,598) ~= 0x333333 --加载完毕
 		
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
@@ -287,6 +287,8 @@ function doTheWork_xiadan_iphone6(...)
 		
 		login_iphone6(userName,passWord);
 		
+		mSleep(1500);
+		
 		geToAllCourcesPage_iphone6();
 		
 		mSleep(500);
@@ -324,7 +326,7 @@ function main_iphone6(...)
 	
 	UINew({titles="脚本配置iphone6",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,自动登录,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
@@ -360,7 +362,7 @@ function main_iphone6(...)
 			
 			--setScreenScale(false)
 		end
-	elseif mode == "自动登录" then
+	elseif mode == "登录付款" then
 		if name == nil then
 			nLog("user choose nothing,so exit the lua!");
 			mSleep(1000)
@@ -381,7 +383,16 @@ function main_iphone6(...)
 			mSleep(1000)
 			
 			login_iphone6(userName,passWord);
-		
+			
+			mSleep(1000);
+			
+			tap(375,591);
+			repeat
+				-- body
+				mSleep(500);
+			until  getColor(583, 1281) == 0xcecece or getColor(583, 1281) == 0xf2f2f2
+			tap(46,1285);
+			mSleep(1000);
 		end
 	elseif mode == "添加帐号" then
 		repeat
