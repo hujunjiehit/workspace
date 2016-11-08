@@ -119,16 +119,17 @@ function startToPingjia_iphone6(begin)
 			tap(610,330);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
+			tap(274, 1280)	--点击提交评价
 			repeat
-				tap(274, 1280)	--点击提交评价
 				mSleep(1000)
-			until getColor(274,1280) ~=  0x5cd390
+			until getColor(370,621) == 0xffffff and getColor(392, 1004) == 0xefeff4
+			
 			--根据color_next判断下一步动作
 			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
 			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
 			
 			mSleep(500)
-			if getColor(274,1280) == 0x5cd390 then
+			if getColor(392, 1004) == 0xffffff then
 				--评价失败
 				--todo ********************************************************
 				nLog("评价失败。");

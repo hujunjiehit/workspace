@@ -124,10 +124,10 @@ function startToPingjia(begin)
 			tap(525,190);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
+			tap(320,1080);	--点击提交评价
 			repeat
-				tap(320,1080);	--点击提交评价
 				mSleep(1000)
-			until getColor(320,1080) ~=  0x5cd390
+			until getColor(325,532) == 0xffffff and getColor(315, 920) == 0xefeff4
 			
 			
 			--根据color_next判断下一步动作
@@ -135,7 +135,7 @@ function startToPingjia(begin)
 			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
 			
 			mSleep(1000)
-			if getColor(210,1080) == 0x5cd390 then
+			if getColor(315, 920) == 0xffffff then
 				--评价失败
 				nLog("评价失败。");
 				goBack();
