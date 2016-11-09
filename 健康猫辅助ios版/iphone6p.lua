@@ -62,7 +62,7 @@ function gotoPingjiaPage_iphone6p()
 	tap(1088, 2126);	 --点击我的tab
 	mSleep(500);
 	
-	tap(386,464); --点击我的订单
+	tap(654,686); --点击我的订单
 	repeat
 		mSleep(1000);
 	until (getColor(654,886) == 0xffffff and getColor(620,994) == 0xffffff ) or getColor(636,1808) == 0xf2f2f2 --加载进度判断
