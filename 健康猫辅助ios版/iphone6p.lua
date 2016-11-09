@@ -1,90 +1,91 @@
 require "TSLib"
 
-function goBack_iphone6(...)
+function goBack_iphone6p(...)
 	-- body
-	tap(26,84);
+	tap(48,126);
 	mSleep(1000);
 end
 
-function login_iphone6(userName,passWord)
+function login_iphone6p(userName,passWord)
 	
-	nLog("now begin to login iphone6");
+	nLog("now begin to login iphone6p");
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
-	tap(658,1282);	 --点击我的tab，拉起登陆界面 
+	tap(1088, 2126);	 --点击我的tab，拉起登陆界面 
 	mSleep(500)
 	
-	tap(666,269) --收起输入法键盘
+	tap(1000,344) --收起输入法键盘
 	mSleep(500)
 		
-	tap(283,401);	 --点击帐号输入框
+	tap(538,600);	 --点击帐号输入框
 	mSleep(500)
 	inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
 	mSleep(500)
 	inputText(userName);
 	mSleep(500);
 		
-	tap(333,492);   --点击密码输入框
+	tap(538,740);   --点击密码输入框
 	mSleep(500);
 	inputText(passWord);
 	mSleep(500);
 
 	repeat
-		tap(530,601); --点击登陆按钮
-		mSleep(1000);
-    until getColor(424, 176) ~= 0x3aab47
+		tap(900,900); --点击登陆按钮
+		mSleep(2000);
+    until getColor(684,286) ~= 0x3aab47
 	
 
 	nLog(userName.."登录成功");
 	
-	tap(658,1282);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
+	tap(1088, 2126);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
 	mSleep(500)
 end
 
-function logout_iphone6()
-	tap(658,1282);		 --点击我的tab，拉起登陆界面 
+function logout_iphone6p()
+	tap(1088, 2126);		 --点击我的tab，拉起登陆界面 
 	mSleep(500);
 	
-	tap(380,1100);	--进入设置
+	tap(628,1658);	--进入设置
 	mSleep(1000);
 	
-	tap(279, 891);	--点击退出登录
+	tap(622, 1336);	--点击退出登录
 	mSleep(1500)
 	
-	tap(469, 714);	--点击确定按钮
+	tap(872, 1182);	--点击确定按钮
 	mSleep(2000)
 	nLog(userName.."退出登录");
 end
 
 
-function gotoPingjiaPage_iphone6()
+--去到评价页面
+function gotoPingjiaPage_iphone6p()
 	
-	tap(658,1282);	 --点击我的tab
+	tap(1088, 2126);	 --点击我的tab
 	mSleep(500);
 	
 	tap(386,464); --点击我的订单
 	repeat
 		mSleep(1000);
-	until ( getColor(396,526) == 0xffffff and getColor(394,612) == 0xffffff and getColor(462,569) == 0xffffff ) or getColor(280,540) == 0xf2f2f2 --加载进度判断
+	until (getColor(654,886) == 0xffffff and getColor(620,994) == 0xffffff ) or getColor(636,1808) == 0xf2f2f2 --加载进度判断
 	
-	tap(385,84); 	 --点击上面的私教订单，展开选项
+	tap(628,126); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
 	
 	
-	tap(370,249); 	 --选择私教团购订单
+	tap(620,370); 	 --选择私教团购订单
 	repeat
 		mSleep(1000);
-	until getColor(396,526) == 0xffffff and getColor(394,612) == 0xffffff and getColor(462,569) == 0xffffff		--加载进度判断
+	until getColor(618,994) == 0xffffff and getColor(714,966) == 0xffffff	--加载进度判断
 	pull_the_screen(320,560,50)	--滑动到顶,避免漏掉第一个
 	mSleep(1000);
 	nLog("成功进入评价详情页");
 end
 
-function startToPingjia_iphone6(begin)
+function startToPingjia_iphone6p(begin)
 	
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	m,n = findColorInRegionFuzzy(0x33c774,80,514,139,743,1327);
+	m,n = findColorInRegionFuzzy(0x33c774,80,990,204,1228,2010);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
@@ -92,65 +93,65 @@ function startToPingjia_iphone6(begin)
 	end
 	
 	for index = begin,8 do	
-		nLog("index = "..index.."   y  = "..tostring(200+153*(index-1)));
-		y = 200+152*(index-1);
-		tap(400,200+152*(index-1));	
+		nLog("index = "..index.."   y  = "..tostring(300+230*(index-1)));
+		y = 300+230*(index-1);
+		tap(674,300+230*(index-1));	
 		
 		repeat
 			mSleep(500)
 			nLog("正在加载课程详情页 wait...");
-		until getColor(94,  426) ~= 0xffffff
+		until getColor(593, 953) ~= 0xffffff
 		--此处有可能网络出错
 		
 		mSleep(500);
 		
-		if getColor(274, 1280) == 0x5cd390 then  --可以评价
+		if getColor(500, 2121) == 0x5cd390 then  --可以评价
 			
 			nLog("可以评价。");
 	
-			tap(274, 1280)
+			tap(500, 2121)
 			mSleep(1000);
 			
-			tap(330,570);	--点击输入框，获取焦点
+			tap(496,846);	--点击输入框，获取焦点
 			mSleep(500);
 			inputText("很好非常好");
 			mSleep(500);
 			
-			tap(610,330);	--点击空白，取消输入法键盘
+			tap(1048,522);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
-			tap(274, 1280)	--点击提交评价
+			tap(622, 2130)	--点击提交评价
 			repeat
 				mSleep(1000)
-			until getColor(370,621) == 0xffffff and getColor(392, 1004) == 0xefeff4
+			until getColor(666,932) == 0xffffff and getColor(602, 1650) == 0xefeff4
 			
 			--根据color_next判断下一步动作
 			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
 			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
 			
 			mSleep(500)
-			if getColor(392, 1004) == 0xffffff then
+			if getColor(592, 1612) == 0xffffff then
 				--评价失败
 				--todo ********************************************************
 				nLog("评价失败。");
-				goBack_iphone6();
-				goBack_iphone6();
+				goBack_iphone6p();
+				goBack_iphone6p();
 			else
 				--评价成功
-				goBack_iphone6();
+				goBack_iphone6p();
 				nLog("评价成功。");
 				flag_count = flag_count + 1;
 			end
 		else	
 			nLog("已经评价过了，直接返回。");
-			goBack_iphone6();
+			goBack_iphone6p();
 		end
 	end
 	nLog("成功进行了"..flag_count.."条评价");
 	return flag_count;
 end
 
-function doTheWork_pingjia_iphone6(...)
+function doTheWork_pingjia_iphone6p(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -159,25 +160,25 @@ function doTheWork_pingjia_iphone6(...)
 		
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
-		login_iphone6(userName,passWord);
+		login_iphone6p(userName,passWord);
 		mSleep(500)
 		
-		gotoPingjiaPage_iphone6();
+		gotoPingjiaPage_iphone6p();
 		
-		num1 = startToPingjia_iphone6(1);
+		num1 = startToPingjia_iphone6p(1);
 		nLog("num1 = "..num1);
 		
 		pull_the_screen(320,560,-508)
 		mSleep(1000)
 		
-		num2 = startToPingjia_iphone6(4);
+		num2 = startToPingjia_iphone6p(4);
 		nLog("num2 = "..num2);
 		
 		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
 		
-		goBack_iphone6();
+		goBack_iphone6p();
 		
-		logout_iphone6();
+		logout_iphone6p();
 		mSleep(1000);
 	end
 end
@@ -312,7 +313,7 @@ function doTheWork_xiadan_iphone6(...)
 end
 
 
-function main_iphone6(...)
+function main_iphone6p(...)
 	-- body
 	data = readFile("/var/mobile/Media/TouchSprite/res/info.txt") 	--读取文件内容，返回一个table
 	str = "";
@@ -326,7 +327,7 @@ function main_iphone6(...)
 	
 	--nLog("str = "..str);
 	
-	UINew({titles="脚本配置iphone6",okname="开始",cancelname="取消",config="UIconfig.dat"})
+	UINew({titles="脚本配置iphone6p",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
@@ -344,7 +345,7 @@ function main_iphone6(...)
 			index = tonumber(strSplit(name)[1]);
 			nLog("index = "..index);
 			
-			doTheWork_pingjia_iphone6();
+			doTheWork_pingjia_iphone6p();
 			
 		end
 	elseif mode == "自动约课" then
@@ -384,16 +385,16 @@ function main_iphone6(...)
 			
 			mSleep(1000)
 			
-			login_iphone6(userName,passWord);
+			login_iphone6p(userName,passWord);
 			
 			mSleep(1000);
 			
-			tap(375,591);
+			tap(586,890);
 			repeat
 				-- body
 				mSleep(500);
-			until  getColor(583, 1281) == 0xcecece or getColor(583, 1281) == 0xf2f2f2
-			tap(46,1285);
+			until  getColor(792, 252) == 0xcecece or getColor(792, 252) == 0xf2f2f2
+			tap(71,2130);
 			mSleep(1000);
 		end
 	elseif mode == "添加帐号" then

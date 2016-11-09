@@ -1,5 +1,6 @@
 require "TSLib"
 require "iphone6"
+require "iphone6p"
 
 function pull_the_screen(x,y,dy)
 	moveTo(x,y,x,y+dy)
@@ -267,9 +268,10 @@ function startToXiadan(begin)
 		elseif getColor(469, 1085) == 0xffffff then
 			--还在当前页面，什么都不做
 		else
+			mSleep(1000);
 			tap(483,1085); --点击报名
 			repeat
-				mSleep(500)
+				mSleep(1000)
 				nLog("loading..2")
 			until getColor(580,1084) == 0x459e6c or getColor(580,1084) == 0x33c774 or getColor(608,  588) == 0xbfbfbf or getColor(608,  588) == 0x999999  --加载完毕
 			--0x459e6c	 已经报过名了
@@ -467,8 +469,10 @@ function main(...)
 	nLog("[DATE]"..width.."---"..height);
 	if width == 640 and height == 1136 then
 		main_iphone5();
-	else
+	elseif width == 750 and height == 1334 then
 		main_iphone6();
+	else
+		main_iphone6p();
 	end
 	
 	showFloatButton(true);
