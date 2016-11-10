@@ -2,6 +2,10 @@ require "TSLib"
 
 function goBack_iphone6p(...)
 	-- body
+	if getColor(293,136) ~= 0x39af4d then
+		pull_the_screen(293,136,-50);
+		mSleep(500);
+	end
 	tap(48,126);
 	mSleep(1000);
 end
@@ -67,9 +71,13 @@ function gotoPingjiaPage_iphone6p()
 		mSleep(1000);
 	until (getColor(654,886) == 0xffffff and getColor(620,994) == 0xffffff ) or getColor(636,1808) == 0xf2f2f2 --加载进度判断
 	
+	if getColor(293,136) ~= 0x39af4d then
+		pull_the_screen(293,136,-50);
+		mSleep(500);
+	end
+
 	tap(628,126); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
-	
 	
 	tap(620,370); 	 --选择私教团购订单
 	repeat
@@ -100,7 +108,8 @@ function startToPingjia_iphone6p(begin)
 		repeat
 			mSleep(500)
 			nLog("正在加载课程详情页 wait...");
-		until getColor(593, 953) ~= 0xffffff
+			m,n = findColorInRegionFuzzy(0x5c5c5c,80,59,596,284,665);
+		until m ~= -1 and n ~= -1
 		--此处有可能网络出错
 		
 		mSleep(500);
@@ -112,7 +121,7 @@ function startToPingjia_iphone6p(begin)
 			tap(500, 2121)
 			mSleep(1000);
 			
-			tap(496,846);	--点击输入框，获取焦点
+			tap(590,890);	--点击输入框，获取焦点
 			mSleep(500);
 			inputText("很好非常好");
 			mSleep(500);
@@ -122,7 +131,7 @@ function startToPingjia_iphone6p(begin)
 			
 			tap(622, 2130)	--点击提交评价
 			repeat
-				mSleep(1000)
+				mSleep(2000)
 			until getColor(666,932) == 0xffffff and getColor(602, 1650) == 0xefeff4
 			
 			--根据color_next判断下一步动作
@@ -171,7 +180,7 @@ function doTheWork_pingjia_iphone6p(...)
 		pull_the_screen(320,560,-508)
 		mSleep(1000)
 		
-		num2 = startToPingjia_iphone6p(4);
+		num2 = startToPingjia_iphone6p(5);
 		nLog("num2 = "..num2);
 		
 		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
@@ -184,94 +193,94 @@ function doTheWork_pingjia_iphone6p(...)
 end
 
 --跳转到所有团课界面
-function geToAllCourcesPage_iphone6()
-	tap(658,1282);	 --点击我的tab
+function geToAllCourcesPage_iphone6p()
+	tap(1088, 2126);	 --点击我的tab
 	mSleep(1000)
 	
-	tap(351,332);	--点击关注
+	tap(580,496);	--点击关注
 	repeat
 		mSleep(500)
-	until getColor(373,499) == 0xffffff and getColor(371,600) == 0xffffff
+	until getColor(618,988) == 0xffffff and getColor(690,888) == 0xffffff
 	
-	tap(80,190);	--点击第一个关注的头像
+	tap(130,296);	--点击第一个关注的头像
 	repeat
 		mSleep(500)
-	until getColor(566, 1287) == 0x5cd390 
+	until getColor(952, 2132) == 0x5cd390 
 	
 	mSleep(1000)
-	pull_the_screen(320,560,-50)
-	mSleep(500)
+	--pull_the_screen(320,560,-50)
+	--mSleep(500)
 	step = 0;
 	repeat
 		-- body
-		tap(685,700+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(100)
+		tap(1138,1944+step*20); --每次下滑20px，尝试点击改点坐标
+		mSleep(500)
 		step = step + 1;
-	until getColor(566, 1287) ~= 0x5cd390
+	until getColor(952, 2132) ~= 0x5cd390
 	
 	repeat
 		mSleep(500);
-	until getColor(590,523) == 0xffffff and getColor(599,697) == 0xffffff
+	until getColor(616,550) == 0xffffff and getColor(830,292) == 0xffffff
 	
 	nLog("成功进入课程详情页");
 	return 0; 
 end
 
-function startToXiadan_iphone6(begin)
-	for index = begin,7 do	
-		nLog("index = "..index.."   y  = "..tostring(208+161*(index-1)));
-		y = 208+161*(index-1);
+function startToXiadan_iphone6p(begin)
+	for index = begin,8 do	
+		nLog("index = "..index.."   y  = "..tostring(300+242*(index-1)));
+		y = 300+242*(index-1);
 		
-		tap(420,208+161*(index-1));
+		tap(664,300+242*(index-1));
 		repeat
 			mSleep(500)
 			nLog("loading..1")
-		until getColor(379,519) == 0xffffff --加载完毕
+		until getColor(624,990) == 0xffffff --加载完毕
 		
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
 		
 		
-		if getColor(580, 1285) == 0xaaaaaa then   --灰色按钮
+		if getColor(962, 2132) == 0xaaaaaa then   --灰色按钮
 			--如果已经报名，直接返回
 			mSleep(500);
-			goBack_iphone6();
-		elseif getColor(580, 1285) == 0xffffff then
+			goBack_iphone6p();
+		elseif getColor(1092, 2145) == 0xffffff then
 			--还在当前页面，什么都不做
 		else
 			mSleep(1000);
-			tap(625,1285); --点击报名
+			tap(962,2132); --点击报名
 			repeat
 				mSleep(1000)
 				nLog("loading..2")
-			until getColor(580, 1285) == 0x459e6c or getColor(580, 1285) == 0x33c774 or getColor(710,643) == 0xbfbfbf or getColor(608,  588) == 0x999999  --加载完毕
+			until getColor(962,2132) == 0x459e6c or getColor(794,2128) == 0x33c774 or getColor(1176,1094) == 0xbfbfbf  --加载完毕
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
 			if getColor(580,1084) == 0x459e6c or getColor(710,643) == 0xbfbfbf then
 				nLog("已经选过课了，返回进行下一个")
-				tap(380,820);
-				mSleep(500);
-				goBack_iphone6();
-			elseif getColor(608,  588) == 0x999999 then
+				tap(618,1344);	--点击关闭
+				mSleep(1000);
+				goBack_iphone6p();
+			--[[elseif getColor(608,  588) == 0x999999 then
 				--iphone6 课程撤销  待处理****************************************
 				nLog("课程已撤销，返回点击好的")
 				tap(317, 626);
 				mSleep(1000);
-				goBack_iphone6();
+				goBack_iphone6();]]
 			else
 				nLog("可以选课")
 				repeat
 					-- body
-					tap(586,1284);  --点击稍后支付
+					tap(912,2130);  --点击稍后支付
 					mSleep(1000)
-					m,n = findColorInRegionFuzzy(0x007aff, 90, 110,530, 630,800); 
+					m,n = findColorInRegionFuzzy(0x007aff, 90, 444, 1218, 720, 1300); 
 					nLog("m = "..m.."   n = "..n);
 				until m ~= -1 and n ~= -1
 				mSleep(500);
 				
-				tap(372,771);   --选课成功，点击我知道了
+				tap(608,1256);   --选课成功，点击我知道了
 				mSleep(1000);
-				goBack_iphone6();
+				goBack_iphone6p();
 			end
 		end
 		
@@ -279,7 +288,7 @@ function startToXiadan_iphone6(begin)
 	end
 end
 
-function doTheWork_xiadan_iphone6(...)
+function doTheWork_xiadan_iphone6p(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -288,26 +297,26 @@ function doTheWork_xiadan_iphone6(...)
 		
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
-		login_iphone6(userName,passWord);
+		login_iphone6p(userName,passWord);
 		
 		mSleep(1500);
 		
-		geToAllCourcesPage_iphone6();
+		geToAllCourcesPage_iphone6p();
 		
 		mSleep(500);
 		
-		startToXiadan_iphone6(1)
+		startToXiadan_iphone6p(1)
 
 		pull_the_screen(320,560,-240)
 		mSleep(2000)
 	
-		startToXiadan_iphone6(4)
+		startToXiadan_iphone6p(7)
 		
-		goBack_iphone6();
-		goBack_iphone6();
-		goBack_iphone6();
+		goBack_iphone6p();
+		goBack_iphone6p();
+		goBack_iphone6p();
 		
-		logout_iphone6();
+		logout_iphone6p();
 		mSleep(1000);
 	end
 end
@@ -361,7 +370,7 @@ function main_iphone6p(...)
 
 			--setScreenScale(true, 640, 1136) 
 			
-			doTheWork_xiadan_iphone6();
+			doTheWork_xiadan_iphone6p();
 			
 			--setScreenScale(false)
 		end

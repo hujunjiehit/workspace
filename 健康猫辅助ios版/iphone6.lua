@@ -300,7 +300,7 @@ function doTheWork_xiadan_iphone6(...)
 		pull_the_screen(320,560,-240)
 		mSleep(2000)
 	
-		startToXiadan_iphone6(4)
+		startToXiadan_iphone6(5)
 		
 		goBack_iphone6();
 		goBack_iphone6();
