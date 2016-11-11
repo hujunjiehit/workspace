@@ -2,10 +2,10 @@ require "TSLib"
 
 function goBack_iphone6p(...)
 	-- body
-	if getColor(293,136) ~= 0x39af4d then
+	--[[if getColor(293,136) ~= 0x39af4d then
 		pull_the_screen(293,136,-50);
 		mSleep(500);
-	end
+	end]]
 	tap(48,126);
 	mSleep(1000);
 end
@@ -71,10 +71,10 @@ function gotoPingjiaPage_iphone6p()
 		mSleep(1000);
 	until (getColor(654,886) == 0xffffff and getColor(620,994) == 0xffffff ) or getColor(636,1808) == 0xf2f2f2 --加载进度判断
 	
-	if getColor(293,136) ~= 0x39af4d then
+	--[[if getColor(293,136) ~= 0x39af4d then
 		pull_the_screen(293,136,-50);
 		mSleep(500);
-	end
+	end]]
 
 	tap(628,126); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
