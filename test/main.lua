@@ -114,10 +114,10 @@ function startToPingjia(begin)
 			tap(280,600);	--点击输入框，获取焦点
 			mSleep(1000);
 			inputText("很好非常好");
-			mSleep(500);
+			mSleep(1000);
 			
 			tap(525,190);	--点击空白，取消输入法键盘
-			mSleep(500);
+			mSleep(1000);
 			
 			tap(320,1080);	--点击提交评价
 			repeat
@@ -191,7 +191,7 @@ function doTheWork_pingjia(...)
 		gotoPingjiaPage();
 		mSleep(1000);
 		
-		for k = 1,40 do
+		for k = 1,9 do
 			--nLog(i..":"..data[i])
 			toast(k,1)
 			startToPingjia(1);

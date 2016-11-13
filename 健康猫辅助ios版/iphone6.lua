@@ -113,7 +113,11 @@ function startToPingjia_iphone6(begin)
 			
 			tap(330,570);	--点击输入框，获取焦点
 			mSleep(500);
-			inputText("很好非常好");
+			--inputText("很好非常好");
+			math.randomseed(getRndNum()) -- 随机种子初始化真随机数
+			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
+			inputText(words[num]);
+				
 			mSleep(500);
 			
 			tap(610,330);	--点击空白，取消输入法键盘
@@ -328,7 +332,7 @@ function main_iphone6(...)
 	
 	UINew({titles="脚本配置iphone6",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,登录付款,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
@@ -344,6 +348,12 @@ function main_iphone6(...)
 			index = tonumber(strSplit(name)[1]);
 			nLog("index = "..index);
 			
+			if isFileExist("/var/mobile/Media/TouchSprite/res/评价语.txt") == false then --存在返回true，不存在返回false
+				writeFileString("/var/mobile/Media/TouchSprite/res/评价语.txt","很好非常好\n");
+			end
+			words = readFile("/var/mobile/Media/TouchSprite/res/评价语.txt");
+			words_count = #words;
+		
 			doTheWork_pingjia_iphone6();
 			
 		end
@@ -396,6 +406,10 @@ function main_iphone6(...)
 			tap(46,1285);
 			mSleep(1000);
 		end
+	elseif mode == "管理评价语" then
+
+		manage_the_pingjia_words();
+		
 	elseif mode == "添加帐号" then
 		repeat
 			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})

@@ -119,7 +119,11 @@ function startToPingjia(begin)
 			
 			tap(280,600);	--点击输入框，获取焦点
 			mSleep(1000);
-			inputText("很好非常好");
+			--inputText("很好非常好");
+			math.randomseed(getRndNum()) -- 随机种子初始化真随机数
+			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
+			inputText(words[num]);
+			
 			mSleep(500);
 			
 			tap(525,190);	--点击空白，取消输入法键盘
@@ -339,8 +343,55 @@ function doTheWork_xiadan(...)
 end
 
 function write_info(str)
-	-- body
 	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
+end
+
+function write_new_pingjia(new_word)
+	return writeFile("/var/mobile/Media/TouchSprite/res/评价语.txt",{new_word});
+end
+
+function manage_the_pingjia_words(...)
+	-- body
+	if isFileExist("/var/mobile/Media/TouchSprite/res/评价语.txt") == false then --存在返回true，不存在返回false
+		writeFileString("/var/mobile/Media/TouchSprite/res/评价语.txt","很好非常好\n");
+	end
+
+	repeat
+		words = readFile("/var/mobile/Media/TouchSprite/res/评价语.txt");
+		local pingjia_words = "";
+		local check_string = "";
+		local int counts = #words;
+		for i = 1,#words do
+			--nLog(i..":"..data[i])
+			if words[i] ~= nil and getStrNum(words[i]) >= 5 then
+				pingjia_words = pingjia_words..words[i]..",";
+				check_string = check_string.."check"..i..",";
+			end
+		end
+		UINew({titles="管理评价语",okname="添加",cancelname="取消"})
+		UILabel("管理评价语",22,"center","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+		UILabel("\n当前评价语如下：",18,"left","0,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+		UICheck(string.sub(check_string,1,getStrNum(check_string)-1),string.sub(pingjia_words,1,string.len(pingjia_words)-1),"");
+		
+		UILabel("\n\n输入您要添加的评价语(不少于五个字)：",18,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+		UIEdit("new_word","此处输入要添加的评价语","",18,"center","0,0,255")
+		
+		UILabel("\n评价时会从所有的评价语里面随机选择一个",13,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
+		UIShow();
+		
+		if new_word == nil then
+			--
+		elseif new_word ~= nil and getStrNum(new_word) < 5 then
+			dialog("评价语不能小于5个字", 0)
+		else
+			if write_new_pingjia(new_word) == true then
+				dialog("评价语添加成功", 0);
+			else
+				dialog("评价语添加失败", 0);
+			end
+			
+		end
+	until (false)	
 end
 
 function main_iphone5(...)
@@ -359,7 +410,7 @@ function main_iphone5(...)
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,登录付款,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
@@ -374,6 +425,12 @@ function main_iphone5(...)
 			
 			index = tonumber(strSplit(name)[1]);
 			nLog("index = "..index);
+			
+			if isFileExist("/var/mobile/Media/TouchSprite/res/评价语.txt") == false then --存在返回true，不存在返回false
+				writeFileString("/var/mobile/Media/TouchSprite/res/评价语.txt","很好非常好\n");
+			end
+			words = readFile("/var/mobile/Media/TouchSprite/res/评价语.txt");
+			words_count = #words;
 			
 			doTheWork_pingjia();
 			
@@ -426,6 +483,10 @@ function main_iphone5(...)
 			tap(46,1086);
 			mSleep(1000);
 		end
+	elseif mode == "管理评价语" then
+
+		manage_the_pingjia_words();
+		
 	elseif mode == "添加帐号" then
 		repeat
 			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})

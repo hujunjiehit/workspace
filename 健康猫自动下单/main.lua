@@ -53,34 +53,40 @@ end
 --跳转到所有团课界面
 function geToAllCourcesPage()
 	tap(626,1131); --点击我的tab
-	mSleep(1000);
+	mSleep(500);
+	
 	tap(362,334);	--点击关注
-	mSleep(1000);
+	repeat
+		mSleep(500);
+	until getColor(575, 203) == 0xd8d8d8
+	
+	mSleep(5000);
+	
 	tap(303,203);
 	mSleep(2000);
 	
 	pull_the_screen(320,800,-600)
-	mSleep(1000)
+	mSleep(500)
 	
 	step = 0;
 	repeat
 		-- body
 		tap(647,660+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(1000)
+		mSleep(500)
 		step = step + 1;
 	until getColor(542,1228) ~= 0x33c774
 	
-	mSleep(1000)
+	mSleep(500)
 	return 0; 
 end
 
 function logout()
-	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
-	mSleep(1000)
 	tap(320,1020);	--进入设置
-	mSleep(1000)
-	tap(350,799);	--点击退出登录
+	repeat
+		mSleep(500);
+	until getColor(288, 793) ~= 0xffffff
 	
+	tap(350,799);	--点击退出登录
 	deviceModel = getDeviceModel();
 	if deviceModel == "Meitu M4" then  
 		mSleep(1000)
@@ -116,7 +122,7 @@ function startToXiadan(begin)
 		
 		repeat
 			nLog("wait for---loading the detail course page");
-			mSleep(2000)
+			mSleep(1000)
 			color_next = getColor(510,1230)		--点击之后，该点的颜色
 		until color_next == color_current or color_next == 0x33c774 or color_next == 0xd8d8d8 or color_next == 0xfafafa or color_next == 0x53c987
 		
@@ -147,7 +153,7 @@ function startToXiadan(begin)
 						tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
 					end
 					
-					mSleep(2000);
+					mSleep(1000);
 					nLog("please whait...")
 				until getColor(265, 1223) == 0xffffff 
 				
@@ -167,7 +173,7 @@ function startToXiadan(begin)
 		else
 			--color_next == 0xd8d8d8 灰色按钮，表示已经报名了 或者 网络出错
 			os.execute("input keyevent 4");
-			mSleep(2000)
+			mSleep(1000)
 			nLog("按钮灰色,已经报名了")
 		end
 	end
@@ -332,8 +338,6 @@ function main()
 	UILabel("请选择需要下单的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("choice_name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
-	
-	nLog("choice_name = "..choice_name)  --choice_name是UICombo返回的，用户选择的字符串
 
 	index = tonumber(strSplit(choice_name)[1]);
 	
