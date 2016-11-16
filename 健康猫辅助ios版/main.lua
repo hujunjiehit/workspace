@@ -206,7 +206,7 @@ function doTheWork_pingjia(...)
 		pull_the_screen(320,560,-508)
 		mSleep(1000)
 		
-		num2 = startToPingjia(1);
+		num2 = startToPingjia(3);
 		nLog("num2 = "..num2);
 		
 		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
@@ -331,7 +331,7 @@ function doTheWork_xiadan(...)
 		pull_the_screen(320,560,-240)
 		mSleep(2000)
 	
-		startToXiadan(2)
+		startToXiadan(3)
 		
 		goBack();
 		goBack();

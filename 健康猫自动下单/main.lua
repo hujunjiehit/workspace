@@ -56,9 +56,9 @@ function geToAllCourcesPage()
 	mSleep(500);
 	
 	tap(362,334);	--点击关注
-	repeat
+	--[[repeat
 		mSleep(500);
-	until getColor(575, 203) == 0xd8d8d8
+	until getColor(575, 203) == 0xd8d8d8]]
 	
 	mSleep(5000);
 	
