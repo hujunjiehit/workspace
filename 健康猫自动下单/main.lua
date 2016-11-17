@@ -76,7 +76,7 @@ function geToAllCourcesPage()
 		step = step + 1;
 	until getColor(542,1228) ~= 0x33c774
 	
-	mSleep(500)
+	mSleep(1500)
 	return 0; 
 end
 
@@ -153,7 +153,7 @@ function startToXiadan(begin)
 						tap(510,1230); --点击稍后支付，然后循环等待，直到付款成功
 					end
 					
-					mSleep(1000);
+					mSleep(2000);
 					nLog("please whait...")
 				until getColor(265, 1223) == 0xffffff 
 				
@@ -161,6 +161,7 @@ function startToXiadan(begin)
 					--mSleep(1000);
 				--until getColor(510, 1230) == 0x33c774
 				
+				mSleep(2000);
 				--选课成功
 				nLog("选课成功")
 				table.insert(results,flag_index);
