@@ -66,6 +66,8 @@ function gotoPingjiaPage_iphone6()
 		mSleep(1000);
 	until ( getColor(396,526) == 0xffffff and getColor(394,612) == 0xffffff and getColor(462,569) == 0xffffff ) or getColor(280,540) == 0xf2f2f2 --加载进度判断
 	
+	mSleep(500);
+	
 	tap(385,84); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
 	
@@ -74,7 +76,7 @@ function gotoPingjiaPage_iphone6()
 	repeat
 		mSleep(1000);
 	until getColor(396,526) == 0xffffff and getColor(394,612) == 0xffffff and getColor(462,569) == 0xffffff		--加载进度判断
-	pull_the_screen(320,560,50)	--滑动到顶,避免漏掉第一个
+	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
 	mSleep(1000);
 	nLog("成功进入评价详情页");
 end
@@ -188,6 +190,8 @@ end
 
 --跳转到所有团课界面
 function geToAllCourcesPage_iphone6()
+	mSleep(1000);
+	
 	tap(658,1282);	 --点击我的tab
 	mSleep(1000)
 	
@@ -229,8 +233,9 @@ function startToXiadan_iphone6(begin)
 		repeat
 			mSleep(500)
 			nLog("loading..1")
-		until getColor(379,519) == 0xffffff --加载完毕
+		until isColor(379,519,0xffffff,80)  --加载完毕
 		
+		mSleep(500);
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
 		

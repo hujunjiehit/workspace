@@ -79,7 +79,7 @@ function gotoPingjiaPage()
 	repeat
 		mSleep(1000);
 	until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a
-	pull_the_screen(320,560,50)	--滑动到顶,避免漏掉第一个
+	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
 	mSleep(1000)
 	nLog("成功进入评价详情页");
 end
@@ -177,9 +177,10 @@ function logout()
 	mSleep(1000)
 	
 	tap(300,892);	--点击退出登录
-	mSleep(1500)	--不能太小，要等对话框出来
-	
-	
+	repeat
+		mSleep(500)
+	until isColor(392,612,0x65d096,90)
+	mSleep(1000)
 	tap(450,617);	--点击确定按钮
 	mSleep(2000)
 	nLog(userName.."退出登录");
@@ -206,7 +207,7 @@ function doTheWork_pingjia(...)
 		pull_the_screen(320,560,-508)
 		mSleep(1000)
 		
-		num2 = startToPingjia(3);
+		num2 = startToPingjia(2);
 		nLog("num2 = "..num2);
 		
 		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
@@ -259,8 +260,9 @@ function startToXiadan(begin)
 		repeat
 			mSleep(1000)
 			nLog("loading..1")
-		until getColor(392, 478) == 0xffffff  --加载完毕
+		until isColor(325,510,0xffffff,80)  --加载完毕
 		
+		mSleep(500);
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
 		

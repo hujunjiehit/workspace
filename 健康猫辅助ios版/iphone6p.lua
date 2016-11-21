@@ -69,13 +69,14 @@ function gotoPingjiaPage_iphone6p()
 	tap(654,686); --点击我的订单
 	repeat
 		mSleep(1000);
-	until (getColor(654,886) == 0xffffff and getColor(620,994) == 0xffffff ) or getColor(636,1808) == 0xf2f2f2 --加载进度判断
-	
+	until isColor(620,994,0xffffff,80)  or isColor(636,1808,0xf2f2f2,80) --加载进度判断
+
 	--[[if getColor(293,136) ~= 0x39af4d then
 		pull_the_screen(293,136,-50);
 		mSleep(500);
 	end]]
-
+	mSleep(1000);
+	
 	tap(628,126); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
 	
@@ -83,7 +84,7 @@ function gotoPingjiaPage_iphone6p()
 	repeat
 		mSleep(1000);
 	until getColor(618,994) == 0xffffff and getColor(714,966) == 0xffffff	--加载进度判断
-	pull_the_screen(320,560,50)	--滑动到顶,避免漏掉第一个
+	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
 	mSleep(1000);
 	nLog("成功进入评价详情页");
 end
@@ -217,7 +218,7 @@ function geToAllCourcesPage_iphone6p()
 	step = 0;
 	repeat
 		-- body
-		tap(1138,1944+step*20); --每次下滑20px，尝试点击改点坐标
+		tap(1138,1894+step*20); --每次下滑20px，尝试点击改点坐标
 		mSleep(500)
 		step = step + 1;
 	until getColor(952, 2132) ~= 0x5cd390
@@ -239,8 +240,9 @@ function startToXiadan_iphone6p(begin)
 		repeat
 			mSleep(500)
 			nLog("loading..1")
-		until getColor(624,990) == 0xffffff --加载完毕
+		until isColor(624,990,0xffffff,80) --加载完毕
 		
+		mSleep(500);
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
 		
@@ -260,7 +262,7 @@ function startToXiadan_iphone6p(begin)
 			until getColor(962,2132) == 0x459e6c or getColor(794,2128) == 0x33c774 or getColor(1176,1094) == 0xbfbfbf  --加载完毕
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if getColor(580,1084) == 0x459e6c or getColor(710,643) == 0xbfbfbf then
+			if getColor(962,2132) == 0x459e6c or getColor(1176,1094) == 0xbfbfbf then
 				nLog("已经选过课了，返回进行下一个")
 				tap(618,1344);	--点击关闭
 				mSleep(1000);
