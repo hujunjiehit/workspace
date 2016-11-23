@@ -93,6 +93,8 @@ function startToPingjia_iphone6(begin)
 		return flag_count;
 	end
 	
+	mSleep(2000);
+	
 	for index = begin,8 do	
 		nLog("index = "..index.."   y  = "..tostring(200+153*(index-1)));
 		y = 200+152*(index-1);
@@ -170,16 +172,20 @@ function doTheWork_pingjia_iphone6(...)
 		
 		gotoPingjiaPage_iphone6();
 		
+		sum_num = 0;
 		num1 = startToPingjia_iphone6(1);
-		nLog("num1 = "..num1);
+		sum_num = sum_num + num1;
+		if pull_count == nil then
+			pull_count = 1;
+		end
+		for k = 1,pull_count do
+			pull_the_screen(320,560,-508)
+			mSleep(1000)
+			num1 = startToPingjia_iphone6(4);
+			sum_num = sum_num + num1;
+		end
 		
-		pull_the_screen(320,560,-508)
-		mSleep(1000)
-		
-		num2 = startToPingjia_iphone6(4);
-		nLog("num2 = "..num2);
-		
-		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
+		wLog("脚本评价记录","帐号"..userName.."成功进行了"..sum_num.."条评价");
 		
 		goBack_iphone6();
 		
@@ -338,9 +344,17 @@ function main_iphone6(...)
 	UINew({titles="脚本配置iphone6",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
+	UILabel("评价时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
+	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
+	
+	--[[for i = 1,pull_count do
+		dialog(i,0);
+		mSleep(1000);
+	end]]
+	
 	
 	if mode == "自动评价" then
 		if name == nil then

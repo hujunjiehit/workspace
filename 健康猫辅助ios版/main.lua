@@ -59,6 +59,26 @@ function login(userName,passWord)
 	mSleep(500)
 end
 
+function logout()
+	tap(560,1083);	 --点击我的tab，拉起登陆界面 
+	mSleep(500)
+	
+	pull_the_screen(320,560,-50)	--滑动，露出设置按钮
+	mSleep(1000)
+	
+	tap(300,956);	--进入设置
+	mSleep(1000)
+	
+	tap(300,892);	--点击退出登录
+	repeat
+		mSleep(500)
+	until isColor(392,612,0x65d096,90)
+	mSleep(1000)
+	tap(450,617);	--点击确定按钮
+	mSleep(2000)
+	nLog(userName.."退出登录");
+end
+
 function gotoPingjiaPage()
 	
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
@@ -97,6 +117,8 @@ function startToPingjia(begin)
 		return flag_count;
 	end
 	
+	mSleep(2000);
+
 	for index = begin,6 do	
 		nLog("index = "..index.."   y  = "..tostring(195+154*(index-1)));
 		y = 195+154*(index-1);
@@ -166,26 +188,6 @@ function startToPingjia(begin)
 end
 
 
-function logout()
-	tap(560,1083);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
-	
-	pull_the_screen(320,560,-50)	--滑动，露出设置按钮
-	mSleep(1000)
-	
-	tap(300,956);	--进入设置
-	mSleep(1000)
-	
-	tap(300,892);	--点击退出登录
-	repeat
-		mSleep(500)
-	until isColor(392,612,0x65d096,90)
-	mSleep(1000)
-	tap(450,617);	--点击确定按钮
-	mSleep(2000)
-	nLog(userName.."退出登录");
-end
-
 
 function doTheWork_pingjia(...)
 	-- body
@@ -201,16 +203,20 @@ function doTheWork_pingjia(...)
 		
 		gotoPingjiaPage();
 		
+		sum_num = 0;
 		num1 = startToPingjia(1);
-		nLog("num1 = "..num1);
+		sum_num = sum_num + num1;
+		if pull_count == nil then
+			pull_count = 1;
+		end
+		for k = 1,pull_count do
+			pull_the_screen(320,560,-408)
+			mSleep(1000)
+			num1 = startToPingjia(2);
+			sum_num = sum_num + num1;
+		end
 		
-		pull_the_screen(320,560,-508)
-		mSleep(1000)
-		
-		num2 = startToPingjia(2);
-		nLog("num2 = "..num2);
-		
-		wLog("脚本评价记录","帐号"..userName.."成功进行了"..num1+num2.."条评价");
+		wLog("脚本评价记录","帐号"..userName.."成功进行了"..sum_num.."条评价");
 		
 		goBack();
 		
@@ -413,6 +419,8 @@ function main_iphone5(...)
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
+	UILabel("评价时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
+	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
