@@ -63,12 +63,20 @@ function logout()
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	mSleep(500)
 	
-	pull_the_screen(320,560,-50)	--滑动，露出设置按钮
-	mSleep(1000)
-	
-	tap(300,956);	--进入设置
-	mSleep(1000)
-	
+	if sysint >= 710 then
+		pull_the_screen(320,560,-50)	--滑动，露出设置按钮
+		mSleep(1000)
+
+		tap(300,956);	--进入设置
+		mSleep(1000)
+	else
+		pull_the_screen(320,560,-100)	--滑动，露出设置按钮
+		mSleep(2000)
+
+		tap(341,855);	--进入设置
+		mSleep(1000)
+	end
+
 	tap(300,892);	--点击退出登录
 	repeat
 		mSleep(500)
@@ -84,13 +92,25 @@ function gotoPingjiaPage()
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	mSleep(500)
 	
-	pull_the_screen(320,560,-50)	--滑动到顶，方便定坐标
-	mSleep(1000)
-	
-	tap(313,313); --点击我的订单
-	repeat
+	if sysint >= 710 then
+		pull_the_screen(320,560,-50)	--滑动到顶，方便定坐标
 		mSleep(1000)
-	until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
+		
+		tap(313,313); --点击我的订单
+		repeat
+			mSleep(1000)
+		until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
+	else
+		pull_the_screen(320,560,100)	--滑动到顶，方便定坐标
+		mSleep(1000)
+		
+		tap(327,461); --点击我的订单
+		repeat
+			mSleep(1000)
+		until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
+	end
+	
+
 	
 	tap(323,82); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
@@ -229,10 +249,19 @@ end
 function geToAllCourcesPage()
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	mSleep(500)
-	pull_the_screen(320,560,-50)	--滑动，露出设置按钮
+	if sysint >= 710 then
+		pull_the_screen(320,560,-50)	--滑动，露出设置按钮
+	else
+		pull_the_screen(320,560,100)	--滑动，露出设置按钮
+	end
 	mSleep(1000)
 	
-	tap(303,185);	--点击关注
+	--tap(303,185);	--点击关注
+	if sysint >= 710 then
+		tap(303,185);	--点击关注
+	else
+		tap(336,330);	--点击关注
+	end
 	repeat
 		mSleep(500)
 	until getColor(264,582) == 0xffffff
@@ -414,6 +443,8 @@ function main_iphone5(...)
 		end
 	end
 	
+	sysver = getOSVer();    --获取系统版本
+	sysint = tonumber(string.sub(sysver, 1, 1)..string.sub(sysver, 3,3)..string.sub(sysver, 5, 5)); 
 	--nLog("str = "..str);
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
