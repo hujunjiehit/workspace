@@ -224,7 +224,7 @@ function geToAllCourcesPage_iphone6p()
 	step = 0;
 	repeat
 		-- body
-		tap(1138,1894+step*20); --每次下滑20px，尝试点击改点坐标
+		tap(1138,1780+step*20); --每次下滑20px，尝试点击改点坐标
 		mSleep(500)
 		step = step + 1;
 	until getColor(952, 2132) ~= 0x5cd390
