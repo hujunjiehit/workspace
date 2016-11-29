@@ -107,11 +107,14 @@ function logout()
 	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
 	mSleep(1000)
 	tap(320,1020);	--进入设置
-	mSleep(1000)
+	repeat
+		mSleep(500);
+	until getColor(267, 834) ~= 0xffffff
+	mSleep(500);
+
 	tap(353,836);	--点击退出登录
 
 	deviceModel = getDeviceModel();
-	write_to_log(deviceModel);
 	if deviceModel == "Meitu M4" then  
 		mSleep(1000)
 		tap(610,806);	--点击确定

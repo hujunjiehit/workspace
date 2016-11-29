@@ -84,9 +84,11 @@ function logout()
 	tap(320,1020);	--进入设置
 	repeat
 		mSleep(500);
-	until getColor(288, 793) ~= 0xffffff
+	until getColor(267, 834) ~= 0xffffff
+	mSleep(500);
 	
-	tap(350,799);	--点击退出登录
+	tap(353,836);	--点击退出登录
+	
 	deviceModel = getDeviceModel();
 	if deviceModel == "Meitu M4" then  
 		mSleep(1000)
@@ -99,7 +101,7 @@ function logout()
 
 	repeat
 		mSleep(1000)
-	until getColor(501,798) ~= 0x663434  --健康猫logo color
+	until isColor(592,103,0x22ac39,85)
 	mSleep(1000)
 	nLog(userName.."退出登录");
 end
@@ -161,7 +163,7 @@ function startToXiadan(begin)
 					--mSleep(1000);
 				--until getColor(510, 1230) == 0x33c774
 				
-				mSleep(2000);
+				mSleep(1000);
 				--选课成功
 				nLog("选课成功")
 				table.insert(results,flag_index);
@@ -318,7 +320,6 @@ function main()
 	init(0)
 	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	wLog("test","[DATE] init log OK!!!"); 
-	showFloatButton(false);
 	
 	path = getSDCardPath();
 	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
@@ -330,7 +331,6 @@ function main()
 			str = str..i.."@第"..i.."个帐号:"..result[1]..",";
 		end
 	end
-	
 	
 	
 	UINew({titles="我的脚本",okname="开始",cancelname="取消",config="UIconfig.dat"})
