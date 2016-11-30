@@ -138,74 +138,49 @@ function startToPingjia(begin)
 		return flag_count;
 	end
 	
-	mSleep(2000);
-
-	for index = begin,6 do	
-		nLog("index = "..index.."   y  = "..tostring(195+154*(index-1)));
-		y = 195+154*(index-1);
-		tap(346,195+154*(index-1));	
+	mSleep(1500);
+	
+	--开始评价
+	index = 1;
+	repeat
+		x = m + 50;
+		y = n + 20 + 154*(index-1);
 		
-		repeat
-			mSleep(500)
-			nLog("正在加载课程详情页 wait...");
-		until getColor(390,434) == 0xffffff
-		--此处有可能网络出错
+		nLog(" index = "..index);
+		
+		if y >= 1135 then
+			return flag_count;
+		end
+		
+		tap(x,y);
 		
 		mSleep(1000);
 		
-		if getColor(232, 1080) == 0x5cd390 then  --可以评价
-			
-			nLog("可以评价。");
-			
-			tap(232, 1080)
-			mSleep(1000);
-			
+		if isColor(232, 1080,0x5cd390,85) then  --可以评价
 			tap(280,600);	--点击输入框，获取焦点
 			mSleep(1000);
-			--inputText("很好非常好");
+			
 			math.randomseed(getRndNum()) -- 随机种子初始化真随机数
 			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
 			inputText(words[num]);
 			
 			mSleep(500);
-			
 			tap(525,190);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
-			tap(320,1080);	--点击提交评价
 			repeat
-				mSleep(1000)
-			until getColor(325,532) == 0xffffff and getColor(315, 920) == 0xefeff4
+				tap(320,1080);	--点击提交评价
+				mSleep(2000);
+			until isColor(232, 1080,0x5cd390,85) == false
 			
+			nLog("评价成功。");
+			flag_count = flag_count + 1;
 			
-			--根据color_next判断下一步动作
-			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
-			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
-			
-			mSleep(1000)
-			if getColor(315, 920) == 0xffffff then
-				--评价失败
-				nLog("评价失败。");
-				goBack();
-				goBack();
-			else
-				--评价成功
-				repeat
-					mSleep(500)
-					nLog("正在加载课程详情页 wait...");
-				until getColor(390,434) == 0xffffff
-				
-				goBack();
-				nLog("评价成功。");
-				flag_count = flag_count + 1;
-			end
-		else	
-			nLog("已经评价过了，直接返回。");
-			goBack();
+			mSleep(500);
 		end
-	end
-	nLog("成功进行了"..flag_count.."条评价");
-	return flag_count;
+		index = index + 1;
+	until false
+	
 end
 
 
@@ -282,7 +257,12 @@ function geToAllCourcesPage()
 		mSleep(500)
 		step = step + 1;
 	until getColor(478, 1085) ~= 0x5cd390
-	mSleep(1000)
+	
+	repeat
+		mSleep(1000)
+		nLog("waiting...")
+	until isColor(447,192,0xffffff,85)
+
 	nLog("成功进入课程详情页");
 	return 0; 
 end
@@ -310,12 +290,13 @@ function startToXiadan(begin)
 		elseif getColor(469, 1085) == 0xffffff then
 			--还在当前页面，什么都不做
 		else
-			mSleep(1000);
+			mSleep(500);
 			tap(483,1085); --点击报名
 			repeat
 				mSleep(1000)
 				nLog("loading..2")
-			until getColor(580,1084) == 0x459e6c or getColor(580,1084) == 0x33c774 or getColor(608,  588) == 0xbfbfbf or getColor(608,  588) == 0x999999  --加载完毕
+			until getColor(624,1086) ~= 0x5cd390  --加载完毕
+			
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
 			if getColor(580,1084) == 0x459e6c or getColor(608,  588) == 0xbfbfbf then
@@ -328,7 +309,7 @@ function startToXiadan(begin)
 				tap(317, 626);
 				mSleep(1000);
 				goBack();
-			else
+			elseif getColor(580,1084) == 0x33c774 then
 				nLog("可以选课")
 				repeat
 					-- body
@@ -342,10 +323,13 @@ function startToXiadan(begin)
 				tap(323,674);   --选课成功，点击我知道了
 				mSleep(1000);
 				goBack();
+			else
+				--进入空白页面
+				mSleep(1000);
+				goBack();
+				goBack();
 			end
 		end
-		
-
 	end
 end
 
@@ -362,14 +346,19 @@ function doTheWork_xiadan(...)
 		
 		geToAllCourcesPage();
 		
-		mSleep(1000);
+		mSleep(1500);
 		
 		startToXiadan(1)
-
-		pull_the_screen(320,560,-240)
-		mSleep(2000)
-	
-		startToXiadan(3)
+		if pull_count == nil then
+			pull_count = 1;
+		end
+		
+		for k = 1,pull_count do
+			pull_the_screen(320,560,-408)
+			mSleep(2000)
+			startToXiadan(2);
+		end
+		mSleep(1000);
 		
 		goBack();
 		goBack();
@@ -451,7 +440,7 @@ function main_iphone5(...)
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
-	UILabel("评价时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
+	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
