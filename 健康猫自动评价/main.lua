@@ -211,7 +211,7 @@ function doTheWork_pingjia_special(...)
 		num1 = startToPingjia_special(1);
 		nLog("num1 = "..num1);
 		
-		pull_the_screen(320,800,-600);
+		pull_the_screen(320,800,-1000);
 		mSleep(1000)
 		
 		num2 = startToPingjia_special(3);
