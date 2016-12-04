@@ -30,10 +30,10 @@ function login_iphone6(userName,passWord)
 
 	repeat
 		tap(530,601); --点击登陆按钮
-		mSleep(1000);
+		mSleep(2000);
     until getColor(424, 176) ~= 0x3aab47
 	
-
+	mSleep(1000);
 	nLog(userName.."登录成功");
 	
 	tap(658,1282);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
@@ -75,9 +75,10 @@ function gotoPingjiaPage_iphone6()
 	tap(370,249); 	 --选择私教团购订单
 	repeat
 		mSleep(1000);
-	until getColor(396,526) == 0xffffff and getColor(394,612) == 0xffffff and getColor(462,569) == 0xffffff		--加载进度判断
+	until isColor(396,526,0xffffff,95) and isColor(394,612,0xffffff,95) and isColor(462,569,0xffffff,95)		--加载进度判断
+	mSleep(500);
 	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
-	mSleep(1000);
+	mSleep(500);
 	nLog("成功进入评价详情页");
 end
 
@@ -86,77 +87,73 @@ function startToPingjia_iphone6(begin)
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	m,n = findColorInRegionFuzzy(0x33c774,80,514,139,743,1327);
+	m,n = findColorInRegionFuzzy(0x33c774,80,587,139,740,1329);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
+		mSleep(500);
 		return flag_count;
 	end
 	
-	mSleep(2000);
+	mSleep(1000);
 	
-	for index = begin,8 do	
-		nLog("index = "..index.."   y  = "..tostring(200+153*(index-1)));
-		y = 200+152*(index-1);
-		tap(400,200+152*(index-1));	
+	--开始评价
+	index = 1;
+	repeat
+		x = m + 50;
+		y = n + 20 + 152*(index-1);
 		
-		repeat
-			mSleep(500)
-			nLog("正在加载课程详情页 wait...");
-		until getColor(94,  426) ~= 0xffffff
-		--此处有可能网络出错
+		nLog(" index = "..index);
+		
+		if y >= 1330 then
+			return flag_count;
+		end
 		
 		mSleep(500);
 		
-		if getColor(274, 1280) == 0x5cd390 then  --可以评价
+		tap(x,y);
+		
+		mSleep(1000);
+		
+		if isColor(274, 1280,0x5cd390,85) then  --可以评价
 			
-			nLog("可以评价。");
-	
-			tap(274, 1280)
-			mSleep(1000);
-			
+			repeat
+				mSleep(500); --加载数据
+			until isColor(193,217,0x7ce5aa,85)
+		
 			tap(330,570);	--点击输入框，获取焦点
 			mSleep(500);
-			--inputText("很好非常好");
+			
 			math.randomseed(getRndNum()) -- 随机种子初始化真随机数
 			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
 			inputText(words[num]);
-				
-			mSleep(500);
 			
+			mSleep(500);
 			tap(610,330);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
-			tap(274, 1280)	--点击提交评价
+			tap(274, 1280);   --点击提交评价
+			times = 0;
 			repeat
-				mSleep(1000)
-			until getColor(370,621) == 0xffffff and getColor(392, 1004) == 0xefeff4
+				mSleep(1000);
+				times = times + 1;
+				if times == 20 then
+					tap(274, 1280);   --点击提交评价
+					times = 0;
+				end
+			until isColor(274,1280,0x5cd390,85) == false
 			
-			--根据color_next判断下一步动作
-			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
-			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
+			nLog("评价成功。");
+			flag_count = flag_count + 1;
 			
-			mSleep(500)
-			if getColor(392, 1004) == 0xffffff then
-				--评价失败
-				--todo ********************************************************
-				nLog("评价失败。");
-				goBack_iphone6();
-				goBack_iphone6();
-			else
-				--评价成功
-				goBack_iphone6();
-				nLog("评价成功。");
-				flag_count = flag_count + 1;
-			end
-		else	
-			nLog("已经评价过了，直接返回。");
-			goBack_iphone6();
+			repeat
+				mSleep(1000);
+			until isColor(450,533,0xffffff,95) or isColor(445,609,0xffffff,95)
 		end
-	end
-	nLog("成功进行了"..flag_count.."条评价");
-	return flag_count;
+		index = index + 1;
+	until false
 end
+
 
 function doTheWork_pingjia_iphone6(...)
 	-- body
@@ -180,7 +177,7 @@ function doTheWork_pingjia_iphone6(...)
 		end
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-508)
-			mSleep(1000)
+			mSleep(2000)
 			num1 = startToPingjia_iphone6(4);
 			sum_num = sum_num + num1;
 		end
@@ -196,15 +193,20 @@ end
 
 --跳转到所有团课界面
 function geToAllCourcesPage_iphone6()
-	mSleep(1000);
 	
+	mSleep(200);
 	tap(658,1282);	 --点击我的tab
-	mSleep(1000)
 	
-	tap(351,332);	--点击关注
 	repeat
 		mSleep(500)
-	until getColor(373,499) == 0xffffff and getColor(371,600) == 0xffffff
+	until  isColor( 100,456,0xff6bac, 85) and isColor( 100,587,0xff5555, 85) and isColor( 101,715,0xff852a, 85)
+
+	mSleep(200)
+	tap(351,332);	--点击关注
+	repeat
+		mSleep(1000)
+	until isColor( 373,  597, 0xffffff, 85) and isColor( 306,  525, 0xffffff, 85) and isColor( 435,  674, 0xffffff, 85)
+	mSleep(500);
 	
 	tap(80,190);	--点击第一个关注的头像
 	repeat
@@ -224,17 +226,20 @@ function geToAllCourcesPage_iphone6()
 	
 	repeat
 		mSleep(500);
-	until getColor(590,523) == 0xffffff and getColor(599,697) == 0xffffff
+	until isColor(590,523,0xffffff,85) and isColor(599,697,0xffffff,85)
 	
+	mSleep(1000)
 	nLog("成功进入课程详情页");
 	return 0; 
 end
 
 function startToXiadan_iphone6(begin)
+	mSleep(500)
 	for index = begin,7 do	
 		nLog("index = "..index.."   y  = "..tostring(208+161*(index-1)));
 		y = 208+161*(index-1);
 		
+		mSleep(500)
 		tap(420,208+161*(index-1));
 		repeat
 			mSleep(500)
@@ -261,7 +266,7 @@ function startToXiadan_iphone6(begin)
 			until getColor(580, 1285) == 0x459e6c or getColor(580, 1285) == 0x33c774 or getColor(710,643) == 0xbfbfbf or getColor(608,  588) == 0x999999  --加载完毕
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if getColor(580,1084) == 0x459e6c or getColor(710,643) == 0xbfbfbf then
+			if getColor(580,1285) == 0x459e6c or getColor(710,643) == 0xbfbfbf then
 				nLog("已经选过课了，返回进行下一个")
 				tap(380,820);
 				mSleep(500);
@@ -272,7 +277,7 @@ function startToXiadan_iphone6(begin)
 				tap(317, 626);
 				mSleep(1000);
 				goBack_iphone6();
-			else
+			elseif isColor(651, 1289, 0x33c774, 85) then
 				nLog("可以选课")
 				repeat
 					-- body
@@ -280,11 +285,31 @@ function startToXiadan_iphone6(begin)
 					mSleep(1000)
 					m,n = findColorInRegionFuzzy(0x007aff, 90, 110,530, 630,800); 
 					nLog("m = "..m.."   n = "..n);
+					
+					if isColor( 659, 1280, 0xefeff4, 95) and isColor( 630, 1152, 0xefeff4, 95) then
+						m = 0;
+						n = 0;
+					end
+					mSleep(200);
 				until m ~= -1 and n ~= -1
-				mSleep(500);
+				mSleep(200);
 				
-				tap(372,771);   --选课成功，点击我知道了
+				if m == 0 and n == 0 then
+					--进入空白页面
+					mSleep(500);
+					goBack_iphone6();
+					goBack_iphone6();
+					goBack_iphone6();
+				else
+					mSleep(500);
+					tap(372,771);   --选课成功，点击我知道了
+					mSleep(1000);
+					goBack_iphone6();
+				end
+			else
+				--进入空白页面
 				mSleep(1000);
+				goBack_iphone6();
 				goBack_iphone6();
 			end
 		end
@@ -308,7 +333,7 @@ function doTheWork_xiadan_iphone6(...)
 		
 		geToAllCourcesPage_iphone6();
 		
-		mSleep(500);
+		mSleep(2000);
 		
 		startToXiadan_iphone6(1)
 

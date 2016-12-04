@@ -3,7 +3,8 @@ require "iphone6"
 require "iphone6p"
 
 function pull_the_screen(x,y,dy)
-	moveTo(x,y,x,y+dy)
+	moveTo(x,y,x,y+dy);
+	mSleep(1000);
 end
 
 function goBack(...)
@@ -119,9 +120,10 @@ function gotoPingjiaPage()
 
 	repeat
 		mSleep(1000);
-	until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a
-	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
-	mSleep(1000)
+	until isColor( 316,511,0xffffff,95) or isColor( 374,437,0xffffff, 85) or isColor(390,582,0xffffff, 95)
+	mSleep(1000);
+	pull_the_screen(320,560,400);	--滑动到顶,避免漏掉第一个
+	mSleep(1000);
 	nLog("成功进入评价详情页");
 end
 
@@ -148,15 +150,22 @@ function startToPingjia(begin)
 		
 		nLog(" index = "..index);
 		
-		if y >= 1135 then
+		if y >= 1130 then
 			return flag_count;
 		end
+		
+		mSleep(1000);
 		
 		tap(x,y);
 		
 		mSleep(1000);
 		
 		if isColor(232, 1080,0x5cd390,85) then  --可以评价
+			
+			repeat
+				mSleep(500); --加载数据
+			until isColor(194,218,0x7ce5aa,85)
+		
 			tap(280,600);	--点击输入框，获取焦点
 			mSleep(1000);
 			
@@ -168,15 +177,23 @@ function startToPingjia(begin)
 			tap(525,190);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
+			tap(320,1080);	--点击提交评价
+			times = 0;
 			repeat
-				tap(320,1080);	--点击提交评价
-				mSleep(2000);
+				mSleep(1000);
+				times = times + 1;
+				if times == 20 then
+					tap(320,1080);	--点击提交评价
+					times = 0;
+				end
 			until isColor(232, 1080,0x5cd390,85) == false
 			
 			nLog("评价成功。");
 			flag_count = flag_count + 1;
 			
-			mSleep(500);
+			repeat
+				mSleep(1000);
+			until isColor(396,455,0xffffff,95) or isColor(391,517,0xffffff,95)
 		end
 		index = index + 1;
 	until false
@@ -207,7 +224,7 @@ function doTheWork_pingjia(...)
 		end
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-408)
-			mSleep(1000)
+			mSleep(1500)
 			num1 = startToPingjia(2);
 			sum_num = sum_num + num1;
 		end
@@ -253,8 +270,8 @@ function geToAllCourcesPage()
 	step = 0;
 	repeat
 		-- body
-		tap(575,750+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(500)
+		tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
+		mSleep(200)
 		step = step + 1;
 	until getColor(478, 1085) ~= 0x5cd390
 	
@@ -317,12 +334,26 @@ function startToXiadan(begin)
 					mSleep(1000)
 					m,n = findColorInRegionFuzzy(0x007aff, 90, 53,420, 628,737); 
 					nLog("m = "..m.."   n = "..n);
+					
+					if isColor(481, 1084,0xefeff4,95) and isColor(461,978,0xefeff4,95) then
+						m = 0;
+						n = 0;
+					end
+					mSleep(200);
 				until m ~= -1 and n ~= -1
-				mSleep(500);
+				mSleep(200);
 				
-				tap(323,674);   --选课成功，点击我知道了
-				mSleep(1000);
-				goBack();
+				if m == 0 and n == 0 then
+					mSleep(500);
+					goBack();
+					goBack();
+					goBack();
+				else
+					mSleep(500);
+					tap(323,674);   --选课成功，点击我知道了
+					mSleep(1000);
+					goBack();
+				end
 			else
 				--进入空白页面
 				mSleep(1000);
