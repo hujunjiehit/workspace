@@ -199,7 +199,7 @@ function geToAllCourcesPage_iphone6()
 	
 	repeat
 		mSleep(500)
-	until  isColor( 100,456,0xff6bac, 85) and isColor( 100,587,0xff5555, 85) and isColor( 101,715,0xff852a, 85)
+	until  isColor( 100,456,0xff6bac, 85) or isColor( 100,587,0xff5555, 85) or isColor( 101,715,0xff852a, 85)
 
 	mSleep(200)
 	tap(351,332);	--点击关注
@@ -219,7 +219,7 @@ function geToAllCourcesPage_iphone6()
 	step = 0;
 	repeat
 		-- body
-		tap(685,700+step*20); --每次下滑20px，尝试点击改点坐标
+		tap(685,600+step*20); --每次下滑20px，尝试点击改点坐标
 		mSleep(100)
 		step = step + 1;
 	until getColor(566, 1287) ~= 0x5cd390

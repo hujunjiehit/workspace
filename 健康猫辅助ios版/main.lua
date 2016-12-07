@@ -163,8 +163,8 @@ function startToPingjia(begin)
 		if isColor(232, 1080,0x5cd390,85) then  --可以评价
 			
 			repeat
-				mSleep(500); --加载数据
-			until isColor(194,218,0x7ce5aa,85)
+				mSleep(1000); --加载数据
+			until isColor(194,218,0x7ce5aa,85) or getColor(97,201) ~= 0xffffff
 		
 			tap(280,600);	--点击输入框，获取焦点
 			mSleep(1000);
@@ -374,6 +374,7 @@ function doTheWork_xiadan(...)
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
 		login(userName,passWord);
+		mSleep(500)
 		
 		geToAllCourcesPage();
 		
