@@ -71,8 +71,8 @@ function geToAllCourcesPage()
 	step = 0;
 	repeat
 		-- body
-		tap(647,660+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(500)
+		tap(647,660+step*10); --每次下滑20px，尝试点击改点坐标
+		mSleep(200)
 		step = step + 1;
 	until getColor(542,1228) ~= 0x33c774
 	

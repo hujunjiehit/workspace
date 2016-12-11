@@ -142,55 +142,75 @@ function startToPingjia_special(begin)
 	
 	switchTSInputMethod(true);
 	
+	mSleep(1000)
+	m,n = findColorInRegionFuzzy(0x33c774,80,0,50,720,1270);
+	nLog(m.."----"..n)
+	if m == -1 and n == -1 then
+		--当前页面没有需要评价的
+		mSleep(500);
+		return flag_count;
+	end
+	
+	mSleep(1000);
+	
+	--开始评价
+	index = 1;
 	repeat
-		mSleep(1000)
-		m,n = findColorInRegionFuzzy(0x33c774,80,0,50,720,1270);
-		if m ~= -1 and n ~= -1 then
-			tap(m+2,n+2);
+		x = m + 50;
+		y = n + 20 + 154*(index-1);
+		
+		nLog(" index = "..index);
+		
+		if y >= 1279 then
+			nLog("成功进行了"..flag_count.."条评价");
+			switchTSInputMethod(false);
+			mSleep(1000)
+			return flag_count;
+		end
+		
+		mSleep(1000);
+		
+		tap(x,y);
+		
+		mSleep(200);
+		
+		repeat
+			mSleep(1000)
+			nLog("正在加载课程详情页 wait...");
+		until isColor(419,682,0xf2f2f2,95) or isColor(362,1024,0xf2f2f2,95)
+		mSleep(500);
+
+		if isColor(282, 1231,0x33c774,85) then  --可以评价
 			
 			repeat
-				mSleep(1000)
-				nLog("正在加载课程详情页 wait...");
-			until isColor(419,682,0xf2f2f2,95)
-			mSleep(500);
+				mSleep(1000); --加载数据
+			until isColor( 190,245,0x7ce5aa,85)
 			
-			if isColor(282, 1231,0x33c774,85) then  --可以评价
-				
-				tap(333,627);	--点击输入框，获取焦点
-				mSleep(1000);
-				--inputText("很好非常好");
-				
-				math.randomseed(getRndNum()) -- 随机种子初始化随机数
-				num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
-				inputText(words[num]);
-				
-				mSleep(1000);
-				
-				tap(351,1231);	--点击提交评价
-				repeat
-					nLog("wait for...");
-					mSleep(2000)
-				until isColor(386,668,0xc2c2c2,85) == false
-				mSleep(1000);
-				
-				if isColor(282, 1231,0x33c774,85) then --已经评价过了
-					os.execute("input keyevent 4");
-					mSleep(1000);
-					pull_the_screen(320,800,1000);
-					mSleep(2000);
-				end
-			else	
-				--已经评价过了，直接返回
-				os.execute("input keyevent 4");
+			tap(333,627);	--点击输入框，获取焦点
+			mSleep(1000);
+			--inputText("很好非常好");
+			
+			math.randomseed(getRndNum()) -- 随机种子初始化随机数
+			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
+			inputText(words[num]);
+			
+			mSleep(1000);
+			
+			tap(351,1231);	--点击提交评价
+			repeat
+				nLog("wait for...");
 				mSleep(1000)
-			end
+			until isColor(282, 1231,0x33c774,85) == false
+			mSleep(1000);
+		else	
+			--已经评价过了，直接返回
+			os.execute("input keyevent 4");
+			mSleep(1000)
 		end
-	until m == -1 and n == -1
-	
-	nLog("成功进行了"..flag_count.."条评价");
-	switchTSInputMethod(false);
-	
-	return flag_count;
+		
+		index = index + 1;
+		mSleep(1000);
+	until false
 end
 
 function doTheWork_pingjia_special(...)
@@ -280,8 +300,6 @@ function manage_the_pingjia_words(...)
 			
 		end
 	until (false)
-
-	
 end
 
 
@@ -313,6 +331,8 @@ function main()
 	
 	index = tonumber(strSplit(choice_name)[1]);
 	nLog("index = "..index);
+
+	mSleep(1000)
 	
 	setScreenScale(true, 720, 1280);
 	

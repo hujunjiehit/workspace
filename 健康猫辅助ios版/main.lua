@@ -55,9 +55,9 @@ function login(userName,passWord)
 		target_color = getColor(355,200) --获取健康猫logo的背景颜色
 	end
 	nLog(userName.."登录成功");
-	
+	mSleep(200)
 	tap(560,1083);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
-	mSleep(500)
+	mSleep(200)
 end
 
 function logout()
@@ -79,9 +79,11 @@ function logout()
 		mSleep(1000)
 	end
 
-	tap(300,892);	--点击退出登录
+
 	repeat
-		mSleep(500)
+		mSleep(200);
+		tap(300,892);	--点击退出登录
+		mSleep(1000);
 	until isColor(392,612,0x65d096,90)
 	mSleep(1000)
 	tap(450,617);	--点击确定按钮
@@ -241,7 +243,7 @@ end
 --跳转到所有团课界面
 function geToAllCourcesPage()
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	mSleep(200)
 	if sysint >= 700 and sysint <= 710 then
 		pull_the_screen(320,560,100)	--滑动，露出设置按钮
 	else
@@ -279,12 +281,14 @@ function geToAllCourcesPage()
 		mSleep(1000)
 		nLog("waiting...")
 	until isColor(447,192,0xffffff,85)
-
+	
+	mSleep(1000);
 	nLog("成功进入课程详情页");
 	return 0; 
 end
 
 function startToXiadan(begin)
+	mSleep(1000);
 	for index = begin,6 do	
 		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
 		y = 208+160*(index-1);
