@@ -208,25 +208,42 @@ function geToAllCourcesPage_iphone6()
 	until isColor( 373,  597, 0xffffff, 85) and isColor( 306,  525, 0xffffff, 85) and isColor( 435,  674, 0xffffff, 85)
 	mSleep(500);
 	
-	tap(80,190);	--点击第一个关注的头像
-	repeat
-		mSleep(500)
-	until getColor(566, 1287) == 0x5cd390 
-	
-	mSleep(1000)
-	pull_the_screen(320,560,-50)
-	mSleep(500)
-	step = 0;
-	repeat
-		-- body
-		tap(685,600+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(100)
-		step = step + 1;
-	until getColor(566, 1287) ~= 0x5cd390
-	
+	sucess = false;
 	repeat
 		mSleep(500);
-	until isColor(590,523,0xffffff,85) and isColor(599,697,0xffffff,85)
+		tap(80,190);	--点击第一个关注的头像
+		repeat
+			mSleep(500)
+		until getColor(566, 1287) == 0x5cd390 
+	
+		mSleep(1000)
+		pull_the_screen(320,560,-50)
+		mSleep(500)
+		step = 0;
+		repeat
+			-- body
+			tap(685,600+step*20); --每次下滑20px，尝试点击改点坐标
+			mSleep(100)
+			step = step + 1;
+		until getColor(566, 1287) ~= 0x5cd390
+	
+		--可能进入动力秀 或者 团课界面
+		repeat
+			mSleep(500);
+		until (isColor(544,203, 0xffffff,85) and isColor(555,347,0xffffff,85)) or (isColor( 371,  626, 0xffffff, 85) and isColor(499, 625,0xffffff, 85))
+		
+		mSleep(500);
+		if isColor(544,203, 0xffffff,85) and isColor(555,347,0xffffff,85) then
+			--进入团课界面
+			sucess = true;
+		else
+			--进入动力秀界面
+			sucess = false;
+			goBack_iphone6();
+			goBack_iphone6();
+		end
+		mSleep(1000);
+	until sucess == true
 	
 	mSleep(1000)
 	nLog("成功进入课程详情页");

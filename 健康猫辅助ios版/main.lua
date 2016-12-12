@@ -261,26 +261,43 @@ function geToAllCourcesPage()
 		mSleep(500)
 	until getColor(264,582) == 0xffffff
 	
-	tap(80,188);	--点击第一个关注的头像
+	sucess = false;
 	repeat
-		mSleep(500)
-	until getColor(478, 1085) == 0x5cd390 
-	
-	mSleep(1000)
-	pull_the_screen(320,560,-50)
-	mSleep(500)
-	step = 0;
-	repeat
-		-- body
-		tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(200)
-		step = step + 1;
-	until getColor(478, 1085) ~= 0x5cd390
-	
-	repeat
+		mSleep(500);
+		tap(80,188);	--点击第一个关注的头像
+		repeat
+			mSleep(500)
+		until getColor(478, 1085) == 0x5cd390
+		
 		mSleep(1000)
-		nLog("waiting...")
-	until isColor(447,192,0xffffff,85)
+		pull_the_screen(320,560,-50)
+		mSleep(500)
+		step = 0;
+		repeat
+			-- body
+			tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
+			mSleep(200)
+			step = step + 1;
+		until getColor(478, 1085) ~= 0x5cd390
+		
+		--可能进入动力秀 或者 团课界面
+		repeat
+			mSleep(1000)
+			nLog("waiting...")
+		until isColor(447,192,0xffffff,85) or (isColor( 319,  550, 0xffffff, 85) and isColor( 425,  549, 0xffffff, 85))
+		
+		mSleep(500);
+		if isColor( 464,  210, 0xffffff, 85) and isColor( 459,  356, 0xffffff, 85) then
+			--进入团课界面
+			sucess = true;
+		else
+			--进入动力秀界面
+			sucess = false;
+			goBack();
+			goBack();
+		end
+		mSleep(1000);
+	until sucess == true
 	
 	mSleep(1000);
 	nLog("成功进入课程详情页");
