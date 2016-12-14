@@ -413,12 +413,92 @@ function doTheWork_xiadan(...)
 		end
 		mSleep(1000);
 		
-		goBack();
-		goBack();
-		goBack();
+		if yueke_mode == nil then
+			--需要约两个号的课程
+			nLog("开始约第二个号的课程")
+			mSleep(1000);
+			goBack();
+			goBack();
+			
+			--回到关注列表页
+			mSleep(500);
+			if (isColor( 511,  312, 0xc4c4c4, 85)) then
+				--有第二个关注的人
+				sucess = false;
+				repeat
+					mSleep(500);
+					tap(88,313);	--点击第二个关注的头像
+					repeat
+						mSleep(500)
+					until getColor(478, 1085) == 0x5cd390
+					
+					mSleep(1000)
+					pull_the_screen(320,560,-50)
+					mSleep(500)
+					step = 0;
+					repeat
+						-- body
+						tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
+						mSleep(200)
+						step = step + 1;
+					until getColor(478, 1085) ~= 0x5cd390
+					
+					--可能进入动力秀 或者 团课界面
+					repeat
+						mSleep(1000)
+						nLog("waiting...")
+					until isColor(447,192,0xffffff,85) or (isColor( 319,  550, 0xffffff, 85) and isColor( 425,  549, 0xffffff, 85))
+					
+					mSleep(500);
+					if isColor( 464,  210, 0xffffff, 85) and isColor( 459,  356, 0xffffff, 85) then
+						--进入团课界面
+						sucess = true;
+					else
+						--进入动力秀界面
+						sucess = false;
+						goBack();
+						goBack();
+					end
+					mSleep(1000);
+				until sucess == true
+				mSleep(1000);
+				nLog("成功进入第二个私教课程详情页");
+				
+				mSleep(1500);
 		
-		logout();
-		mSleep(1000);
+				startToXiadan(1)
+				if pull_count == nil then
+					pull_count = 1;
+				end
+				
+				for k = 1,pull_count do
+					pull_the_screen(320,560,-408)
+					mSleep(2000)
+					startToXiadan(2);
+				end
+				
+				mSleep(1000);
+				goBack();
+				goBack();
+				goBack();
+				logout();
+				mSleep(1000);
+			else
+				--没有第二个关注的人
+				nLog("没有第二个关注的人")
+				goBack();
+				logout();
+				mSleep(1000);
+			end
+		else
+			--不需要约两个号的课程
+			goBack();
+			goBack();
+			goBack();
+			
+			logout();
+			mSleep(1000);
+		end
 	end
 end
 
@@ -495,8 +575,10 @@ function main_iphone5(...)
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
+	UICheck("yueke_mode","只约一个私教号的课","0");
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
+
 	UIShow();
 	
 	if mode == "自动评价" then
