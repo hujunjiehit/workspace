@@ -1,17 +1,12 @@
 require "TSLib"
 
-function pull_the_screen(x,y,dy)
-	moveTo(x,y,x,y+dy);
-	mSleep(1000);
-end
-
-function goBack(...)
+function goBack_ipad(...)
 	-- body
 	tap(90,116);
 	mSleep(1000);
 end
 
-function login(userName,passWord)
+function login_ipad(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
 	tap(625,935);	 --点击我的tab，拉起登陆界面 
@@ -47,7 +42,7 @@ function login(userName,passWord)
 	mSleep(1000)
 end
 
-function logout()
+function logout_ipad()
 	tap(625,935);	 --点击我的tab，拉起登陆界面 
 	mSleep(500)
 	
@@ -76,7 +71,7 @@ function logout()
 	nLog(userName.."退出登录");
 end
 
-function gotoPingjiaPage()
+function gotoPingjiaPage_ipad()
 	
 	tap(625,935); --点击我的tab
 	mSleep(500)
@@ -104,7 +99,7 @@ function gotoPingjiaPage()
 end
 
 
-function startToPingjia(begin)
+function startToPingjia_ipad(begin)
 	
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
@@ -178,7 +173,7 @@ end
 
 
 
-function doTheWork_pingjia(...)
+function doTheWork_pingjia_ipad(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -187,13 +182,13 @@ function doTheWork_pingjia(...)
 		
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
-		login(userName,passWord);
+		login_ipad(userName,passWord);
 		mSleep(1500)
 		
-		gotoPingjiaPage();
+		gotoPingjiaPage_ipad();
 		
 		sum_num = 0;
-		num1 = startToPingjia(1);
+		num1 = startToPingjia_ipad(1);
 		sum_num = sum_num + num1;
 		if pull_count == nil then
 			pull_count = 1;
@@ -201,21 +196,21 @@ function doTheWork_pingjia(...)
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-408)
 			mSleep(1500)
-			num1 = startToPingjia(2);
+			num1 = startToPingjia_ipad(2);
 			sum_num = sum_num + num1;
 		end
 		
 		wLog("脚本评价记录","帐号"..userName.."成功进行了"..sum_num.."条评价");
 		
-		goBack();
+		goBack_ipad();
 		
-		logout();
+		logout_ipad();
 		mSleep(1000);
 	end
 end
 
 --跳转到所有团课界面
-function geToAllCourcesPage()
+function geToAllCourcesPage_ipad()
 	tap(625,935); --点击我的tab 
 	mSleep(200)
 	pull_the_screen(320,560,100)	--滑动，露出设置按钮
@@ -260,8 +255,8 @@ function geToAllCourcesPage()
 		else
 			--进入动力秀界面
 			sucess = false;
-			goBack();
-			goBack();
+			goBack_ipad();
+			goBack_ipad();
 		end
 		mSleep(1000);
 	until sucess == true
@@ -271,7 +266,7 @@ function geToAllCourcesPage()
 	return 0; 
 end
 
-function startToXiadan(begin)
+function startToXiadan_ipad(begin)
 	mSleep(1000);
 	for index = begin,5 do	
 		nLog("index = "..index.."   y  = "..tostring(234+160*(index-1)));
@@ -291,7 +286,7 @@ function startToXiadan(begin)
 		if getColor(548, 930) == 0xaaaaaa then   --灰色按钮
 			--如果已经报名，直接返回
 			mSleep(500);
-			goBack();
+			goBack_ipad();
 		elseif getColor(548, 930) == 0xffffff then
 			--还在当前页面，什么都不做
 		else
@@ -308,12 +303,12 @@ function startToXiadan(begin)
 				nLog("已经选过课了，返回进行下一个")
 				tap(383,675);
 				mSleep(500);
-				goBack();
+				goBack_ipad();
 			elseif getColor(608,  588) == 0x999999 then
 				nLog("课程已撤销，返回点击好的------待定")
 				tap(317, 626);
 				mSleep(1000);
-				goBack();
+				goBack_ipad();
 			elseif getColor(463,940) == 0x33c774 then
 				nLog("可以选课")
 				repeat
@@ -335,19 +330,19 @@ function startToXiadan(begin)
 				mSleep(500);
 				tap(388,612);   --选课成功，点击我知道了
 				mSleep(1000);
-				goBack();
+				goBack_ipad();
 
 			else
 				--进入空白页面
 				mSleep(1000);
-				goBack();
-				goBack();
+				goBack_ipad();
+				goBack_ipad();
 			end
 		end
 	end
 end
 
-function doTheWork_xiadan(...)
+function doTheWork_xiadan_ipad(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -356,14 +351,14 @@ function doTheWork_xiadan(...)
 		
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
-		login(userName,passWord);
+		login_ipad(userName,passWord);
 		mSleep(500)
 		
-		geToAllCourcesPage();
+		geToAllCourcesPage_ipad();
 		
 		mSleep(1500);
 		
-		startToXiadan(1)
+		startToXiadan_ipad(1)
 		if pull_count == nil then
 			pull_count = 1;
 		end
@@ -371,72 +366,21 @@ function doTheWork_xiadan(...)
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-408)
 			mSleep(2000)
-			startToXiadan(1);
+			startToXiadan_ipad(1);
 		end
 		mSleep(1000);
 		
-		goBack();
-		goBack();
-		goBack();
+		goBack_ipad();
+		goBack_ipad();
+		goBack_ipad();
 		
-		logout();
+		logout_ipad();
 		mSleep(1000);
 	end
 end
 
-function write_info(str)
-	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
-end
 
-function write_new_pingjia(new_word)
-	return writeFile("/var/mobile/Media/TouchSprite/res/评价语.txt",{new_word});
-end
-
-function manage_the_pingjia_words(...)
-	-- body
-	if isFileExist("/var/mobile/Media/TouchSprite/res/评价语.txt") == false then --存在返回true，不存在返回false
-		writeFileString("/var/mobile/Media/TouchSprite/res/评价语.txt","很好非常好\n");
-	end
-
-	repeat
-		words = readFile("/var/mobile/Media/TouchSprite/res/评价语.txt");
-		local pingjia_words = "";
-		local check_string = "";
-		local int counts = #words;
-		for i = 1,#words do
-			--nLog(i..":"..data[i])
-			if words[i] ~= nil and getStrNum(words[i]) >= 5 then
-				pingjia_words = pingjia_words..words[i]..",";
-				check_string = check_string.."check"..i..",";
-			end
-		end
-		UINew({titles="管理评价语",okname="添加",cancelname="取消"})
-		UILabel("管理评价语",22,"center","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-		UILabel("\n当前评价语如下：",18,"left","0,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-		UICheck(string.sub(check_string,1,getStrNum(check_string)-1),string.sub(pingjia_words,1,string.len(pingjia_words)-1),"");
-		
-		UILabel("\n\n输入您要添加的评价语(不少于五个字)：",18,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-		UIEdit("new_word","此处输入要添加的评价语","",18,"center","0,0,255")
-		
-		UILabel("\n评价时会从所有的评价语里面随机选择一个",13,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-		UIShow();
-		
-		if new_word == nil then
-			--
-		elseif new_word ~= nil and getStrNum(new_word) < 5 then
-			dialog("评价语不能小于5个字", 0)
-		else
-			if write_new_pingjia(new_word) == true then
-				dialog("评价语添加成功", 0);
-			else
-				dialog("评价语添加失败", 0);
-			end
-			
-		end
-	until (false)	
-end
-
-function main_ipad(...)
+function main_ipad_real(...)
 	-- body
 	data = readFile("/var/mobile/Media/TouchSprite/res/info.txt") 	--读取文件内容，返回一个table
 	str = "";
@@ -478,7 +422,7 @@ function main_ipad(...)
 			words = readFile("/var/mobile/Media/TouchSprite/res/评价语.txt");
 			words_count = #words;
 			
-			doTheWork_pingjia();
+			doTheWork_pingjia_ipad();
 			
 		end
 	elseif mode == "自动约课" then
@@ -492,7 +436,7 @@ function main_ipad(...)
 			index = tonumber(strSplit(name)[1]);
 			nLog("index = "..index);
 			
-			doTheWork_xiadan();
+			doTheWork_xiadan_ipad();
 	
 		end
 	elseif mode == "登录付款" then
@@ -515,7 +459,7 @@ function main_ipad(...)
 			
 			mSleep(1000)
 			
-			login(userName,passWord);
+			login_ipad(userName,passWord);
 			
 			tap(625,935);	 --点击我的tab，拉起登陆界面 
 			mSleep(500)
@@ -562,27 +506,11 @@ function main_ipad(...)
 	end
 end 
 
-function beforeUserExit(...)
+function main_ipad(...)
 	-- body
-	showFloatButton(true);
-end
-
-function main(...)
-	-- body
-	init("0", 0);  --竖屏
-	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
-	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
-	
-	width,height = getScreenSize();
-	nLog("[DATE]"..width.."---"..height);
-	
 	setScreenScale(true, 768, 1024)  --以768,1024分辨率为基准坐标进行缩放
 	
-	main_ipad();
+	main_ipad_real();
 
 	setScreenScale(false)  --关闭缩放
-
-	closeLog("脚本评价记录");  --关闭日志
 end
-
-main()
