@@ -271,11 +271,11 @@ function geToAllCourcesPage()
 		
 		mSleep(1000)
 		pull_the_screen(320,560,-50)
-		mSleep(500)
+		mSleep(1000)
 		step = 0;
 		repeat
 			-- body
-			tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
+			tap(575,550+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(200)
 			step = step + 1;
 		until getColor(478, 1085) ~= 0x5cd390
@@ -434,11 +434,11 @@ function doTheWork_xiadan(...)
 					
 					mSleep(1000)
 					pull_the_screen(320,560,-50)
-					mSleep(500)
+					mSleep(1000)
 					step = 0;
 					repeat
 						-- body
-						tap(575,650+step*20); --每次下滑20px，尝试点击改点坐标
+						tap(575,550+step*20); --每次下滑20px，尝试点击改点坐标
 						mSleep(200)
 						step = step + 1;
 					until getColor(478, 1085) ~= 0x5cd390
