@@ -47,9 +47,13 @@ function logout_iphone6()
 	tap(380,1100);	--进入设置
 	mSleep(1000);
 	
-	tap(279, 891);	--点击退出登录
-	mSleep(1500)
+	repeat
+		mSleep(200);
+		tap(279, 891);	--点击退出登录
+		mSleep(1000);
+	until isColor( 597,718,0x65d095,90)
 	
+	mSleep(500);
 	tap(469, 714);	--点击确定按钮
 	mSleep(2000)
 	nLog(userName.."退出登录");
