@@ -119,7 +119,7 @@ function startToPingjia_iphone6(begin)
 			
 			repeat
 				mSleep(500); --加载数据
-			until isColor(193,217,0x7ce5aa,85)
+			until isColor(193,217,0x7ce5aa,85) or getColor(97,205) ~= 0xffffff
 		
 			tap(330,570);	--点击输入框，获取焦点
 			mSleep(500);

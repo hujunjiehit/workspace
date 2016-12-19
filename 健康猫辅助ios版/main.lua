@@ -1,6 +1,7 @@
 require "TSLib"
 require "iphone6"
 require "iphone6p"
+require "ipad"
 
 function pull_the_screen(x,y,dy)
 	moveTo(x,y,x,y+dy);
@@ -681,7 +682,6 @@ end
 
 function beforeUserExit(...)
 	-- body
-	showFloatButton(true);
 end
 
 function main(...)
@@ -690,19 +690,20 @@ function main(...)
 	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
 	
-	showFloatButton(false);
-	
 	width,height = getScreenSize();
 	nLog("[DATE]"..width.."---"..height);
 	if width == 640 and height == 1136 then
 		main_iphone5();
 	elseif width == 750 and height == 1334 then
 		main_iphone6();
-	else
+	elseif width == 1242 and height == 2208 then
 		main_iphone6p();
+	elseif (width == 768 and height == 1024) or (width == 1536 and height == 2048)  then
+		main_ipad();
+	else
+		dialog("暂不支持的分辨率，请联系脚本作者", 0);
 	end
 	
-	showFloatButton(true);
 	closeLog("脚本评价记录");  --关闭日志
 end
 
