@@ -255,7 +255,7 @@ function geToAllCourcesPage_iphone6()
 end
 
 function startToXiadan_iphone6(begin)
-	mSleep(500)
+	mSleep(1000)
 	for index = begin,7 do	
 		nLog("index = "..index.."   y  = "..tostring(208+161*(index-1)));
 		y = 208+161*(index-1);
@@ -357,11 +357,17 @@ function doTheWork_xiadan_iphone6(...)
 		mSleep(2000);
 		
 		startToXiadan_iphone6(1)
-
-		pull_the_screen(320,560,-240)
-		mSleep(2000)
-	
-		startToXiadan_iphone6(5)
+		if pull_count == nil then
+			pull_count = 1;
+		end
+		
+		for k = 1,pull_count do
+			pull_the_screen(320,560,-240)
+			mSleep(2000)
+			startToXiadan_iphone6(4);
+		end
+		
+		mSleep(1000);
 		
 		goBack_iphone6();
 		goBack_iphone6();
