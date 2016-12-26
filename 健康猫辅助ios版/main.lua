@@ -2,6 +2,7 @@ require "TSLib"
 require "iphone6"
 require "iphone6p"
 require "ipad"
+require "ipadair"
 
 function pull_the_screen(x,y,dy)
 	moveTo(x,y,x,y+dy);
@@ -698,8 +699,10 @@ function main(...)
 		main_iphone6();
 	elseif width == 1242 and height == 2208 then
 		main_iphone6p();
-	elseif (width == 768 and height == 1024) or (width == 1536 and height == 2048)  then
+	elseif (width == 768 and height == 1024) then
 		main_ipad();
+	elseif (width == 1536 and height == 2048)  then
+		main_ipadair();
 	else
 		dialog("暂不支持的分辨率，请联系脚本作者", 0);
 	end
