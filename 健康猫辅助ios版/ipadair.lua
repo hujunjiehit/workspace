@@ -213,7 +213,7 @@ end
 function geToAllCourcesPage_ipadair()
 	tap(1248,1876); --点击我的tab 
 	mSleep(200)
-	pull_the_screen(320,560,1000)	--滑动，露出设置按钮
+	pull_the_screen(320,560,1000)	
 
 	mSleep(1000)
 	
@@ -229,10 +229,10 @@ function geToAllCourcesPage_ipadair()
 		tap(300,456);	--点击第一个关注的头像
 		repeat
 			mSleep(500)
-		until isColor( 900,  1886, 0x5cd390, 85)
+		until isColor( 1080,  1886, 0x5cd390, 85)
 		
 		mSleep(1000)
-		pull_the_screen(320,560,-50)
+		pull_the_screen(640,1120,-200)
 		mSleep(1500)
 		step = 0;
 		repeat
@@ -240,7 +240,7 @@ function geToAllCourcesPage_ipadair()
 			tap(1270,1000+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(100)
 			step = step + 1;
-		until getColor(900,1886) ~= 0x5cd390
+		until getColor(1080,1886) ~= 0x5cd390
 		
 		--可能进入动力秀 或者 团课界面
 		repeat
