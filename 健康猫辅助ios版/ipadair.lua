@@ -232,7 +232,7 @@ function geToAllCourcesPage_ipadair()
 		until isColor( 1080,  1886, 0x5cd390, 85)
 		
 		mSleep(1000)
-		pull_the_screen(640,1120,-200)
+		pull_the_screen(640,1120,-800)
 		mSleep(1500)
 		step = 0;
 		repeat
