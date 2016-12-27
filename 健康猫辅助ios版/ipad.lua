@@ -370,12 +370,99 @@ function doTheWork_xiadan_ipad(...)
 		end
 		mSleep(1000);
 		
-		goBack_ipad();
-		goBack_ipad();
-		goBack_ipad();
 		
-		logout_ipad();
-		mSleep(1000);
+		if yueke_mode == nil then
+			--需要约两个号的课程
+			nLog("开始约第二个号的课程")
+			mSleep(1000);
+			goBack_ipad();
+			goBack_ipad();
+			
+			--回到关注列表页
+			mSleep(500);
+			if (isColor(580,344, 0xc4c4c4, 85)) then
+				--有第二个关注的人
+				sucess = false;
+				repeat
+					mSleep(500);
+					tap(150,350);	--点击第2个关注的头像
+					repeat
+						mSleep(500)
+					until isColor( 540,  943, 0x5cd390, 85)
+					
+					mSleep(1000)
+					pull_the_screen(320,560,-50)
+					mSleep(1500)
+					step = 0;
+					repeat
+						-- body
+						tap(635,500+step*20); --每次下滑20px，尝试点击改点坐标
+						mSleep(100)
+						step = step + 1;
+					until getColor(540,943) ~= 0x5cd390
+					
+					--可能进入动力秀 或者 团课界面
+					repeat
+						mSleep(1000)
+						nLog("waiting...")
+					until isColor(476,230,0xffffff,85) or isColor( 279,  473, 0xffffff, 85)
+					
+					mSleep(500);
+					if isColor(476,230, 0xffffff, 85) and isColor( 553,  254, 0xffffff, 85) then
+						--进入团课界面
+						sucess = true;
+					else
+						--进入动力秀界面
+						sucess = false;
+						goBack_ipad();
+						goBack_ipad();
+					end
+					mSleep(1000);
+				until sucess == true
+				
+				mSleep(1000);
+				nLog("成功进入第二个私教课程详情页");
+				
+				startToXiadan_ipad(1)
+				if pull_count == nil then
+					pull_count = 1;
+				end
+				
+				for k = 1,pull_count do
+					pull_the_screen(320,560,-408)
+					mSleep(2000)
+					startToXiadan_ipad(1);
+				end
+				mSleep(1000);
+				
+				goBack_ipad();
+				goBack_ipad();
+				goBack_ipad();
+				logout_ipad();
+				mSleep(1000);
+			else
+				--没有第二个关注的人
+				nLog("没有第二个关注的人")
+				goBack_ipad();
+				logout_ipad();
+				mSleep(1000);
+			end
+		else
+			--不需要约两个号的课程
+			goBack_ipad();
+			goBack_ipad();
+			goBack_ipad();
+			
+			logout_ipad();
+			mSleep(1000);
+		end
+		
+		--goBack_ipad();
+		--goBack_ipad();
+		--goBack_ipad();
+		
+		--logout_ipad();
+		--mSleep(1000);
 	end
 end
 
@@ -401,6 +488,7 @@ function main_ipad_real(...)
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",30,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",30,"center","0,0,255")
+	UICheck("yueke_mode","只约一个私教号的课","0");
 	UILabel("请选择需要登录的帐号：",30,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();

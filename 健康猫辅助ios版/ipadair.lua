@@ -357,18 +357,107 @@ function doTheWork_xiadan_ipadair(...)
 		end
 		
 		for k = 1,pull_count do
-			pull_the_screen(320,560,-408)
+			pull_the_screen(640,1120,-808)
 			mSleep(2000)
 			startToXiadan_ipadair(1);
 		end
 		mSleep(1000);
 		
-		goBack_ipadair();
-		goBack_ipadair();
-		goBack_ipadair();
 		
-		logout_ipadair();
-		mSleep(1000);
+		if yueke_mode == nil then
+			--需要约两个号的课程
+			nLog("开始约第二个号的课程")
+			mSleep(1000);
+			goBack_ipadair();
+			goBack_ipadair();
+			
+			--回到关注列表页
+			mSleep(1000);
+			if (isColor(1160,688,0xc4c4c4, 85)) then
+				--有第二个关注的人
+				--toast("有第二个关注的人",1);
+				sucess = false;
+				repeat
+					mSleep(500);
+					tap(300,700);	--点击第2个关注的头像
+					repeat
+						mSleep(500)
+					until isColor( 1080,  1886, 0x5cd390, 85)
+					
+					mSleep(1000)
+					pull_the_screen(640,1120,-800)
+					mSleep(1500)
+					step = 0;
+					repeat
+						-- body
+						tap(1270,1000+step*20); --每次下滑20px，尝试点击改点坐标
+						mSleep(100)
+						step = step + 1;
+					until getColor(1080,1886) ~= 0x5cd390
+					
+					--可能进入动力秀 或者 团课界面
+					repeat
+						mSleep(1000)
+						nLog("waiting...")
+					until isColor(952,460,0xffffff,85) or isColor( 558,  946, 0xffffff, 85)
+					
+					mSleep(500);
+					if isColor(952,460, 0xffffff, 85) and isColor( 1106,  508, 0xffffff, 85) then
+						--进入团课界面
+						sucess = true;
+					else
+						--进入动力秀界面
+						sucess = false;
+						goBack_ipadair();
+						goBack_ipadair();
+					end
+					mSleep(1000);
+				until sucess == true
+				
+				mSleep(1000);
+				nLog("成功进入第二个私教课程详情页");
+				
+				startToXiadan_ipadair(1)
+				if pull_count == nil then
+					pull_count = 1;
+				end
+				
+				for k = 1,pull_count do
+					pull_the_screen(640,1120,-808)
+					mSleep(2000)
+					startToXiadan_ipadair(1);
+				end
+				mSleep(1000);
+				
+				goBack_ipadair();
+				goBack_ipadair();
+				goBack_ipadair();
+				logout_ipadair();
+				mSleep(1000);
+			else
+				--没有第二个关注的人
+				nLog("没有第二个关注的人")
+				--toast("没有第二个关注的人",1);
+				goBack_ipadair();
+				logout_ipadair();
+				mSleep(1000);
+			end
+		else
+			--不需要约两个号的课程
+			goBack_ipadair();
+			goBack_ipadair();
+			goBack_ipadair();
+			
+			logout_ipadair();
+			mSleep(1000);
+		end
+		
+		--goBack_ipadair();
+		--goBack_ipadair();
+		--goBack_ipadair();
+		
+		--logout_ipadair();
+		--mSleep(1000);
 	end
 end
 
@@ -394,6 +483,7 @@ function main_ipadair_real(...)
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",30,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",30,"center","0,0,255")
+	UICheck("yueke_mode","只约一个私教号的课","0");
 	UILabel("请选择需要登录的帐号：",30,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
