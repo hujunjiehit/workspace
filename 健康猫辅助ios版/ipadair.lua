@@ -21,7 +21,10 @@ function login_ipadair(userName,passWord)
 	mSleep(500)
 	inputText(userName);
 	mSleep(500);
-		
+	
+	tap(1300,438) --收起输入法键盘
+	mSleep(500)
+	
 	tap(768,1050);   --点击密码输入框
 	mSleep(500);
 	inputText(passWord);

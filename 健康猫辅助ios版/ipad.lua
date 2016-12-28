@@ -21,7 +21,10 @@ function login_ipad(userName,passWord)
 	mSleep(500)
 	inputText(userName);
 	mSleep(500);
-		
+	
+	tap(597,267) --收起输入法键盘
+	mSleep(500)
+	
 	tap(388,520);   --点击密码输入框
 	mSleep(500);
 	inputText(passWord);
