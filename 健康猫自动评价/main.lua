@@ -333,7 +333,7 @@ function main()
 	UIShow();
 	
 	index = tonumber(strSplit(choice_name)[1]);
-	nLog("index = "..index);
+	--nLog("index = "..index);
 
 	mSleep(1000)
 	
