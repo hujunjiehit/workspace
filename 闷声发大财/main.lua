@@ -87,7 +87,7 @@ function main(...)
 
 	
 	--startToPingjia(1)
-	pull_the_screen(320,560,-400)
+	pull_the_screen(320,560,-220)
 	
 
 	closeLog("脚本宣传记录");  --关闭日志

@@ -409,7 +409,7 @@ function doTheWork_xiadan(...)
 		end
 		
 		for k = 1,pull_count do
-			pull_the_screen(320,560,-408)
+			pull_the_screen(320,560,-220)
 			mSleep(2000)
 			startToXiadan(2);
 		end
@@ -474,7 +474,7 @@ function doTheWork_xiadan(...)
 				end
 				
 				for k = 1,pull_count do
-					pull_the_screen(320,560,-408)
+					pull_the_screen(320,560,-220)
 					mSleep(2000)
 					startToXiadan(2);
 				end
