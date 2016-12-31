@@ -96,7 +96,7 @@ end
 function gotoPingjiaPage()
 	
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	mSleep(100)
 	
 	if sysint >= 700 and sysint <= 710 then
 		pull_the_screen(320,560,100)	--滑动到顶，方便定坐标
@@ -216,7 +216,7 @@ function doTheWork_pingjia(...)
 		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
 		
 		login(userName,passWord);
-		mSleep(2000)
+		mSleep(1000)
 		
 		gotoPingjiaPage();
 		
@@ -504,6 +504,71 @@ function doTheWork_xiadan(...)
 	end
 end
 
+
+function doTheWork_fukuan(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
+		
+		login(userName,passWord);
+		
+		tap(560,1083);	 --点击我的tab，拉起登陆界面 
+		mSleep(500)
+		pull_the_screen(320,560,500)	--滑动，露出设置按钮
+		mSleep(1000)
+	
+		tap(300,600);
+		repeat
+			-- body
+			mSleep(500);
+		until  getColor(481, 1090) == 0xcecece or getColor(481, 1090) == 0xf2f2f2
+		tap(46,1086);
+		mSleep(1000);
+		
+		toast("付款之后，请进入设置界面",2)
+		
+		repeat
+			mSleep(2000);
+			nLog("waiting for fukuan...")
+		until isColor( 526,  321, 0x4cd964, 85) and isColor( 201,  888, 0xfc8080, 85) and isColor( 355, 1035, 0xf2f2f2, 85)
+		
+		nLog("进入设置界面");
+		
+		choice = dialogRet("是否继续付款下一个？", "继续付款", "结束付款", "", 0);
+		if choice == 0 then
+			nLog("继续付款下一个");
+			mSleep(1000);
+			repeat
+				mSleep(200);
+				tap(300,892);	--点击退出登录
+				mSleep(1000);
+			until isColor(392,612,0x65d096,90)
+			mSleep(1000)
+			tap(450,617);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+		else
+			nLog("结束付款");
+			mSleep(1000);
+			repeat
+				mSleep(200);
+				tap(300,892);	--点击退出登录
+				mSleep(1000);
+			until isColor(392,612,0x65d096,90)
+			mSleep(1000)
+			tap(450,617);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+			return lua_exit();
+		end
+	end
+end
+
+
 function write_info(str)
 	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
 end
@@ -623,33 +688,9 @@ function main_iphone5(...)
 			mSleep(1000)
 			lua_exit();
 		else
-			nLog("name = "..name);
-		
-			index = strSplit(name)[1];
-			nLog("index = "..index);
+			index = tonumber(strSplit(name)[1]);
 			
-			info = strSplit(data[tonumber(index)],",");
-			
-			userName = info[1];
-			passWord = info[2];
-			
-			nLog("userName = "..userName.."   passWord = "..passWord);
-			
-			mSleep(1000)
-			
-			login(userName,passWord);
-			tap(560,1083);	 --点击我的tab，拉起登陆界面 
-			mSleep(500)
-			pull_the_screen(320,560,-50)	--滑动，露出设置按钮
-			mSleep(1000)
-	
-			tap(264,443);
-			repeat
-				-- body
-				mSleep(500);
-			until  getColor(481, 1090) == 0xcecece or getColor(481, 1090) == 0xf2f2f2
-			tap(46,1086);
-			mSleep(1000);
+			doTheWork_fukuan();
 		end
 	elseif mode == "管理评价语" then
 

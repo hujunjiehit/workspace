@@ -96,81 +96,75 @@ function gotoPingjiaPage_iphone6p()
 end
 
 function startToPingjia_iphone6p(begin)
-	
+		
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	m,n = findColorInRegionFuzzy(0x33c774,80,990,204,1228,2010);
+	m,n = findColorInRegionFuzzy(0x33c774,80,990,204,1228,2180);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
+		mSleep(500);
 		return flag_count;
 	end
 	
-	mSleep(2000);
+	mSleep(1000);
 	
-	for index = begin,8 do	
-		nLog("index = "..index.."   y  = "..tostring(300+230*(index-1)));
-		y = 300+230*(index-1);
-		tap(674,300+230*(index-1));	
+	--开始评价
+	index = 1;
+	repeat
+		x = m + 80;
+		y = n + 32 + 230*(index-1);
 		
-		repeat
-			mSleep(500)
-			nLog("正在加载课程详情页 wait...");
-			m,n = findColorInRegionFuzzy(0x5c5c5c,80,59,596,284,665);
-		until m ~= -1 and n ~= -1
-		--此处有可能网络出错
+		nLog(" index = "..index);
+		
+		if y >= 2200 then
+			return flag_count;
+		end
 		
 		mSleep(500);
 		
-		if getColor(500, 2121) == 0x5cd390 then  --可以评价
+		tap(x,y);
+		
+		mSleep(1000);
+		
+		if isColor(464,2132,0x5cd390,85) then  --可以评价
 			
-			nLog("可以评价。");
-	
-			tap(500, 2121)
-			mSleep(1000);
-			
-			tap(590,890);	--点击输入框，获取焦点
+			repeat
+				mSleep(500); --加载数据
+			until isColor(254,326,0x7ce5aa,85) or getColor(138,204) ~= 0xffffff
+		
+			tap(633,921);	--点击输入框，获取焦点
 			mSleep(500);
-			--inputText("很好非常好");
+			
 			math.randomseed(getRndNum()) -- 随机种子初始化真随机数
 			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
 			inputText(words[num]);
 			
 			mSleep(500);
-			
-			tap(1048,522);	--点击空白，取消输入法键盘
+			tap(1136,296);	--点击空白，取消输入法键盘
 			mSleep(500);
 			
-			tap(622, 2130)	--点击提交评价
+			tap(464, 2132);   --点击提交评价
+			times = 0;
 			repeat
-				mSleep(2000)
-			until getColor(666,932) == 0xffffff and getColor(602, 1650) == 0xefeff4
+				mSleep(1000);
+				times = times + 1;
+				if times == 20 then
+					tap(464, 2132);   --点击提交评价
+					times = 0;
+				end
+			until isColor(464,2132,0x5cd390,85) == false
 			
-			--根据color_next判断下一步动作
-			--1.color_next == 0x33c774 未跳转，还在当前页面，表示网络出错
-			--2.color_next == 0xf2f2f2 跳转成功，表示评价成功
+			nLog("评价成功。");
+			flag_count = flag_count + 1;
 			
-			mSleep(500)
-			if getColor(592, 1612) == 0xffffff then
-				--评价失败
-				--todo ********************************************************
-				nLog("评价失败。");
-				goBack_iphone6p();
-				goBack_iphone6p();
-			else
-				--评价成功
-				goBack_iphone6p();
-				nLog("评价成功。");
-				flag_count = flag_count + 1;
-			end
-		else	
-			nLog("已经评价过了，直接返回。");
-			goBack_iphone6p();
+			repeat
+				mSleep(1000);
+			until isColor(762,898,0xffffff,95) or isColor(744,994,0xffffff,95)
 		end
-	end
-	nLog("成功进行了"..flag_count.."条评价");
-	return flag_count;
+		index = index + 1;
+	until false 
 end
 
 function doTheWork_pingjia_iphone6p(...)
@@ -218,27 +212,47 @@ function geToAllCourcesPage_iphone6p()
 	repeat
 		mSleep(500)
 	until getColor(618,988) == 0xffffff and getColor(690,888) == 0xffffff
-	
-	tap(130,296);	--点击第一个关注的头像
-	repeat
-		mSleep(500)
-	until getColor(952, 2132) == 0x5cd390 
-	
 	mSleep(1000)
-	--pull_the_screen(320,560,-50)
-	--mSleep(500)
-	step = 0;
-	repeat
-		-- body
-		tap(1138,1780+step*20); --每次下滑20px，尝试点击改点坐标
-		mSleep(500)
-		step = step + 1;
-	until getColor(952, 2132) ~= 0x5cd390
 	
+	
+	sucess = false;
 	repeat
 		mSleep(500);
-	until getColor(616,550) == 0xffffff and getColor(830,292) == 0xffffff
+		tap(130,296);	--点击第一个关注的头像
+		repeat
+			mSleep(500)
+		until getColor(952, 2132) == 0x5cd390 
 	
+		mSleep(1000)
+		pull_the_screen(320,560,-50)
+		mSleep(1000)
+		step = 0;
+		repeat
+		-- body
+			tap(1138,1500+step*20); --每次下滑20px，尝试点击改点坐标
+			mSleep(50)
+			step = step + 1;
+		until getColor(952, 2132) ~= 0x5cd390
+	
+		--可能进入动力秀 或者 团课界面
+		repeat
+			mSleep(500);
+		until (isColor(616,550, 0xffffff,85) and isColor(830,292,0xffffff,85)) or (isColor( 542, 1017, 0xffffff, 85) and isColor(663, 1016,0xffffff, 85))
+		
+		mSleep(500);
+		if isColor(616,550, 0xffffff,85) and isColor(830,292,0xffffff,85) then
+			--进入团课界面
+			sucess = true;
+		else
+			--进入动力秀界面
+			sucess = false;
+			goBack_iphone6p();
+			goBack_iphone6p();
+		end
+		mSleep(1000);
+	until sucess == true
+	
+	mSleep(1000)
 	nLog("成功进入课程详情页");
 	return 0; 
 end
@@ -321,7 +335,7 @@ function doTheWork_xiadan_iphone6p(...)
 		
 		geToAllCourcesPage_iphone6p();
 		
-		mSleep(500);
+		mSleep(1500);
 		
 		startToXiadan_iphone6p(1)
 
@@ -329,13 +343,100 @@ function doTheWork_xiadan_iphone6p(...)
 		mSleep(2000)
 	
 		startToXiadan_iphone6p(7)
+		mSleep(1000)
 		
-		goBack_iphone6p();
-		goBack_iphone6p();
-		goBack_iphone6p();
 		
-		logout_iphone6p();
-		mSleep(1000);
+		if yueke_mode == nil then
+			--需要约两个号的课程
+			nLog("开始约第二个号的课程")
+			mSleep(1000);
+			goBack_iphone6p();
+			goBack_iphone6p();
+			
+			--回到关注列表页
+			mSleep(500);
+			if (isColor(1056, 470, 0xc4c4c4, 85)) then
+				mSleep(1000)
+				--有第二个关注的人
+				sucess = false;
+				repeat
+					mSleep(500);
+					tap(130,478);	--点击第二个关注的头像
+					repeat
+						mSleep(500)
+					until getColor(952, 2132) == 0x5cd390 
+				
+					mSleep(1000)
+					pull_the_screen(320,560,-50)
+					mSleep(1000)
+					step = 0;
+					repeat
+					-- body
+						tap(1138,1500+step*20); --每次下滑20px，尝试点击改点坐标
+						mSleep(50)
+						step = step + 1;
+					until getColor(952, 2132) ~= 0x5cd390
+				
+					--可能进入动力秀 或者 团课界面
+					repeat
+						mSleep(500);
+					until (isColor(616,550, 0xffffff,85) and isColor(830,292,0xffffff,85)) or (isColor( 542, 1017, 0xffffff, 85) and isColor(663, 1016,0xffffff, 85))
+					
+					mSleep(500);
+					if isColor(616,550, 0xffffff,85) and isColor(830,292,0xffffff,85) then
+						--进入团课界面
+						sucess = true;
+					else
+						--进入动力秀界面
+						sucess = false;
+						goBack_iphone6p();
+						goBack_iphone6p();
+					end
+					mSleep(1000);
+				until sucess == true
+				mSleep(1000);
+				nLog("成功进入第二个私教课程详情页");
+				
+				mSleep(1500);
+		
+				startToXiadan_iphone6p(1)
+
+				pull_the_screen(320,560,-240)
+				mSleep(2000)
+	
+				startToXiadan_iphone6p(7)
+				mSleep(1000);
+				
+				goBack_iphone6p();
+				goBack_iphone6p();
+				goBack_iphone6p();
+				logout_iphone6p();
+				mSleep(1000);
+			else
+				--没有第二个关注的人
+				mSleep(1000)
+				goBack_iphone6p();
+				logout_iphone6p();
+				mSleep(1000);
+			end
+		else
+			--不需要约两个号的课程
+			toast("不需要约两个号的课程",1);
+			goBack_iphone6p();
+			goBack_iphone6p();
+			goBack_iphone6p();
+			
+			logout_iphone6p();
+			mSleep(1000);
+		end
+		
+		
+		--goBack_iphone6p();
+		--goBack_iphone6p();
+		--goBack_iphone6p();
+		
+		--logout_iphone6p();
+		--mSleep(1000);
 	end
 end
 
@@ -359,6 +460,7 @@ function main_iphone6p(...)
 	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
+	UICheck("yueke_mode","只约一个私教号的课","0");
 	UILabel("请选择需要登录的帐号：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
 	UICombo("name",str)--可选参数如果写部分的话，该参数前的所有参数都必须需要填写，否则会
 	UIShow();
