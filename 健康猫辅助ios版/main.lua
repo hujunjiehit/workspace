@@ -409,7 +409,7 @@ function doTheWork_xiadan(...)
 		end
 		
 		for k = 1,pull_count do
-			pull_the_screen(320,560,-220)
+			pull_the_screen(320,560,-320)
 			mSleep(2000)
 			startToXiadan(2);
 		end
@@ -474,7 +474,7 @@ function doTheWork_xiadan(...)
 				end
 				
 				for k = 1,pull_count do
-					pull_the_screen(320,560,-220)
+					pull_the_screen(320,560,-320)
 					mSleep(2000)
 					startToXiadan(2);
 				end
@@ -532,7 +532,7 @@ function doTheWork_fukuan(...)
 		toast("付款之后，请进入设置界面",2)
 		
 		repeat
-			mSleep(2000);
+			mSleep(1000);
 			nLog("waiting for fukuan...")
 		until isColor( 526,  321, 0x4cd964, 85) and isColor( 201,  888, 0xfc8080, 85) and isColor( 355, 1035, 0xf2f2f2, 85)
 		

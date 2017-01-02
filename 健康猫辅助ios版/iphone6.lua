@@ -369,8 +369,6 @@ function doTheWork_xiadan_iphone6(...)
 		
 		mSleep(1000);
 		
-		
-		
 		if yueke_mode == nil then
 			--需要约两个号的课程
 			nLog("开始约第二个号的课程")
@@ -459,6 +457,70 @@ function doTheWork_xiadan_iphone6(...)
 	end
 end
 
+function doTheWork_fukuan_iphone6(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
+		
+		login_iphone6(userName,passWord);
+			
+		mSleep(1000);
+			
+		tap(375,591);
+		repeat
+			-- body
+			mSleep(500);
+		until  getColor(583, 1281) == 0xcecece or getColor(583, 1281) == 0xf2f2f2
+		
+		tap(46,1285);
+		mSleep(1000);
+		
+		toast("付款之后，请进入设置界面",2)
+		
+		repeat
+			mSleep(1000);
+			nLog("waiting for fukuan...")
+		until isColor( 643,317, 0x4cd964, 85) and isColor( 200,  890, 0xfc8080, 85) and isColor( 340, 800, 0xf2f2f2, 85)
+		
+		nLog("进入设置界面");
+		
+		choice = dialogRet("是否继续付款下一个？", "继续付款", "结束付款", "", 0);
+		if choice == 0 then
+			nLog("继续付款下一个");
+			
+			mSleep(1000);
+			repeat
+				mSleep(200);
+				tap(279, 891);	--点击退出登录
+				mSleep(1000);
+			until isColor( 597,718,0x65d095,90)
+	
+			mSleep(500);
+			tap(469, 714);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+			
+		else
+			nLog("结束付款");
+			mSleep(1000);
+			repeat
+				mSleep(200);
+				tap(279, 891);	--点击退出登录
+				mSleep(1000);
+			until isColor( 597,718,0x65d095,90)
+	
+			mSleep(500);
+			tap(469, 714);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+			return lua_exit();
+		end
+	end
+end
 
 function main_iphone6(...)
 	-- body
@@ -533,31 +595,9 @@ function main_iphone6(...)
 			mSleep(1000)
 			lua_exit();
 		else
-			nLog("name = "..name);
-		
-			index = strSplit(name)[1];
-			nLog("index = "..index);
+			index = tonumber(strSplit(name)[1]);
 			
-			info = strSplit(data[tonumber(index)],",");
-			
-			userName = info[1];
-			passWord = info[2];
-			
-			nLog("userName = "..userName.."   passWord = "..passWord);
-			
-			mSleep(1000)
-			
-			login_iphone6(userName,passWord);
-			
-			mSleep(1000);
-			
-			tap(375,591);
-			repeat
-				-- body
-				mSleep(500);
-			until  getColor(583, 1281) == 0xcecece or getColor(583, 1281) == 0xf2f2f2
-			tap(46,1285);
-			mSleep(1000);
+			doTheWork_fukuan_iphone6();
 		end
 	elseif mode == "管理评价语" then
 

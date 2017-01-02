@@ -100,6 +100,7 @@ function startToPingjia_iphone6p(begin)
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
+	mSleep(1000);
 	m,n = findColorInRegionFuzzy(0x33c774,80,990,204,1228,2180);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
@@ -189,7 +190,7 @@ function doTheWork_pingjia_iphone6p(...)
 		end
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-508)
-			mSleep(1000)
+			mSleep(2000)
 			num1 = startToPingjia_iphone6p(5);
 			sum_num = sum_num + num1;
 		end
@@ -224,12 +225,12 @@ function geToAllCourcesPage_iphone6p()
 		until getColor(952, 2132) == 0x5cd390 
 	
 		mSleep(1000)
-		pull_the_screen(320,560,-50)
-		mSleep(1000)
+		--pull_the_screen(320,560,-50)
+		--mSleep(1000)
 		step = 0;
 		repeat
 		-- body
-			tap(1138,1500+step*20); --每次下滑20px，尝试点击改点坐标
+			tap(1138,1200+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(50)
 			step = step + 1;
 		until getColor(952, 2132) ~= 0x5cd390
@@ -342,7 +343,7 @@ function doTheWork_xiadan_iphone6p(...)
 		pull_the_screen(320,560,-240)
 		mSleep(2000)
 	
-		startToXiadan_iphone6p(7)
+		startToXiadan_iphone6p(6)
 		mSleep(1000)
 		
 		
@@ -440,6 +441,72 @@ function doTheWork_xiadan_iphone6p(...)
 	end
 end
 
+function doTheWork_fukuan_iphone6p(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
+		
+		login_iphone6p(userName,passWord);
+		
+		mSleep(1000);
+			
+		tap(586,890);
+		repeat
+			-- body
+			mSleep(1000);
+		until  getColor(1000, 2130) == 0xcecece or getColor(1000, 2130) == 0xf2f2f2
+		
+		tap(68,2134);
+		mSleep(1000);
+		
+		toast("付款之后，请进入设置界面",2)
+		
+		
+		repeat
+			mSleep(1000);
+			nLog("waiting for fukuan...")
+		until isColor( 1060,477, 0x4cd864, 85) and isColor( 360,  1337, 0xfc8080, 85) and isColor( 600, 1200, 0xf2f2f2, 85)
+		
+		nLog("进入设置界面");
+		
+		choice = dialogRet("是否继续付款下一个？", "继续付款", "结束付款", "", 0);
+		if choice == 0 then
+			nLog("继续付款下一个");
+			
+			mSleep(1000);
+			repeat
+				mSleep(300);
+				tap(622, 1336);	--点击退出登录
+				mSleep(1000);
+			until isColor( 770, 1186, 0x64cf95, 85)
+			
+			mSleep(500)
+			tap(872, 1182);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+		else
+			nLog("结束付款");
+			
+			mSleep(1000);
+			repeat
+				mSleep(300);
+				tap(622, 1336);	--点击退出登录
+				mSleep(1000);
+			until isColor( 770, 1186, 0x64cf95, 85)
+			
+			mSleep(500)
+			tap(872, 1182);	--点击确定按钮
+			mSleep(2000)
+			nLog(userName.."退出登录");
+			return lua_exit();
+		end
+	end
+end
+
 
 function main_iphone6p(...)
 	-- body
@@ -505,31 +572,9 @@ function main_iphone6p(...)
 			mSleep(1000)
 			lua_exit();
 		else
-			nLog("name = "..name);
-		
-			index = strSplit(name)[1];
-			nLog("index = "..index);
+			index = tonumber(strSplit(name)[1]);
 			
-			info = strSplit(data[tonumber(index)],",");
-			
-			userName = info[1];
-			passWord = info[2];
-			
-			nLog("userName = "..userName.."   passWord = "..passWord);
-			
-			mSleep(1000)
-			
-			login_iphone6p(userName,passWord);
-			
-			mSleep(1000);
-			
-			tap(586,890);
-			repeat
-				-- body
-				mSleep(500);
-			until  getColor(792, 252) == 0xcecece or getColor(792, 252) == 0xf2f2f2
-			tap(71,2130);
-			mSleep(1000);
+			doTheWork_fukuan_iphone6p();
 		end
 	elseif mode == "管理评价语" then
 		
