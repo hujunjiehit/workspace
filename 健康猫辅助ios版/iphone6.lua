@@ -81,7 +81,7 @@ function gotoPingjiaPage_iphone6()
 		mSleep(1000);
 	until isColor(396,526,0xffffff,95) and isColor(394,612,0xffffff,95) and isColor(462,569,0xffffff,95)		--加载进度判断
 	mSleep(500);
-	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
+	pull_the_screen(320,560,1000)	--滑动到顶,避免漏掉第一个
 	mSleep(500);
 	nLog("成功进入评价详情页");
 end

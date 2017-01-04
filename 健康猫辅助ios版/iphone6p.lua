@@ -90,7 +90,7 @@ function gotoPingjiaPage_iphone6p()
 	repeat
 		mSleep(1000);
 	until getColor(618,994) == 0xffffff and getColor(714,966) == 0xffffff	--加载进度判断
-	pull_the_screen(320,560,100)	--滑动到顶,避免漏掉第一个
+	pull_the_screen(320,560,1000)	--滑动到顶,避免漏掉第一个
 	mSleep(1000);
 	nLog("成功进入评价详情页");
 end
@@ -190,7 +190,7 @@ function doTheWork_pingjia_iphone6p(...)
 		end
 		for k = 1,pull_count do
 			pull_the_screen(320,560,-508)
-			mSleep(2000)
+			mSleep(1500)
 			num1 = startToPingjia_iphone6p(5);
 			sum_num = sum_num + num1;
 		end
