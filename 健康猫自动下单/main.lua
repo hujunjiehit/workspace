@@ -1,82 +1,81 @@
  require "TSLib"
 
+function goBack(str_to_write)
+	-- body
+	tap(40,98);
+	mSleep(1000);
+end
+
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
-	switchTSInputMethod(true);
 	mSleep(500);
 	
-	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
-	nLog("target_color = 0x"..string.format("%X",target_color));
-	
-	isFirst = true;
-	while  target_color ==  0x3aab47 do
+	while isColor(400,211,0x3aab47,85) do
 		nLog("now begin to login");
-		mSleep(500);
+		mSleep(1000);
 		tap(400,429);  --点击帐号输入框
-		mSleep(500);
+		mSleep(1000);
 		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+		mSleep(1000);
 		
-		mSleep(500);
 		inputText(userName);
+		mSleep(1000);
 		
-		mSleep(500);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
-		if isFirst == false then
-			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-		end
 		
-		mSleep(500);
 		inputText(passWord);
-		
-		mSleep(500)
-		tap(450,629); --点击登陆按钮
-		
+		mSleep(1000)
 		repeat
-			mSleep(500)
+			if isColor(457,622, 0x59cf8d, 85) then
+				tap(450,629); --点击登陆按钮
+			end
+			mSleep(1000)
 			nLog("loging now...")
-		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
-		mSleep(2000)
-		isFirst = false;
-		target_color = getColor(400,211) --获取健康猫logo的背景颜色
+		until isColor(100,457,0xff6bac,85) and isColor(100,566,0xff5555, 85) and isColor( 103,  685, 0xff852a, 85)
+		mSleep(1000)
 	end
+	tap(626,1227); --点击我的tab
+	mSleep(500)
 	nLog("login sucess!");
 	nLog(userName.."登录成功");
-	switchTSInputMethod(false);
 end
 
 function pull_the_screen(x,y,dy)
-	moveTo(x,y,x,y+dy)
+	moveTo(x,y,x,y+dy,20,50)
 end
 
 --跳转到所有团课界面
 function geToAllCourcesPage()
-	tap(626,1131); --点击我的tab
-	mSleep(500);
 	
 	tap(362,334);	--点击关注
-	--[[repeat
+	repeat
 		mSleep(500);
-	until getColor(575, 203) == 0xd8d8d8]]
+		nLog("正在加载关注列表")
+	until isColor(379,  215, 0xffffff, 85) and isColor( 593,  208, 0xd8d8d8, 85)
 	
-	mSleep(5000);
+	mSleep(1000)
 	
-	tap(303,203);
-	mSleep(2000);
+	repeat
+		tap(80,208)
+		mSleep(1000)
+		nLog("正在加载私教小屋")
+	until isColor( 686,  456, 0x33c774, 85) and isColor( 541, 1232, 0x33c774, 85)
 	
-	pull_the_screen(320,800,-600)
 	mSleep(500)
+	
+	pull_the_screen(320,800,-400)
+	mSleep(1000)
 	
 	step = 0;
 	repeat
 		-- body
-		tap(647,660+step*10); --每次下滑20px，尝试点击改点坐标
-		mSleep(200)
+		tap(647,800+step*15); --每次下滑20px，尝试点击改点坐标
+		mSleep(100)
 		step = step + 1;
-	until getColor(542,1228) ~= 0x33c774
-	
-	mSleep(1500)
+	until isColor(542,1228,0x33c774) == false
+	mSleep(1000)
 	return 0; 
 end
 
@@ -189,8 +188,6 @@ function doTheWorkOnce(...)
 	passWord = info[2];
 	
 	nLog("index = "..index.."   userName = "..userName.."   passWord = "..passWord);
-	
-	
 	
 	mSleep(500)
 	
@@ -320,6 +317,9 @@ function main()
 	init(0)
 	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	wLog("test","[DATE] init log OK!!!"); 
+	toast("正在准备界面，请稍候",1)
+	switchTSInputMethod(true);
+	mSleep(1000)
 	
 	path = getSDCardPath();
 	data = readFile(path.."/info.txt") 	--读取文件内容，返回一个table
@@ -376,7 +376,7 @@ function main()
 		until false
 	end
 	setScreenScale(false, 720, 1280);
-	
+	switchTSInputMethod(false);
 	closeLog("test");  --关闭日志
 end
 
@@ -385,4 +385,5 @@ function beforeUserExit()
 	switchTSInputMethod(false);
 end
 
-main()
+--main()
+geToAllCourcesPage()

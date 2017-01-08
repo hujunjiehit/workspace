@@ -1,5 +1,11 @@
  require "TSLib"
  
+function goBack(str_to_write)
+	-- body
+	tap(40,98);
+	mSleep(1000);
+end
+
 function write_to_log(str_to_write)
 	-- body
 	path = getSDCardPath();
@@ -28,7 +34,7 @@ function split(str, pat)
 end
 
 function pull_the_screen(x,y,dy)
-	moveTo(x,y,x,y+dy)
+	moveTo(x,y,x,y+dy,20,50)
 end
 
 function touchClick(x,y)
@@ -39,73 +45,57 @@ end
 
 function login(userName,passWord)
 	tap(626,1227); --点击我的tab，拉起登陆界面 
-	switchTSInputMethod(true);
 	mSleep(500);
 	
-	target_color = getColor(400,211)	--获取健康猫logo的背景颜色
-	nLog("target_color = 0x"..string.format("%X",target_color));
-	
-	isFirst = true;
-	while  target_color ==  0x3aab47 do
+	while isColor(400,211,0x3aab47,85) do
 		nLog("now begin to login");
-		mSleep(500);
+		mSleep(1000);
 		tap(400,429);  --点击帐号输入框
-		mSleep(500);
+		mSleep(1000);
 		
 		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+		mSleep(1000);
 		
-		mSleep(500);
 		inputText(userName);
+		mSleep(1000);
 		
-		mSleep(500);
 		tap(400,507);   --点击密码输入框
 		mSleep(1000);
-		if isFirst == false then
-			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-		end
 		
-		mSleep(500);
 		inputText(passWord);
-		
-		mSleep(500)
-		tap(450,629); --点击登陆按钮
-		
+		mSleep(1000)
 		repeat
-			mSleep(500)
+			if isColor(457,622, 0x59cf8d, 85) then
+				tap(450,629); --点击登陆按钮
+			end
+			mSleep(1000)
 			nLog("loging now...")
-		until getColor(450,629) ~= 0xf5f5f5   --正在登录的颜色
-		mSleep(2000)
-		isFirst = false;
-		target_color = getColor(400,211) --获取健康猫logo的背景颜色
+		until isColor(100,457,0xff6bac,85) and isColor(100,566,0xff5555, 85) and isColor( 103,  685, 0xff852a, 85)
+		mSleep(1000)
 	end
+	tap(626,1227); --点击我的tab
+	mSleep(500)
 	nLog("login sucess!");
 	nLog(userName.."登录成功");
-	switchTSInputMethod(false);
 end
 
 function gotoPingjiaPage()
-	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
-	mSleep(1000)
 	tap(236,456); --点击我的订单
-	repeat
-		mSleep(1000)
-	until getColor(386,668) ~= 0xc2c2c2			--加载进度判断
-	
-	mSleep(1000)
-	tap(351,86); 	 --点击上面的私教订单，展开选项
-	mSleep(1000)
-	tap(357,268); 	 --选择私教团购订单
 	mSleep(1000)
 
+	tap(351,86); 	 --点击上面的私教订单，展开选项
+	mSleep(1000)
+	
+	tap(357,268); 	 --选择私教团购订单
+	
 	repeat
 		mSleep(1000);
-	until getColor(386,668) ~= 0xc2c2c2
+	until isColor(84,232,0xffffff,85) == false or isColor(595,220,0xffffff,85) == false
+	mSleep(500)
 	nLog("loading finish");   --here may be fail, so we need to record the progress
 end
 
 function logout()
-	tap(626,1227); --登录状态下，点击我的tab，进入个人资料界面
-	mSleep(1000)
 	tap(320,1020);	--进入设置
 	repeat
 		mSleep(500);
@@ -135,12 +125,74 @@ function beforeUserExit()
 	switchTSInputMethod(false);
 end
 
+function pingjia_the_course(x,y)
+	-- body
+	nLog("start to pingjia the course, x = "..x.."  y = "..y);
+	
+	mSleep(500)
+	
+	tap(x,y);
 
-function startToPingjia_special(begin)
+	repeat
+		mSleep(500)
+		nLog("loading class..")
+	until (isColor(367,629,0xf2f2f2,85) and isColor(177,1229,0x33c774,85)) or 
+	(isColor(101,171,0xffffff,85) == false and isColor(102,266,0xffffff,85) == false and isColor(219,1230,0x1f6d41,85) == false and isColor(219,1230,0x33c774,85) == false)
 	
-	flag_count = 0; 
+	mSleep(500)
 	
-	switchTSInputMethod(true);
+	if (isColor(367,629,0xf2f2f2,85) and isColor(177,1229,0x33c774,85)) then
+		
+		nLog("可以评价");
+		
+		math.randomseed(getRndNum()) -- 随机种子初始化随机数
+		num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
+		inputText(words[num]);
+		mSleep(500);
+
+		local times = 1;
+		repeat
+			if (isColor( 235, 1231, 0x33c774, 85)) then
+				tap(351,1231);	--点击提交评价
+				times = times + 1;
+			end
+			mSleep(1000);
+		until (isColor(492,403,0xffffff,85) and isColor( 495,  475, 0xffffff, 85)) or times > 5
+		
+		if times > 5 then
+			nLog("已经评价过了  尝试过5次");
+			goBack();
+		end
+	elseif (isColor(101,171,0xffffff,85) == false and isColor( 102,266,0xffffff,85) == false) then
+		nLog("不需要评价");
+		goBack();
+	end
+end
+
+--m,n是第一个绿色点的坐标
+function pingjia_one_page(m,n)
+	mSleep(500)
+	index = 1;
+	x = m + 50;
+	y = n + 20
+	repeat
+		nLog(" index = "..index);
+		
+		if isColor(591,y,0x33c774,85) then
+			mSleep(500)
+			pingjia_the_course(x,y)
+		else
+			mSleep(500)
+			nLog("按钮不是绿色下一个");
+		end
+		mSleep(500)
+		index = index + 1;
+		y = n + 20 + 154*(index-1);
+	until y > 1279
+end
+
+
+function startToPingjia_special()
 	
 	mSleep(1000)
 	m,n = findColorInRegionFuzzy(0x33c774,80,0,50,720,1270);
@@ -148,69 +200,13 @@ function startToPingjia_special(begin)
 	if m == -1 and n == -1 then
 		--当前页面没有需要评价的
 		mSleep(500);
-		return flag_count;
+		return
 	end
 	
 	mSleep(1000);
 	
-	--开始评价
-	index = 1;
-	repeat
-		x = m + 50;
-		y = n + 20 + 154*(index-1);
-		
-		nLog(" index = "..index);
-		
-		if y >= 1279 then
-			nLog("成功进行了"..flag_count.."条评价");
-			switchTSInputMethod(false);
-			mSleep(1000)
-			return flag_count;
-		end
-		
-		mSleep(1000);
-		
-		tap(x,y);
-		
-		mSleep(200);
-		
-		repeat
-			mSleep(1000)
-			nLog("正在加载课程详情页 wait...");
-		until isColor(419,682,0xf2f2f2,95) or isColor(362,1024,0xf2f2f2,95)
-		mSleep(500);
-
-		if isColor(282, 1231,0x33c774,85) then  --可以评价
-			
-			repeat
-				mSleep(1000); --加载数据
-			until isColor( 190,245,0x7ce5aa,85)
-			
-			tap(333,627);	--点击输入框，获取焦点
-			mSleep(1000);
-			--inputText("很好非常好");
-			
-			math.randomseed(getRndNum()) -- 随机种子初始化随机数
-			num = math.random(1, words_count) -- 随机获取一个1-100之间的数字
-			inputText(words[num]);
-			
-			mSleep(1000);
-			
-			tap(351,1231);	--点击提交评价
-			repeat
-				nLog("wait for...");
-				mSleep(1000)
-			until isColor(282, 1231,0x33c774,85) == false
-			mSleep(1000);
-		else	
-			--已经评价过了，直接返回
-			os.execute("input keyevent 4");
-			mSleep(1000)
-		end
-		
-		index = index + 1;
-		mSleep(1000);
-	until false
+	--开始评价one page
+	pingjia_one_page(m,n)
 end
 
 function doTheWork_pingjia_special(...)
@@ -228,24 +224,25 @@ function doTheWork_pingjia_special(...)
 		
 		gotoPingjiaPage();  --跳转到评价页面
 		
-		num1 = startToPingjia_special(1);
-		nLog("num1 = "..num1);
+		startToPingjia_special();
 		
-		pull_the_screen(320,800,1000);
-		mSleep(3000)
+		tap(351,86); 	 --点击上面的私教订单，展开选项
+		mSleep(1000)
+	
+		tap(357,268); 	 --选择私教团购订单
+	
+		repeat
+			mSleep(1000);
+		until isColor(84,232,0xffffff,85) == false or isColor(595,220,0xffffff,85) == false
+		mSleep(500)
 		
-		pull_the_screen(320,800,-1000);
+		pull_the_screen(380,1150,-550);
 		mSleep(1000)
 		
-		num2 = startToPingjia_special(3);
-		nLog("num2 = "..num2);
-		
-		nLog("帐号"..userName.."成功进行了"..num1+num2.."条评价");
-		write_to_log("帐号"..userName.."成功进行了"..num1+num2.."条评价")
+		startToPingjia_special();
 		
 		mSleep(1000)
-		os.execute("input keyevent 4")
-		mSleep(2000)
+		goBack();
 		logout();
 	end
 end
@@ -310,7 +307,9 @@ function main()
 	init(0)
 	initLog("test", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	wLog("test","[DATE] init log OK!!!"); 
-	
+	toast("正在准备界面，请稍候",1)
+	switchTSInputMethod(true);
+	mSleep(1000)
 	write_to_log("\n\n\n\n脚本开始时间:"..os.date("%c"))
 	
 	path = getSDCardPath();
@@ -374,6 +373,7 @@ function main()
 	elseif mode == "管理评价语" then
 		manage_the_pingjia_words();
 	end
+	switchTSInputMethod(false);
 	setScreenScale(false, 720, 1280)
 	closeLog("test");  --关闭日志
 end
