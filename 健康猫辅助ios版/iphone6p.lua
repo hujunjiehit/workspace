@@ -100,7 +100,7 @@ function startToPingjia_iphone6p(begin)
 	flag_count = 0;  --计数器，记录当前成功评价的个数 
 	
 	--先判断需不需要评价，通过找颜色，如果不需要直接返回
-	mSleep(1000);
+	mSleep(200)
 	m,n = findColorInRegionFuzzy(0x33c774,80,990,204,1228,2180);
 	nLog(m.."----"..n)
 	if m == -1 and n == -1 then
@@ -109,7 +109,7 @@ function startToPingjia_iphone6p(begin)
 		return flag_count;
 	end
 	
-	mSleep(1000);
+	mSleep(500);
 	
 	--开始评价
 	index = 1;
