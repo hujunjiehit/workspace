@@ -621,6 +621,41 @@ function manage_the_pingjia_words(...)
 	until (false)	
 end
 
+function doTheWorkQiangHongbao(...)
+	-- body
+	toast("已经进入抢红包模式，按音量-终止抢红包",1)
+	repeat
+		mSleep(1000)
+		x,y = findMultiColorInRegionFuzzy( 0xfa9d3b, "-165|-42|0xef4c49,-152|17|0xcf3c35", 90, 0, 0, 639, 1135)
+		nLog(x.."---"..y)
+		if x ~= -1 and y ~= -1 then
+			tap(x,y)
+			
+			repeat
+				mSleep(500)
+			until  (isColor( 260,  747, 0xddbc84, 85) and isColor( 226,  840, 0xd84e43, 85)) or isColor(319,126,0xd84e43, 85)
+			
+			if (isColor( 260,  747, 0xddbc84, 85) and isColor( 226,  840, 0xd84e43, 85)) then
+				nLog("红包可拆...")
+				mSleep(500)
+				tap(320,730)   --拆开红包
+				repeat
+					mSleep(1000)
+					nLog("正在拆红包...")
+				until isColor(319,126,0xd84e43, 85)
+				mSleep(500)
+				tap(50,80)
+				mSleep(500)
+			elseif isColor(319,126,0xd84e43, 85) then
+				nLog("红包已经拆过了...")
+				mSleep(500)
+				tap(50,80)
+				mSleep(500)
+			end
+		end
+	until false
+end
+
 function main_iphone5(...)
 	-- body
 	data = readFile("/var/mobile/Media/TouchSprite/res/info.txt") 	--读取文件内容，返回一个table
@@ -639,7 +674,7 @@ function main_iphone5(...)
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号,抢微信红包"})
 	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UICheck("yueke_mode","只约一个私教号的课","0");
@@ -695,7 +730,9 @@ function main_iphone5(...)
 	elseif mode == "管理评价语" then
 
 		manage_the_pingjia_words();
-		
+	elseif mode == "抢微信红包" then
+		dialog("启动之后，请进入微信聊天界面或者群聊天界面，等待红包到来",0)
+		doTheWorkQiangHongbao()
 	elseif mode == "添加帐号" then
 		repeat
 			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})
@@ -752,3 +789,7 @@ function main(...)
 end
 
 main()
+
+
+
+
