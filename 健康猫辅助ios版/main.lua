@@ -246,30 +246,22 @@ end
 function geToAllCourcesPage()
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	mSleep(200)
-	if sysint >= 700 and sysint <= 710 then
-		pull_the_screen(320,560,100)	--滑动，露出设置按钮
-	else
-		pull_the_screen(320,560,-100)	--滑动，露出设置按钮
-	end
+
+	pull_the_screen(320,560,100)	--滑动，方便定坐标
 	mSleep(1000)
-	
-	--tap(303,185);	--点击关注
-	if sysint >= 700 and sysint <= 710then
-		tap(336,330);	--点击关注
-	else
-		tap(303,185);	--点击关注
-	end
+
 	repeat
-		mSleep(500)
-	until getColor(264,582) == 0xffffff
+		tap(336,330);	--点击关注
+		mSleep(1000)
+	until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor( 320,512,0xffffff,95)
 	
 	sucess = false;
 	repeat
 		mSleep(500);
-		tap(80,188);	--点击第一个关注的头像
 		repeat
-			mSleep(500)
-		until getColor(478, 1085) == 0x5cd390
+			tap(80,188);	--点击第一个关注的头像
+			mSleep(1000)
+		until isColor(478, 1085,0x5cd390,90)
 		
 		mSleep(1000)
 		pull_the_screen(320,560,-50)
@@ -280,7 +272,7 @@ function geToAllCourcesPage()
 			tap(575,550+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(200)
 			step = step + 1;
-		until getColor(478, 1085) ~= 0x5cd390
+		until isColor(478, 1085,0x5cd390,85) == false
 		
 		--可能进入动力秀 或者 团课界面
 		repeat
@@ -301,13 +293,13 @@ function geToAllCourcesPage()
 		mSleep(1000);
 	until sucess == true
 	
-	mSleep(1000);
+	mSleep(200);
 	nLog("成功进入课程详情页");
 	return 0; 
 end
 
 function startToXiadan(begin)
-	mSleep(1000);
+	mSleep(200);
 	for index = begin,6 do	
 		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
 		y = 208+160*(index-1);
@@ -333,7 +325,7 @@ function startToXiadan(begin)
 			mSleep(500);
 			tap(483,1085); --点击报名
 			repeat
-				mSleep(1000)
+				mSleep(500)
 				nLog("loading..2")
 			until getColor(624,1086) ~= 0x5cd390  --加载完毕
 			
@@ -347,7 +339,7 @@ function startToXiadan(begin)
 			elseif getColor(608,  588) == 0x999999 then
 				nLog("课程已撤销，返回点击好的")
 				tap(317, 626);
-				mSleep(1000);
+				mSleep(500);
 				goBack();
 			elseif getColor(580,1084) == 0x33c774 then
 				nLog("可以选课")
@@ -401,7 +393,7 @@ function doTheWork_xiadan(...)
 		
 		geToAllCourcesPage();
 		
-		mSleep(1500);
+		mSleep(500);
 		
 		startToXiadan(1)
 		if pull_count == nil then
@@ -429,10 +421,10 @@ function doTheWork_xiadan(...)
 				sucess = false;
 				repeat
 					mSleep(500);
-					tap(88,313);	--点击第二个关注的头像
 					repeat
-						mSleep(500)
-					until getColor(478, 1085) == 0x5cd390
+						tap(88,313);	--点击第二个关注的头像
+						mSleep(1000)
+					until isColor(478,1085,0x5cd390,90)
 					
 					mSleep(1000)
 					pull_the_screen(320,560,-50)
