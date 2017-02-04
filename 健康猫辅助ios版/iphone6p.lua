@@ -286,10 +286,11 @@ function startToXiadan_iphone6p(begin)
 			repeat
 				mSleep(1000)
 				nLog("loading..2")
-			until getColor(962,2132) == 0x459e6c or getColor(794,2128) == 0x33c774 or getColor(1176,1094) == 0xbfbfbf  --加载完毕
+			until isColor(962,2132,0x5cd390,95) == false
+	
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if getColor(962,2132) == 0x459e6c or getColor(1176,1094) == 0xbfbfbf then
+			if isColor(962,2132,0x459e6c,95) or isColor(1176,1094,0xbfbfbf,95) or isColor(962,2132,0x33744f,95) or isColor(1176,1094,0x8c8c8c,95) then
 				nLog("已经选过课了，返回进行下一个")
 				tap(618,1344);	--点击关闭
 				mSleep(1000);

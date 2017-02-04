@@ -332,7 +332,7 @@ function startToXiadan(begin)
 			mSleep(500)
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) then
+			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) or isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
 				nLog("已经选过课了，返回进行下一个")
 				mSleep(1000)
 				tap(400,724);

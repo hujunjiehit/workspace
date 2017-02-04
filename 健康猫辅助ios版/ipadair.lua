@@ -298,11 +298,11 @@ function startToXiadan_ipadair(begin)
 			repeat
 				mSleep(1000)
 				nLog("loading..2")
-			until getColor(1096, 1860) ~= 0x5cd390  --加载完毕
+			until isColor(1096, 1860,0x5cd390,95) == false  --加载完毕
 			
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if getColor(1096, 1860) == 0x459e6c or getColor(1356,  978) == 0xbfbfbf then
+			if isColor(1096, 1860,0x459e6c,95) or isColor(1356,978,0xbfbfbf,95) or isColor(1096, 1860,0x33744f,95) or isColor(1356,978,0x8c8c8c,95)  then
 				nLog("已经选过课了，返回进行下一个")
 				tap(766,1350);
 				mSleep(500);
