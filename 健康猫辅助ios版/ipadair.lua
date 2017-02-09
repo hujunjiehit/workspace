@@ -197,9 +197,9 @@ function doTheWork_pingjia_ipadair(...)
 			pull_count = 1;
 		end
 		for k = 1,pull_count do
-			pull_the_screen(320,560,-408)
+			pull_the_screen(640,1800,-1600)
 			mSleep(1500)
-			num1 = startToPingjia_ipadair(2);
+			num1 = startToPingjia_ipadair(1);
 			sum_num = sum_num + num1;
 		end
 		
@@ -360,7 +360,7 @@ function doTheWork_xiadan_ipadair(...)
 		end
 		
 		for k = 1,pull_count do
-			pull_the_screen(640,1120,-808)
+			pull_the_screen(640,1800,-1600)
 			mSleep(2000)
 			startToXiadan_ipadair(1);
 		end
@@ -426,7 +426,7 @@ function doTheWork_xiadan_ipadair(...)
 				end
 				
 				for k = 1,pull_count do
-					pull_the_screen(640,1120,-808)
+					pull_the_screen(640,1800,-1600)
 					mSleep(2000)
 					startToXiadan_ipadair(1);
 				end
