@@ -96,7 +96,7 @@ end
 function gotoPingjiaPage()
 	
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
-	mSleep(100)
+	mSleep(1000)
 	
 	if sysint >= 700 and sysint <= 710 then
 		pull_the_screen(320,560,100)	--滑动到顶，方便定坐标
@@ -107,7 +107,7 @@ function gotoPingjiaPage()
 			mSleep(1000)
 		until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
 	else
-		pull_the_screen(320,560,-50)	--滑动到顶，方便定坐标
+		pull_the_screen(320,560,-100)	--滑动到顶，方便定坐标
 		mSleep(1000)
 		
 		tap(313,313); --点击我的订单
