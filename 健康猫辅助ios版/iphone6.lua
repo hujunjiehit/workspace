@@ -229,7 +229,7 @@ function geToAllCourcesPage_iphone6()
 			tap(685,600+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(100)
 			step = step + 1;
-		until getColor(566, 1287) ~= 0x5cd390
+		until isColor(566,1287,0x5cd390,90) == false
 	
 		--可能进入动力秀 或者 团课界面
 		repeat
