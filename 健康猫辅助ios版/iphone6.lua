@@ -253,6 +253,7 @@ function geToAllCourcesPage_iphone6()
 end
 
 function startToXiadan_iphone6(begin)
+	wLog("脚本评价记录","\n\n准备约课:"..userName.."    index = "..begin)	
 	for index = begin,7 do	
 		nLog("index = "..index.."   y  = "..tostring(208+161*(index-1)));
 		y = 208+161*(index-1);
@@ -264,13 +265,13 @@ function startToXiadan_iphone6(begin)
 			mSleep(1000)
 			times = times + 1;
 			nLog("loading..1  times == "..times.."   index = "..index)
-			wLog("loading..1  times == "..times.."   index = "..index)
+			wLog("脚本评价记录","loading..1  times == "..times.."   index = "..index)
 		until (isColor(379,519,0xffffff,80) and (isColor(580, 1285,0xaaaaaa,80) or isColor(580, 1285,0x5cd390,80))) or times == 10  --加载完毕
 		
 		if times == 10 then
 			--没有更多课程了
 			nLog("times is 10,times == "..times.."   index = "..index)
-			wLog("times is 10,times == "..times.."   index = "..index)
+			wLog("脚本评价记录","times is 10,times == "..times.."   index = "..index)
 			mSleep(500);
 			break;
 		end
