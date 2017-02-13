@@ -257,21 +257,38 @@ function startToXiadan_iphone6(begin)
 		nLog("index = "..index.."   y  = "..tostring(208+161*(index-1)));
 		y = 208+161*(index-1);
 		
-		if index == 1 then
+		mSleep(500)
+		times = 0;
+		repeat
+			tap(475,208+161*(index-1));
+			mSleep(1000)
+			times = times + 1;
+			nLog("loading..1  times == "..times.."   index = "..index)
+			wLog("loading..1  times == "..times.."   index = "..index)
+		until (isColor(379,519,0xffffff,80) and (isColor(580, 1285,0xaaaaaa,80) or isColor(580, 1285,0x5cd390,80))) or times == 10  --加载完毕
+		
+		if times == 10 then
+			--没有更多课程了
+			nLog("times is 10,times == "..times.."   index = "..index)
+			wLog("times is 10,times == "..times.."   index = "..index)
+			mSleep(500);
+			break;
+		end
+		--[[if index == 1 then
 			mSleep(500)
 			repeat
-				tap(420,208);
+				tap(475,208+161*(index-1));
 				mSleep(1000)
 				nLog("loading..1")
 			until isColor(379,519,0xffffff,80) and (isColor(580, 1285,0xaaaaaa,80) or isColor(580, 1285,0x5cd390,80)) --加载完毕
 		else
 			mSleep(1000)
-			tap(420,208+161*(index-1));
+			tap(475,208+161*(index-1));
 			repeat
 				mSleep(1000)
 				nLog("loading..1")
 			until isColor(379,519,0xffffff,80) --加载完毕
-		end
+		end]]
 		
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
@@ -328,8 +345,6 @@ function startToXiadan_iphone6(begin)
 				goBack_iphone6();
 			end
 		end
-		
-
 	end
 end
 
