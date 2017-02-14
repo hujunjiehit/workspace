@@ -341,6 +341,7 @@ function startToXiadan_iphone6(begin)
 				goBack_iphone6();
 			else
 				--进入空白页面
+				wLog("脚本评价记录","进入空白页面")
 				mSleep(500);
 				goBack_iphone6();
 				goBack_iphone6();
