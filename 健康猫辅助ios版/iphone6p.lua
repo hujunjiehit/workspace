@@ -296,7 +296,7 @@ function startToXiadan_iphone6p(begin)
 			repeat
 				mSleep(500)
 				nLog("loading..2")
-			until isColor(962,2132,0x5cd390,95) == false
+			until isColor(962,2132,0x5cd390,80) == false
 	
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
