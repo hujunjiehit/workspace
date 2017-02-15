@@ -307,11 +307,11 @@ function startToXiadan_iphone6(begin)
 				if isColor(580,1285,0x5cd390,80) then
 					tap(625,1285); --点击报名
 				end
-				mSleep(1000)
+				mSleep(500)
 				nLog("loading..2")
 			until isColor(580,1285,0x5cd390,95) == false  --加载完毕
 			
-			mSleep(500)
+			mSleep(1000)
 			
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
