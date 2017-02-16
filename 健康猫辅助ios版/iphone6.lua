@@ -31,7 +31,7 @@ function login_iphone6(userName,passWord)
 	repeat
 		tap(530,601); --点击登陆按钮
 		mSleep(2000);
-    until getColor(424, 176) ~= 0x3aab47
+    until isColor(424, 176,0x3aab47,95) == false
 	
 	mSleep(1000);
 	nLog(userName.."登录成功");
@@ -200,10 +200,6 @@ function geToAllCourcesPage_iphone6()
 
 	tap(658,1282);	 --点击我的tab
 	mSleep(200);
-	
-	--repeat
-	--	mSleep(500)
-	--until  isColor(100,456,0xff6bac, 85) or isColor( 100,587,0xff5555, 85) or isColor( 101,715,0xff852a, 85)
 
 	repeat
 		tap(351,332);	--点击关注
@@ -304,7 +300,7 @@ function startToXiadan_iphone6(begin)
 		else
 
 			repeat
-				if isColor(580,1285,0x5cd390,80) then
+				if isColor(580,1285,0x5cd390,95) then
 					tap(625,1285); --点击报名
 				end
 				mSleep(500)
@@ -337,7 +333,6 @@ function startToXiadan_iphone6(begin)
 				mSleep(500);
 				
 				tap(372,771);   --选课成功，点击我知道了
-				
 				mSleep(500);
 				
 				goBack_iphone6();

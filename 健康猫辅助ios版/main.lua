@@ -24,42 +24,33 @@ function login(userName,passWord)
 	tap(524,206) --收起输入法键盘
 	mSleep(500)
 	
-	target_color = getColor(355,200)	--获取健康猫logo的背景颜色
-	nLog("target_color = 0x"..string.format("%X",target_color));
+	tap(295,404);	 --点击帐号输入框
+	mSleep(500)
 	
-	isFirst = true;
-	while  target_color ==  0x3aab47 do
-		nLog("now begin to login");
+	inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+	mSleep(500)
+	
+	inputText(userName);
+	mSleep(500);
 		
-		tap(295,404);	 --点击帐号输入框
-		mSleep(500)
-		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-		mSleep(500)
-		inputText(userName);
-		mSleep(500);
-		
-		tap(400,484);   --点击密码输入框
-		mSleep(500);
-		if isFirst == false then
-			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-			mSleep(500)
-		end
-		inputText(passWord);
-		mSleep(500);
-		
+	tap(400,484);   --点击密码输入框
+	mSleep(500);
+	
+	inputText(passWord);
+	mSleep(500);
+	
+	
+	repeat
 		tap(458,598); --点击登陆按钮
-		repeat
-			mSleep(500)
-			nLog("loging now...")
-		until getColor(231,340) ~= 0x303030   --正在登录
-		mSleep(500)
-		isFirst = false;
-		target_color = getColor(355,200) --获取健康猫logo的背景颜色
-	end
+		mSleep(2000);
+    until isColor(355,200,0x3aab47,95) == false
+	
+	mSleep(1000);
+	
 	nLog(userName.."登录成功");
-	mSleep(200)
+
 	tap(560,1083);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
-	mSleep(200)
+	mSleep(500)
 end
 
 function logout()
@@ -87,8 +78,10 @@ function logout()
 		tap(300,892);	--点击退出登录
 		mSleep(1000);
 	until isColor(392,612,0x65d096,90)
+	
 	mSleep(1000)
 	tap(450,617);	--点击确定按钮
+	
 	mSleep(2000)
 	nLog(userName.."退出登录");
 end
@@ -253,26 +246,28 @@ function geToAllCourcesPage()
 	repeat
 		tap(336,330);	--点击关注
 		mSleep(1000)
-	until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor( 320,512,0xffffff,95)
+		nLog("正在加载关注列表")
+	until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
 	
 	sucess = false;
 	repeat
 		mSleep(500);
 		repeat
 			tap(80,188);	--点击第一个关注的头像
-			mSleep(1000)
+			mSleep(500);
+			nLog("正在加载私教小屋");
 		until isColor(478, 1085,0x5cd390,90)
 		
 		mSleep(1000)
 		pull_the_screen(320,560,-50)
-		mSleep(1000)
+		mSleep(500)
 		step = 0;
 		repeat
 			-- body
 			tap(575,550+step*20); --每次下滑20px，尝试点击改点坐标
-			mSleep(200)
+			mSleep(50)
 			step = step + 1;
-		until isColor(478, 1085,0x5cd390,85) == false
+		until isColor(478, 1085,0x5cd390,90) == false
 		
 		--可能进入动力秀 或者 团课界面
 		repeat
@@ -293,27 +288,36 @@ function geToAllCourcesPage()
 		mSleep(1000);
 	until sucess == true
 	
-	mSleep(200);
 	nLog("成功进入课程详情页");
 	return 0; 
 end
 
 function startToXiadan(begin)
-	mSleep(200);
+	wLog("脚本评价记录","\n\n准备约课:"..userName.."    index = "..begin)	
 	for index = begin,6 do	
 		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
 		y = 208+160*(index-1);
 		
-		tap(344,208+160*(index-1));
+		mSleep(500)
+		times = 0;
 		repeat
+			tap(344,208+160*(index-1));
 			mSleep(1000)
-			nLog("loading..1")
-		until isColor(325,510,0xffffff,80)  --加载完毕
+			times = times + 1;
+			nLog("loading..1  times == "..times.."   index = "..index)
+			wLog("脚本评价记录","loading..1  times == "..times.."   index = "..index)
+		until (isColor(325,510,0xffffff,80) and (isColor(469, 1085,0xaaaaaa,80) or isColor(469,1085,0x5cd390,80))) or times == 10  --加载完毕
 		
-		mSleep(500);
+		if times == 10 then
+			--没有更多课程了
+			nLog("times is 10,times == "..times.."   index = "..index)
+			wLog("脚本评价记录","times is 10,times == "..times.."   index = "..index)
+			mSleep(500);
+			break;
+		end
+		
 		--课程详情加载完毕
 		nLog("课程详情加载完毕")
-		
 		
 		if getColor(469, 1085) == 0xaaaaaa then   --灰色按钮
 			--如果已经报名，直接返回
@@ -322,14 +326,16 @@ function startToXiadan(begin)
 		elseif getColor(469, 1085) == 0xffffff then
 			--还在当前页面，什么都不做
 		else
-			mSleep(500);
-			tap(483,1085); --点击报名
 			repeat
-				mSleep(1000)
+				if isColor(469, 1085,0x5cd390,95) then
+					tap(483,1085); --点击报名
+				end
+				mSleep(500)
 				nLog("loading..2")
-			until isColor(624,1086,0x5cd390,95) == false  --加载完毕
+			until isColor(469,1085,0x5cd390,95) == false  --加载完毕
 			
-			mSleep(500)
+			mSleep(1000)
+			
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
 			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) or isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
@@ -343,36 +349,23 @@ function startToXiadan(begin)
 				tap(317, 626);
 				mSleep(500);
 				goBack();
-			elseif getColor(580,1084) == 0x33c774 then
+			elseif isColor(580,1084,0x33c774,85) then
 				nLog("可以选课")
 				repeat
 					-- body
 					tap(486,1086);  --点击稍后支付
 					mSleep(1000)
-					m,n = findColorInRegionFuzzy(0x007aff, 90, 53,420, 628,737); 
-					nLog("m = "..m.."   n = "..n);
-					
-					if isColor(481, 1084,0xefeff4,95) and isColor(461,978,0xefeff4,95) then
-						m = 0;
-						n = 0;
-					end
-					mSleep(200);
-				until m ~= -1 and n ~= -1
-				mSleep(200);
+				until isColor(580,1084,0x1f7746,85)
 				
-				if m == 0 and n == 0 then
-					mSleep(500);
-					goBack();
-					goBack();
-					goBack();
-				else
-					mSleep(500);
-					tap(323,674);   --选课成功，点击我知道了
-					mSleep(1000);
-					goBack();
-				end
+				mSleep(1000);
+				
+				tap(323,674);   --选课成功，点击我知道了
+				mSleep(1000);
+				
+				goBack();
 			else
 				--进入空白页面
+				wLog("脚本评价记录","进入空白页面")
 				mSleep(1000);
 				goBack();
 				goBack();
@@ -403,6 +396,7 @@ function doTheWork_xiadan(...)
 		end
 		
 		for k = 1,pull_count do
+			mSleep(1000)
 			pull_the_screen(320,560,-380)
 			mSleep(2000)
 			startToXiadan(2);
@@ -460,14 +454,13 @@ function doTheWork_xiadan(...)
 				mSleep(1000);
 				nLog("成功进入第二个私教课程详情页");
 				
-				mSleep(1500);
-		
 				startToXiadan(1)
 				if pull_count == nil then
 					pull_count = 1;
 				end
 				
 				for k = 1,pull_count do
+					mSleep(1000)
 					pull_the_screen(320,560,-380)
 					mSleep(2000)
 					startToXiadan(2);
