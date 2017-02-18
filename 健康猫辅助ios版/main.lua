@@ -2,6 +2,7 @@ require "TSLib"
 require "iphone6"
 require "iphone6p"
 require "ipad"
+require "iphone4"
 require "ipadair"
 
 function pull_the_screen(x,y,dy)
@@ -767,6 +768,8 @@ function main(...)
 	nLog("[DATE]"..width.."---"..height);
 	if width == 640 and height == 1136 then
 		main_iphone5();
+	elseif width == 640 and height == 960 then
+		main_iphone4();
 	elseif width == 750 and height == 1334 then
 		main_iphone6();
 	elseif width == 1242 and height == 2208 then

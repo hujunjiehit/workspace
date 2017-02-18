@@ -1,4 +1,5 @@
 [res]
+info.txt
 [lib]
 [file]
 TSLib.lua
@@ -8,3 +9,4 @@ iphone6.lua
 iphone6p.lua
 ipad.lua
 ipadair.lua
+iphone4.lua
