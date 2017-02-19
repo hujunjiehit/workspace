@@ -244,8 +244,8 @@ function doTheWork_pingjia(...)
 end
 
 --跳转到所有团课界面
-function geToAllCourcesPage()
-	tap(560,1083);	 --点击我的tab，拉起登陆界面 
+function geToAllCourcesPage(position)
+	--[[tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	mSleep(200)
 
 	pull_the_screen(320,560,100)	--滑动，方便定坐标
@@ -255,12 +255,13 @@ function geToAllCourcesPage()
 		tap(336,330);	--点击关注
 		mSleep(1000)
 	until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor( 320,512,0xffffff,95)
+	]]
 	
 	sucess = false;
 	repeat
 		mSleep(500);
 		repeat
-			tap(80,188);	--点击第一个关注的头像
+			tap(80,188 + 123*(position-1));	--点击第一个关注的头像
 			mSleep(1000)
 		until isColor(478, 1085,0x5cd390,90)
 		
@@ -282,7 +283,7 @@ function geToAllCourcesPage()
 		until isColor(447,192,0xffffff,85) or (isColor( 319,  550, 0xffffff, 85) and isColor( 425,  549, 0xffffff, 85))
 		
 		mSleep(500);
-		if isColor( 464,  210, 0xffffff, 85) and isColor( 459,  356, 0xffffff, 85) then
+		if isColor( 464,  210, 0xffffff, 85) and isColor( 459,356, 0xffffff, 85) then
 			--进入团课界面
 			sucess = true;
 		else
@@ -382,7 +383,8 @@ function startToXiadan(begin)
 	end
 end
 
-function doTheWork_xiadan(...)
+
+function doTheWork_xiadan_new(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -394,81 +396,38 @@ function doTheWork_xiadan(...)
 		login(userName,passWord);
 		mSleep(500)
 		
-		geToAllCourcesPage();
+		tap(560,1083);	 --点击我的tab，拉起登陆界面 
+		mSleep(200)
+
+		pull_the_screen(320,560,100)	--滑动，方便定坐标
+		mSleep(1000)
+
+		repeat
+			tap(336,330);	--点击关注
+			mSleep(1000)
+		until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
 		
-		mSleep(500);
-		
-		startToXiadan(1)
-		if pull_count == nil then
-			pull_count = 1;
-		end
-		
-		for k = 1,pull_count do
-			pull_the_screen(320,560,-380)
-			mSleep(2000)
-			startToXiadan(2);
-		end
-		mSleep(1000);
+		--进入关注列表页
 		
 		if yueke_mode == nil then
-			--需要约两个号的课程
-			nLog("开始约第二个号的课程")
-			mSleep(1000);
-			goBack();
-			goBack();
+			nLog("需要约多个号")
 			
-			--回到关注列表页
-			mSleep(500);
-			if (isColor( 511,  312, 0xc4c4c4, 85)) then
-				--有第二个关注的人
-				sucess = false;
-				repeat
-					mSleep(500);
-					repeat
-						tap(88,313);	--点击第二个关注的头像
-						mSleep(1000)
-					until isColor(478,1085,0x5cd390,90)
-					
-					mSleep(1000)
-					pull_the_screen(320,560,-50)
-					mSleep(1000)
-					step = 0;
-					repeat
-						-- body
-						tap(575,550+step*20); --每次下滑20px，尝试点击改点坐标
-						mSleep(200)
-						step = step + 1;
-					until getColor(478, 1085) ~= 0x5cd390
-					
-					--可能进入动力秀 或者 团课界面
-					repeat
-						mSleep(1000)
-						nLog("waiting...")
-					until isColor(447,192,0xffffff,85) or (isColor( 319,  550, 0xffffff, 85) and isColor( 425,  549, 0xffffff, 85))
-					
-					mSleep(500);
-					if isColor( 464,  210, 0xffffff, 85) and isColor( 459,  356, 0xffffff, 85) then
-						--进入团课界面
-						sucess = true;
-					else
-						--进入动力秀界面
-						sucess = false;
-						goBack();
-						goBack();
-					end
-					mSleep(1000);
-				until sucess == true
-				mSleep(1000);
-				nLog("成功进入第二个私教课程详情页");
+			mSleep(500)
+			position = 1;
+			repeat
+				nLog("开始约第"..position.."个号")
 				
-				mSleep(1500);
-		
+				geToAllCourcesPage(position);
+				
+				mSleep(500)
+				
 				startToXiadan(1)
 				if pull_count == nil then
 					pull_count = 1;
 				end
 				
 				for k = 1,pull_count do
+					mSleep(1000)
 					pull_the_screen(320,560,-380)
 					mSleep(2000)
 					startToXiadan(2);
@@ -477,25 +436,39 @@ function doTheWork_xiadan(...)
 				mSleep(1000);
 				goBack();
 				goBack();
-				goBack();
-				logout();
-				mSleep(1000);
-			else
-				--没有第二个关注的人
-				nLog("没有第二个关注的人")
-				goBack();
-				logout();
-				mSleep(1000);
-			end
-		else
-			--不需要约两个号的课程
-			goBack();
-			goBack();
-			goBack();
+				position = position + 1;
+				mSleep(500)
+			until isColor(514,189+123*(position-1),0xc4c4c4,90) == false
 			
-			logout();
+			nLog("没有更多关注的私教了。。end")
+		else
+			nLog("不需要约多个号，只约第一个关注的号即可")
+			
+			geToAllCourcesPage(1);
+			
+			mSleep(500);
+		
+			startToXiadan(1)
+			if pull_count == nil then
+				pull_count = 1;
+			end
+			
+			for k = 1,pull_count do
+				mSleep(1000)
+				pull_the_screen(320,560,-380)
+				mSleep(2000)
+				startToXiadan(2);
+			end
+			
 			mSleep(1000);
+			goBack();
+			goBack();
+			mSleep(500)
 		end
+		
+		goBack();
+		logout();
+		mSleep(1000)
 	end
 end
 
@@ -616,40 +589,7 @@ function manage_the_pingjia_words(...)
 	until (false)	
 end
 
-function doTheWorkQiangHongbao(...)
-	-- body
-	toast("已经进入抢红包模式，按音量-终止抢红包",1)
-	repeat
-		mSleep(1000)
-		x,y = findMultiColorInRegionFuzzy( 0xfa9d3b, "-165|-42|0xef4c49,-152|17|0xcf3c35", 90, 0, 0, 639, 1135)
-		nLog(x.."---"..y)
-		if x ~= -1 and y ~= -1 then
-			tap(x,y)
-			
-			repeat
-				mSleep(500)
-			until  (isColor( 260,  747, 0xddbc84, 85) and isColor( 226,  840, 0xd84e43, 85)) or isColor(319,126,0xd84e43, 85)
-			
-			if (isColor( 260,  747, 0xddbc84, 85) and isColor( 226,  840, 0xd84e43, 85)) then
-				nLog("红包可拆...")
-				mSleep(500)
-				tap(320,730)   --拆开红包
-				repeat
-					mSleep(1000)
-					nLog("正在拆红包...")
-				until isColor(319,126,0xd84e43, 85)
-				mSleep(500)
-				tap(50,80)
-				mSleep(500)
-			elseif isColor(319,126,0xd84e43, 85) then
-				nLog("红包已经拆过了...")
-				mSleep(500)
-				tap(50,80)
-				mSleep(500)
-			end
-		end
-	until false
-end
+
 
 function main_iphone5(...)
 	-- body
@@ -669,7 +609,7 @@ function main_iphone5(...)
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号,抢微信红包"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UICheck("yueke_mode","只约一个私教号的课","0");
@@ -709,7 +649,7 @@ function main_iphone5(...)
 			index = tonumber(strSplit(name)[1]);
 			nLog("index = "..index);
 			
-			doTheWork_xiadan();
+			doTheWork_xiadan_new();
 	
 		end
 	elseif mode == "登录付款" then
@@ -725,9 +665,7 @@ function main_iphone5(...)
 	elseif mode == "管理评价语" then
 
 		manage_the_pingjia_words();
-	elseif mode == "抢微信红包" then
-		dialog("启动之后，请进入微信聊天界面或者群聊天界面，等待红包到来",0)
-		doTheWorkQiangHongbao()
+		
 	elseif mode == "添加帐号" then
 		repeat
 			UINew({titles="添加帐号界面",okname="添加",cancelname="取消"})
@@ -764,6 +702,10 @@ function main(...)
 	initLog("脚本评价记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 	wLog("脚本评价记录","\n\n\n\n脚本开始时间:"..os.date("%c")); 
 	
+	if isFileExist("/var/mobile/Media/TouchSprite/res/info.txt") == false then --存在返回true，不存在返回false
+		writeFileString("/var/mobile/Media/TouchSprite/res/info.txt","");
+	end
+			
 	width,height = getScreenSize();
 	nLog("[DATE]"..width.."---"..height);
 	if width == 640 and height == 1136 then
