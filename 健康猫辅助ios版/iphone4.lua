@@ -43,7 +43,7 @@ function login_iphone4(userName,passWord)
 	nLog(userName.."登录成功");
 	
 	tap(560,908);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
-	mSleep(500)
+	mSleep(1000)
 end
 
 function logout_iphone4()
@@ -81,15 +81,15 @@ end
 function gotoPingjiaPage_iphone4()
 	
 	tap(560,908);	 --点击我的tab
-	mSleep(500);
+	mSleep(2000);
 	
 	pull_the_screen(320,560,200)	--滑动到顶，方便定坐标
-	mSleep(1000)
+	mSleep(2000)
 		
 	tap(334,441); --点击我的订单
 	repeat
 		mSleep(1000);
-	until (isColor( 364,  497, 0xffffff, 95) and isColor( 320,  455, 0xffffff, 95) and isColor( 380,  346, 0xffffff, 95)) or getColor(347,816) == 0xf2f2f2 --加载进度判断
+	until (isColor( 364,497,0xffffff,95) and isColor( 320,  455, 0xffffff, 95) and isColor( 380,  346, 0xffffff, 95)) or getColor(347,816) == 0xf2f2f2 --加载进度判断
 	
 	mSleep(500);
 	
@@ -332,9 +332,9 @@ function startToXiadan_iphone4(begin)
 					tap(410,909);  --点击稍后支付
 					mSleep(1000)
 					nLog("loading...3")
-				until isColor(410,909,0x1f7746,90)
+				until isColor(410,909,0x1f7746,90) or isColor(410,909,0x1e7646,90) or isColor(621,478,0x999999,99)
 				
-				mSleep(500);
+				mSleep(1000);
 				
 				tap(316,676);   --选课成功，点击我知道了
 				mSleep(1000);
