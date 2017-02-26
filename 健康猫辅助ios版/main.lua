@@ -10,10 +10,11 @@ function pull_the_screen(x,y,dy)
 	mSleep(1000);
 end
 
-function goBack(...)
+function goBack(delaytime)
 	-- body
+	delaytime = delaytime or 1000
 	tap(23,84);
-	mSleep(1000);
+	mSleep(delaytime);
 end
 
 function login(userName,passWord)
@@ -25,42 +26,33 @@ function login(userName,passWord)
 	tap(524,206) --收起输入法键盘
 	mSleep(500)
 	
-	target_color = getColor(355,200)	--获取健康猫logo的背景颜色
-	nLog("target_color = 0x"..string.format("%X",target_color));
+	tap(295,404);	 --点击帐号输入框
+	mSleep(500)
 	
-	isFirst = true;
-	while  target_color ==  0x3aab47 do
-		nLog("now begin to login");
+	inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+	mSleep(500)
+	
+	inputText(userName);
+	mSleep(1000);
 		
-		tap(295,404);	 --点击帐号输入框
-		mSleep(500)
-		inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-		mSleep(500)
-		inputText(userName);
-		mSleep(500);
-		
-		tap(400,484);   --点击密码输入框
-		mSleep(500);
-		if isFirst == false then
-			inputText("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-			mSleep(500)
-		end
-		inputText(passWord);
-		mSleep(500);
-		
+	tap(400,484);   --点击密码输入框
+	mSleep(1000);
+	
+	inputText(passWord);
+	mSleep(1000);
+	
+	
+	repeat
 		tap(458,598); --点击登陆按钮
-		repeat
-			mSleep(500)
-			nLog("loging now...")
-		until getColor(231,340) ~= 0x303030   --正在登录
-		mSleep(500)
-		isFirst = false;
-		target_color = getColor(355,200) --获取健康猫logo的背景颜色
-	end
+		mSleep(2000);
+    until isColor(355,200,0x3aab47,95) == false
+	
+	mSleep(1000);
+	
 	nLog(userName.."登录成功");
-	mSleep(200)
+
 	tap(560,1083);	 --点击我的tab，去掉帐号第一次登录时出现的引导蒙板
-	mSleep(200)
+	mSleep(500)
 end
 
 function logout()
@@ -88,8 +80,10 @@ function logout()
 		tap(300,892);	--点击退出登录
 		mSleep(1000);
 	until isColor(392,612,0x65d096,90)
+	
 	mSleep(1000)
 	tap(450,617);	--点击确定按钮
+	
 	mSleep(2000)
 	nLog(userName.."退出登录");
 end
@@ -97,27 +91,15 @@ end
 function gotoPingjiaPage()
 	
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
+	mSleep(500)
+	
+	pull_the_screen(320,560,100)	--滑动到顶，方便定坐标
 	mSleep(1000)
 	
-	if sysint >= 700 and sysint <= 710 then
-		pull_the_screen(320,560,100)	--滑动到顶，方便定坐标
+	tap(327,461); --点击我的订单
+	repeat
 		mSleep(1000)
-		
-		tap(327,461); --点击我的订单
-		repeat
-			mSleep(1000)
-		until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
-	else
-		pull_the_screen(320,560,-100)	--滑动到顶，方便定坐标
-		mSleep(1000)
-		
-		tap(313,313); --点击我的订单
-		repeat
-			mSleep(1000)
-		until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
-	end
-	
-
+	until getColor(264,582) ~= 0x333333	and getColor(264,582) ~= 0x3a3a3a		--加载进度判断
 	
 	tap(323,82); 	 --点击上面的私教订单，展开选项
 	mSleep(1000)
@@ -384,7 +366,7 @@ function startToXiadan(begin)
 end
 
 
-function doTheWork_xiadan_new(...)
+function doTheWork_xiadan(...)
 	-- body
 	for i = index,#data do
 		info = strSplit(data[i],",");
@@ -536,6 +518,177 @@ function doTheWork_fukuan(...)
 	end
 end
 
+function startToXiadan_new(begin)
+	mSleep(200);
+	for index = begin,6 do	
+		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
+		y = 208+160*(index-1);
+		
+		mSleep(500)
+		times = 0;
+		repeat
+			tap(344,208+160*(index-1));
+			mSleep(1000)
+			times = times + 1;
+			nLog("loading..1  times == "..times.."   index = "..index)
+			wLog("脚本评价记录","loading..1  times == "..times.."   index = "..index)
+		until (isColor(325,510,0xffffff,95) and (isColor(469, 1085,0xaaaaaa,95) or isColor(469,1085,0x5cd390,95))) or times == 10  --加载完毕
+		
+		if times == 10 then
+			--没有更多课程了
+			nLog("times is 10,times == "..times.."   index = "..index)
+			mSleep(500);
+			break;
+		end
+		--课程详情加载完毕
+		nLog("课程详情加载完毕")
+		
+		
+		if getColor(469, 1085) == 0xaaaaaa then   --灰色按钮
+			--如果已经报名，直接返回
+			mSleep(500);
+			goBack();
+		elseif getColor(469, 1085) == 0xffffff then
+			--还在当前页面，什么都不做
+		else
+			repeat
+				if isColor(469, 1085,0x5cd390,95) then
+					tap(483,1085); --点击报名
+				end
+				mSleep(1000)
+				nLog("loading..2")
+			until isColor(469,1085,0x5cd390,95) == false  --加载完毕
+			
+			mSleep(1000)
+			
+			--0x459e6c	 已经报过名了
+			--0x33c774   可以报名
+			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) or isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
+				nLog("已经选过课了，返回进行下一个")
+				mSleep(1000)
+				tap(400,724);
+				mSleep(500);
+				goBack(500);
+			elseif getColor(608,  588) == 0x999999 then
+				nLog("课程已撤销，返回点击好的")
+				tap(317, 626);
+				mSleep(500);
+				goBack(500);
+			elseif isColor(580,1084,0x33c774,95) then
+				nLog("可以选课")
+				repeat
+					-- body
+					tap(486,1086);  --点击稍后支付
+					mSleep(1000)
+				until isColor(580,1084,0x33c774,95) == false
+				
+				mSleep(500);
+				repeat
+					tap(323,674);   --选课成功，点击我知道了
+					mSleep(500)
+				until isColor(580,1084,0x5cd390,95)
+				
+				mSleep(500);
+				
+				goBack(500);
+			else
+				--进入空白页面
+				nLog("进入空白页面")
+				mSleep(1000);
+				goBack(500);
+				goBack(500);
+			end
+		end
+	end
+end
+
+function doTheWork_xiadan_new(...)
+	-- body
+	for i = index,#data do
+		info = strSplit(data[i],",");
+		userName = info[1];
+		passWord = info[2];
+		
+		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
+		
+		login(userName,passWord);
+		mSleep(500)
+		
+		tap(560,1083);	 --点击我的tab，拉起登陆界面 
+		mSleep(200)
+
+		pull_the_screen(320,560,100)	--滑动，方便定坐标
+		mSleep(500)
+
+		repeat
+			tap(336,330);	--点击关注
+			mSleep(500)
+		until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
+		
+		--进入关注列表页
+		
+		if yueke_mode == nil then
+			nLog("需要约多个号")
+			
+			mSleep(500)
+			position = 1;
+			repeat
+				nLog("开始约第"..position.."个号")
+				
+				geToAllCourcesPage(position);
+				
+				mSleep(500)
+				
+				startToXiadan_new(1)
+				if pull_count == nil then
+					pull_count = 1;
+				end
+				
+				for k = 1,pull_count do
+					mSleep(1000)
+					pull_the_screen(320,560,-250)
+					mSleep(2000)
+					startToXiadan_new(3);
+				end
+				
+				mSleep(1000);
+				goBack(500);
+				goBack(500);
+				position = position + 1;
+				mSleep(500)
+			until isColor(514,189+123*(position-1),0xc4c4c4,90) == false
+			
+			nLog("没有更多关注的私教了。。end")
+		else
+			nLog("不需要约多个号，只约第一个关注的号即可")
+			
+			geToAllCourcesPage(1);
+			
+			mSleep(500);
+		
+			startToXiadan_new(1)
+			if pull_count == nil then
+				pull_count = 1;
+			end
+			
+			for k = 1,pull_count do
+				mSleep(1000)
+				pull_the_screen(320,560,-250)
+				mSleep(2000)
+				startToXiadan_new(3);
+			end
+			
+			mSleep(1000);
+			goBack(1000);
+			goBack(1000);
+			mSleep(1000)
+		end
+		
+		goBack(1000);
+		logout();
+		mSleep(1000)
+	end
+end
 
 function write_info(str)
 	return writeFile("/var/mobile/Media/TouchSprite/res/info.txt",{str});
@@ -609,7 +762,7 @@ function main_iphone5(...)
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,自动约课优化版本,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UICheck("yueke_mode","只约一个私教号的课","0");
@@ -639,6 +792,19 @@ function main_iphone5(...)
 			
 		end
 	elseif mode == "自动约课" then
+		if name == nil then
+			nLog("user choose nothing,so exit the lua!");
+			mSleep(1000)
+			lua_exit();
+		else
+			nLog("开始下单, name = "..name);
+			
+			index = tonumber(strSplit(name)[1]);
+			nLog("index = "..index);
+			
+			doTheWork_xiadan();
+		end
+	elseif mode == "自动约课优化版本" then
 		if name == nil then
 			nLog("user choose nothing,so exit the lua!");
 			mSleep(1000)

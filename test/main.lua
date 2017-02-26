@@ -77,6 +77,12 @@ function geToAllCourcesPage()
 	return 0; 
 end
 
+function getDistance(recognize)
+	-- body
+	local data = strSplit(recognize)
+	local num = strSplit(data[2],".")
+	return tonumber(num[1]);
+end
 
 function main(...)
 	-- body
@@ -86,8 +92,30 @@ function main(...)
 	sysver = getOSVer();    --获取系统版本
 	sysint = tonumber(string.sub(sysver, 1, 1)..string.sub(sysver, 3,3)..string.sub(sysver, 5, 5));
 	
-	geToAllCourcesPage();
+	recognize = ocrText(538, 201, 742, 259, 0);  --OCR 英文识别
+	mSleep(500); 
+	result = getDistance(recognize)
+	dialog("识别出的字符："..result, 0);
 	
+	if	result < 20 then
+		nLog("target")
+	else
+		nLog("not target")
+	end
+	
+	mSleep(1000)
+	m,n = findColorInRegionFuzzy(0x9960fd,90,1,599,745,1232); 
+	nLog("m = "..m.."   n = "..n)
+	recognize = ocrText(538,n,742,n+58, 0);  --OCR 英文识别
+	mSleep(500); 
+	result = getDistance(recognize)
+	dialog("识别出的字符："..result, 0);
+	
+	if	result < 20 then
+		nLog("target")
+	else
+		nLog("not target")
+	end
 	closeLog("脚本评价记录");  --关闭日志
 end
 
