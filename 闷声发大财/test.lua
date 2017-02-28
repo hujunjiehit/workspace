@@ -7,8 +7,9 @@ local name;
 local token;
 
 function pull_the_screen(x,y,dy)
-	moveTo(x,y,x,y+dy);
+	moveTo(x,y,x,y+dy,2,50);
 	mSleep(1000);
+	toast("滑动结束",1)
 end
 
 function goBack(...)
@@ -23,7 +24,7 @@ function main(...)
 	initLog("脚本宣传记录", 0);	--把 0 换成 1 即生成形似 test_1397679553.log 的日志文件 
 
 	
-	pull_the_screen(320,560,-450)
+	pull_the_screen(320,560,-500)
 
 	closeLog("脚本宣传记录");  --关闭日志
 end

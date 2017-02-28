@@ -79,7 +79,7 @@ function logout()
 		mSleep(200);
 		tap(300,892);	--点击退出登录
 		mSleep(1000);
-	until isColor(392,612,0x65d096,90)
+	until isColor(392,612,0x65d096,85) or isColor(392,612,0x62cd93,85)
 	
 	mSleep(1000)
 	tap(450,617);	--点击确定按钮
@@ -580,11 +580,11 @@ function startToXiadan_new(begin)
 					-- body
 					tap(486,1086);  --点击稍后支付
 					mSleep(1000)
-				until isColor(580,1084,0x33c774,95) == false
+				until isColor(580,1084,0x33c774,95) == false or isColor(621,451,0x999999,95)
 				
 				mSleep(500);
 				repeat
-					tap(323,674);   --选课成功，点击我知道了
+					tap(312,671);   --选课成功，点击我知道了
 					mSleep(500)
 				until isColor(580,1084,0x5cd390,95)
 				

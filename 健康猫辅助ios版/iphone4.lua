@@ -337,6 +337,10 @@ function startToXiadan_iphone4(begin)
 				mSleep(1000);
 				
 				tap(316,676);   --选课成功，点击我知道了
+				mSleep(500);
+				if isColor(410,909,0x1f7746,90) or isColor(410,909,0x1e7646,90) or isColor(621,478,0x999999,99) then
+					tap(316,583);   --选课成功，点击我知道了
+				end
 				mSleep(1000);
 				
 				goBack_iphone4();
