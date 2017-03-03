@@ -557,13 +557,13 @@ function startToXiadan_new(begin)
 				end
 				mSleep(1000)
 				nLog("loading..2")
-			until isColor(469,1085,0x5cd390,95) == false  --加载完毕
+			until isColor(580,1084,0x33744f,95) or isColor(580,1084,0x33c774,95) --加载完毕
 			
 			mSleep(1000)
 			
 			--0x459e6c	 已经报过名了
 			--0x33c774   可以报名
-			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) or isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
+			if isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
 				nLog("已经选过课了，返回进行下一个")
 				mSleep(1000)
 				tap(400,724);
@@ -586,7 +586,7 @@ function startToXiadan_new(begin)
 				repeat
 					tap(312,671);   --选课成功，点击我知道了
 					mSleep(500)
-				until isColor(580,1084,0x5cd390,95)
+				until isColor(580,1084,0x5cd390,95) or isColor(469,1085,0xaaaaaa,95)
 				
 				mSleep(500);
 				
