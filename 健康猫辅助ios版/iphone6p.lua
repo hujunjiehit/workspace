@@ -15,7 +15,9 @@ function login_iphone6p(userName,passWord)
 	nLog("now begin to login iphone6p");
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
 	tap(1088, 2126);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	repeat
+		mSleep(500)
+	until isColor(614,888,0xf2f2f2,95)
 	
 	tap(1000,344) --收起输入法键盘
 	mSleep(500)
@@ -32,8 +34,8 @@ function login_iphone6p(userName,passWord)
 	inputText(passWord);
 	mSleep(500);
 
+	tap(900,900); --点击登陆按钮
 	repeat
-		tap(900,900); --点击登陆按钮
 		mSleep(2000);
     until getColor(684,286) ~= 0x3aab47
 	
@@ -48,7 +50,7 @@ function logout_iphone6p()
 	tap(1088, 2126);		 --点击我的tab，拉起登陆界面 
 	mSleep(500);
 	
-	tap(628,1458);	--进入设置
+	tap(628,1658);	--进入设置
 	mSleep(1000);
 	
 	--tap(622, 1336);	--点击退出登录
@@ -160,9 +162,9 @@ function startToPingjia_iphone6p(begin)
 			nLog("评价成功。");
 			flag_count = flag_count + 1;
 			
-			repeat
+			--repeat
 				mSleep(1000);
-			until isColor(762,898,0xffffff,95) or isColor(744,994,0xffffff,95)
+			--until isColor(762,898,0xffffff,95) or isColor(744,994,0xffffff,95)
 		end
 		index = index + 1;
 	until false 
@@ -213,19 +215,19 @@ function geToAllCourcesPage_iphone6p()
 		tap(580,496);	--点击关注
 		mSleep(1000)
 		nLog("正在加载关注列表")
-	until isColor(1052,284, 0xc4c4c4,85) and isColor(618,290, 0xffffff, 85) and isColor(612,992, 0xffffff, 85)
+	until isColor(1052,474, 0xc4c4c4,85) and isColor(634,893, 0xffffff, 85)
 	
 	sucess = false;
 	repeat
 		mSleep(500);
 		repeat
-			tap(130,296);	--点击第一个关注的头像
+			tap(130,480);	--点击第一个关注的头像
 			mSleep(1000)
 			nLog("正在加载私教小屋")
 		until isColor(952,2132,0x5cd390,90)
 	
 		mSleep(1000)
-		--pull_the_screen(320,560,-50)
+		pull_the_screen(320,560,-50)
 		--mSleep(1000)
 		step = 0;
 		repeat
@@ -383,14 +385,14 @@ function doTheWork_xiadan_iphone6p(...)
 			
 			--回到关注列表页
 			mSleep(500);
-			if (isColor(1056, 470, 0xc4c4c4, 85)) then
+			if (isColor(1056, 650, 0xc4c4c4, 85)) then
 				mSleep(1000)
 				--有第二个关注的人
 				sucess = false;
 				repeat
 					mSleep(500);
 					repeat
-						tap(130,478);	--点击第二个关注的头像
+						tap(130,660);	--点击第二个关注的头像
 						mSleep(1000)
 						nLog("正在加载私教小屋")
 					until isColor(952,2132,0x5cd390,90)

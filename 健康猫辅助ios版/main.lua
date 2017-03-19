@@ -21,7 +21,9 @@ function login(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
 	tap(560,1083);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	repeat
+		mSleep(500)
+	until isColor(322,570,0xf2f2f2,95)
 	
 	tap(524,206) --收起输入法键盘
 	mSleep(500)
@@ -41,9 +43,8 @@ function login(userName,passWord)
 	inputText(passWord);
 	mSleep(1000);
 	
-	
+	tap(458,598); --点击登陆按钮
 	repeat
-		tap(458,598); --点击登陆按钮
 		mSleep(2000);
     until isColor(355,200,0x3aab47,95) == false
 	
@@ -178,9 +179,9 @@ function startToPingjia(begin)
 			nLog("评价成功。");
 			flag_count = flag_count + 1;
 			
-			repeat
-				mSleep(1000);
-			until isColor(396,455,0xffffff,95) or isColor(391,517,0xffffff,95)
+			--repeat
+			mSleep(1000);
+			--until isColor(396,455,0xffffff,95) or isColor(391,517,0xffffff,95)
 		end
 		index = index + 1;
 	until false
@@ -243,12 +244,12 @@ function geToAllCourcesPage(position)
 	repeat
 		mSleep(500);
 		repeat
-			tap(80,188 + 123*(position-1));	--点击第一个关注的头像
+			tap(80,311 + 123*(position-1));	--点击第一个关注的头像
 			mSleep(1000)
 		until isColor(478, 1085,0x5cd390,90)
 		
-		mSleep(1000)
-		pull_the_screen(320,560,-50)
+		mSleep(2000)
+		pull_the_screen(320,560,-80)
 		mSleep(1000)
 		step = 0;
 		repeat
@@ -280,178 +281,6 @@ function geToAllCourcesPage(position)
 	mSleep(200);
 	nLog("成功进入课程详情页");
 	return 0; 
-end
-
-function startToXiadan(begin)
-	mSleep(200);
-	for index = begin,6 do	
-		nLog("index = "..index.."   y  = "..tostring(208+160*(index-1)));
-		y = 208+160*(index-1);
-		
-		tap(344,208+160*(index-1));
-		repeat
-			mSleep(1000)
-			nLog("loading..1")
-		until isColor(325,510,0xffffff,80)  --加载完毕
-		
-		mSleep(500);
-		--课程详情加载完毕
-		nLog("课程详情加载完毕")
-		
-		
-		if getColor(469, 1085) == 0xaaaaaa then   --灰色按钮
-			--如果已经报名，直接返回
-			mSleep(500);
-			goBack();
-		elseif getColor(469, 1085) == 0xffffff then
-			--还在当前页面，什么都不做
-		else
-			mSleep(500);
-			tap(483,1085); --点击报名
-			repeat
-				mSleep(1000)
-				nLog("loading..2")
-			until isColor(624,1086,0x5cd390,95) == false  --加载完毕
-			
-			mSleep(500)
-			--0x459e6c	 已经报过名了
-			--0x33c774   可以报名
-			if  isColor(580,1084,0x459e6c,95) or isColor(608,  588,0xbfbfbf,95) or isColor(580,1084,0x33744f,95) or isColor(608,588,0x8c8c8c,95) then
-				nLog("已经选过课了，返回进行下一个")
-				mSleep(1000)
-				tap(400,724);
-				mSleep(500);
-				goBack();
-			elseif getColor(608,  588) == 0x999999 then
-				nLog("课程已撤销，返回点击好的")
-				tap(317, 626);
-				mSleep(500);
-				goBack();
-			elseif getColor(580,1084) == 0x33c774 then
-				nLog("可以选课")
-				repeat
-					-- body
-					tap(486,1086);  --点击稍后支付
-					mSleep(1000)
-					m,n = findColorInRegionFuzzy(0x007aff, 90, 53,420, 628,737); 
-					nLog("m = "..m.."   n = "..n);
-					
-					if isColor(481, 1084,0xefeff4,95) and isColor(461,978,0xefeff4,95) then
-						m = 0;
-						n = 0;
-					end
-					mSleep(200);
-				until m ~= -1 and n ~= -1
-				mSleep(200);
-				
-				if m == 0 and n == 0 then
-					mSleep(500);
-					goBack();
-					goBack();
-					goBack();
-				else
-					mSleep(500);
-					tap(323,674);   --选课成功，点击我知道了
-					mSleep(1000);
-					goBack();
-				end
-			else
-				--进入空白页面
-				mSleep(1000);
-				goBack();
-				goBack();
-			end
-		end
-	end
-end
-
-
-function doTheWork_xiadan(...)
-	-- body
-	for i = index,#data do
-		info = strSplit(data[i],",");
-		userName = info[1];
-		passWord = info[2];
-		
-		nLog("i = "..i.."   userName = "..userName.."   passWord = "..passWord);
-		
-		login(userName,passWord);
-		mSleep(500)
-		
-		tap(560,1083);	 --点击我的tab，拉起登陆界面 
-		mSleep(200)
-
-		pull_the_screen(320,560,100)	--滑动，方便定坐标
-		mSleep(1000)
-
-		repeat
-			tap(336,330);	--点击关注
-			mSleep(1000)
-		until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
-		
-		--进入关注列表页
-		
-		if yueke_mode == nil then
-			nLog("需要约多个号")
-			
-			mSleep(500)
-			position = 1;
-			repeat
-				nLog("开始约第"..position.."个号")
-				
-				geToAllCourcesPage(position);
-				
-				mSleep(500)
-				
-				startToXiadan(1)
-				if pull_count == nil then
-					pull_count = 1;
-				end
-				
-				for k = 1,pull_count do
-					mSleep(1000)
-					pull_the_screen(320,560,-380)
-					mSleep(2000)
-					startToXiadan(2);
-				end
-				
-				mSleep(1000);
-				goBack();
-				goBack();
-				position = position + 1;
-				mSleep(500)
-			until isColor(514,189+123*(position-1),0xc4c4c4,90) == false
-			
-			nLog("没有更多关注的私教了。。end")
-		else
-			nLog("不需要约多个号，只约第一个关注的号即可")
-			
-			geToAllCourcesPage(1);
-			
-			mSleep(500);
-		
-			startToXiadan(1)
-			if pull_count == nil then
-				pull_count = 1;
-			end
-			
-			for k = 1,pull_count do
-				mSleep(1000)
-				pull_the_screen(320,560,-380)
-				mSleep(2000)
-				startToXiadan(2);
-			end
-			
-			mSleep(1000);
-			goBack();
-			goBack();
-			mSleep(500)
-		end
-		
-		goBack();
-		logout();
-		mSleep(1000)
-	end
 end
 
 
@@ -576,27 +405,28 @@ function startToXiadan_new(begin)
 				goBack(500);
 			elseif isColor(580,1084,0x33c774,95) then
 				nLog("可以选课")
+				mSleep(1000)
+				tap(486,1086);  --点击稍后支付
 				repeat
 					-- body
-					tap(486,1086);  --点击稍后支付
 					mSleep(1000)
 				until isColor(580,1084,0x33c774,95) == false or isColor(621,451,0x999999,95)
 				
-				mSleep(500);
+				mSleep(2000);
 				repeat
 					tap(312,671);   --选课成功，点击我知道了
-					mSleep(500)
+					mSleep(1000)
 				until isColor(580,1084,0x5cd390,95) or isColor(469,1085,0xaaaaaa,95)
 				
-				mSleep(500);
+				mSleep(2000);
 				
-				goBack(500);
+				goBack(1000);
 			else
 				--进入空白页面
 				nLog("进入空白页面")
 				mSleep(1000);
-				goBack(500);
-				goBack(500);
+				goBack(1000);
+				goBack(1000);
 			end
 		end
 	end
@@ -623,7 +453,7 @@ function doTheWork_xiadan_new(...)
 		repeat
 			tap(336,330);	--点击关注
 			mSleep(500)
-		until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
+		until isColor(512,320, 0xc4c4c4,90) and isColor(321, 200,0xffffff, 90) and isColor(320,512,0xffffff,95)
 		
 		--进入关注列表页
 		
@@ -646,17 +476,17 @@ function doTheWork_xiadan_new(...)
 				
 				for k = 1,pull_count do
 					mSleep(1000)
-					pull_the_screen(320,560,-250)
+					pull_the_screen(320,560,-370)
 					mSleep(2000)
-					startToXiadan_new(3);
+					startToXiadan_new(2);
 				end
 				
 				mSleep(1000);
-				goBack(500);
-				goBack(500);
+				goBack(1000);
+				goBack(1000);
 				position = position + 1;
-				mSleep(500)
-			until isColor(514,189+123*(position-1),0xc4c4c4,90) == false
+				mSleep(1000)
+			until isColor(514,311+123*(position-1),0xc4c4c4,90) == false
 			
 			nLog("没有更多关注的私教了。。end")
 		else
@@ -673,9 +503,9 @@ function doTheWork_xiadan_new(...)
 			
 			for k = 1,pull_count do
 				mSleep(1000)
-				pull_the_screen(320,560,-250)
+				pull_the_screen(320,560,-370)
 				mSleep(2000)
-				startToXiadan_new(3);
+				startToXiadan_new(2);
 			end
 			
 			mSleep(1000);
@@ -762,7 +592,7 @@ function main_iphone5(...)
 	
 	UINew({titles="脚本配置iphone5",okname="开始",cancelname="取消",config="UIconfig.dat"})
 	UILabel("脚本功能选择：",15,"left","255,0,0",-1,0) --宽度写-1为一行，自定义宽度可写其他数值
-	UIRadio({id="mode",list="自动评价,自动约课,自动约课优化版本,登录付款,管理评价语,添加帐号"})
+	UIRadio({id="mode",list="自动评价,自动约课,登录付款,管理评价语,添加帐号"})
 	UILabel("评价或者约课时下滑次数：",15,"left","255,0,0") --宽度写-1为一行，自定义宽度可写其他数值
 	UIEdit("pull_count","输入下滑次数","1",15,"center","0,0,255")
 	UICheck("yueke_mode","只约一个私教号的课","0");
@@ -792,19 +622,6 @@ function main_iphone5(...)
 			
 		end
 	elseif mode == "自动约课" then
-		if name == nil then
-			nLog("user choose nothing,so exit the lua!");
-			mSleep(1000)
-			lua_exit();
-		else
-			nLog("开始下单, name = "..name);
-			
-			index = tonumber(strSplit(name)[1]);
-			nLog("index = "..index);
-			
-			doTheWork_xiadan();
-		end
-	elseif mode == "自动约课优化版本" then
 		if name == nil then
 			nLog("user choose nothing,so exit the lua!");
 			mSleep(1000)

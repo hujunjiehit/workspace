@@ -10,7 +10,7 @@ function login_ipadair(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
 	tap(1248,1876);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	mSleep(1500)
 	
 	tap(1300,438) --收起输入法键盘
 	mSleep(500)
@@ -33,8 +33,8 @@ function login_ipadair(userName,passWord)
 	tap(1300,438) --收起输入法键盘
 	mSleep(500)
 	
+	tap(1044,1264); --点击登陆按钮
 	repeat
-		tap(1044,1264); --点击登陆按钮
 		mSleep(2000);
     until getColor(838, 454) ~= 0x3aab47
 	
@@ -165,9 +165,9 @@ function startToPingjia_ipadair(begin)
 			nLog("评价成功。");
 			flag_count = flag_count + 1;
 			
-			repeat
+			--repeat
 				mSleep(1000);
-			until isColor(916,994,0xffffff,95) or isColor(918,780,0xffffff,95)
+			--until isColor(916,994,0xffffff,95) or isColor(918,780,0xffffff,95)
 		end
 		index = index + 1;
 	until false
@@ -224,12 +224,12 @@ function geToAllCourcesPage_ipadair()
 
 	repeat
 		mSleep(500)
-	until getColor(700,1064) == 0xffffff
+	until getColor(638,1084) == 0xffffff
 	
 	sucess = false;
 	repeat
 		mSleep(500);
-		tap(300,456);	--点击第一个关注的头像
+		tap(300,700);	--点击第一个关注的头像
 		repeat
 			mSleep(500)
 		until isColor( 1080,  1886, 0x5cd390, 85)
@@ -376,13 +376,13 @@ function doTheWork_xiadan_ipadair(...)
 			
 			--回到关注列表页
 			mSleep(1000);
-			if (isColor(1160,688,0xc4c4c4, 85)) then
+			if (isColor(1160,950,0xc4c4c4, 85)) then
 				--有第二个关注的人
 				--toast("有第二个关注的人",1);
 				sucess = false;
 				repeat
 					mSleep(500);
-					tap(300,700);	--点击第2个关注的头像
+					tap(300,950);	--点击第2个关注的头像
 					repeat
 						mSleep(500)
 					until isColor( 1080,  1886, 0x5cd390, 85)

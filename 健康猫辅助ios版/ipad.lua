@@ -10,7 +10,7 @@ function login_ipad(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
 	tap(625,935);	 --点击我的tab，拉起登陆界面 
-	mSleep(500)
+	mSleep(1500)
 	
 	tap(597,267) --收起输入法键盘
 	mSleep(500)
@@ -33,8 +33,8 @@ function login_ipad(userName,passWord)
 	tap(597,267) --收起输入法键盘
 	mSleep(500)
 	
+	tap(523,628); --点击登陆按钮
 	repeat
-		tap(523,628); --点击登陆按钮
 		mSleep(2000);
     until getColor(415, 229) ~= 0x3aab47
 	
@@ -165,9 +165,9 @@ function startToPingjia_ipad(begin)
 			nLog("评价成功。");
 			flag_count = flag_count + 1;
 			
-			repeat
+			--repeat
 				mSleep(1000);
-			until isColor(458,497,0xffffff,95) or isColor(459,390,0xffffff,95)
+			--until isColor(458,497,0xffffff,95) or isColor(459,390,0xffffff,95)
 		end
 		index = index + 1;
 	until false
@@ -224,12 +224,12 @@ function geToAllCourcesPage_ipad()
 
 	repeat
 		mSleep(500)
-	until getColor(350,532) == 0xffffff
+	until getColor(319,542) == 0xffffff
 	
 	sucess = false;
 	repeat
 		mSleep(500);
-		tap(150,228);	--点击第一个关注的头像
+		tap(150,350);	--点击第一个关注的头像
 		repeat
 			mSleep(500)
 		until isColor( 540,  943, 0x5cd390, 85)
@@ -383,12 +383,12 @@ function doTheWork_xiadan_ipad(...)
 			
 			--回到关注列表页
 			mSleep(500);
-			if (isColor(580,344, 0xc4c4c4, 85)) then
+			if (isColor(580,475, 0xc4c4c4, 85)) then
 				--有第二个关注的人
 				sucess = false;
 				repeat
 					mSleep(500);
-					tap(150,350);	--点击第2个关注的头像
+					tap(150,475);	--点击第2个关注的头像
 					repeat
 						mSleep(500)
 					until isColor( 540,  943, 0x5cd390, 85)
