@@ -405,11 +405,11 @@ function startToXiadan_new(begin)
 				goBack(500);
 			elseif isColor(580,1084,0x33c774,95) then
 				nLog("可以选课")
-				mSleep(1000)
-				tap(486,1086);  --点击稍后支付
+				mSleep(500)
 				repeat
 					-- body
-					mSleep(1000)
+					tap(486,1086);  --点击稍后支付
+					mSleep(2000)
 				until isColor(580,1084,0x33c774,95) == false or isColor(621,451,0x999999,95)
 				
 				mSleep(2000);
