@@ -409,18 +409,19 @@ function startToXiadan_new(begin)
 				repeat
 					-- body
 					tap(486,1086);  --点击稍后支付
-					mSleep(2000)
+					mSleep(1000)
 				until isColor(580,1084,0x33c774,95) == false or isColor(621,451,0x999999,95)
 				
-				mSleep(2000);
+				mSleep(500)
 				repeat
+					mSleep(500)
 					tap(312,671);   --选课成功，点击我知道了
-					mSleep(1000)
+					mSleep(500)
 				until isColor(580,1084,0x5cd390,95) or isColor(469,1085,0xaaaaaa,95)
 				
-				mSleep(2000);
+				mSleep(500);
 				
-				goBack(1000);
+				goBack(800);
 			else
 				--进入空白页面
 				nLog("进入空白页面")
