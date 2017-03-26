@@ -244,7 +244,7 @@ function geToAllCourcesPage(position)
 	repeat
 		mSleep(500);
 		repeat
-			tap(80,311 + 123*(position-1));	--点击第一个关注的头像
+			tap(80,188 + 123*(position-1));	--点击第一个关注的头像
 			mSleep(1000)
 		until isColor(478, 1085,0x5cd390,90)
 		
@@ -407,8 +407,9 @@ function startToXiadan_new(begin)
 				nLog("可以选课")
 				mSleep(500)
 				repeat
-					-- body
-					tap(486,1086);  --点击稍后支付
+					if isColor(400,531,0xffffff,95) or isColor(400,500,0xffffff,95) then
+						tap(486,1086);  --点击稍后支付
+					end
 					mSleep(1000)
 				until isColor(580,1084,0x33c774,95) == false or isColor(621,451,0x999999,95)
 				
@@ -454,7 +455,7 @@ function doTheWork_xiadan_new(...)
 		repeat
 			tap(336,330);	--点击关注
 			mSleep(500)
-		until isColor(512,320, 0xc4c4c4,90) and isColor(321, 200,0xffffff, 90) and isColor(320,512,0xffffff,95)
+		until isColor(512,189, 0xc4c4c4,90) and isColor(321, 190,0xffffff, 90) and isColor(320,512,0xffffff,95)
 		
 		--进入关注列表页
 		
@@ -487,7 +488,7 @@ function doTheWork_xiadan_new(...)
 				goBack(1000);
 				position = position + 1;
 				mSleep(1000)
-			until isColor(514,311+123*(position-1),0xc4c4c4,90) == false
+			until isColor(514,189+123*(position-1),0xc4c4c4,90) == false
 			
 			nLog("没有更多关注的私教了。。end")
 		else

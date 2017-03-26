@@ -224,12 +224,12 @@ function geToAllCourcesPage_ipad()
 
 	repeat
 		mSleep(500)
-	until getColor(319,542) == 0xffffff
+	until getColor(350,532) == 0xffffff
 	
 	sucess = false;
 	repeat
 		mSleep(500);
-		tap(150,350);	--点击第一个关注的头像
+		tap(150,228);	--点击第一个关注的头像
 		repeat
 			mSleep(500)
 		until isColor( 540,  943, 0x5cd390, 85)
@@ -383,12 +383,12 @@ function doTheWork_xiadan_ipad(...)
 			
 			--回到关注列表页
 			mSleep(500);
-			if (isColor(580,475, 0xc4c4c4, 85)) then
+			if (isColor(580,344, 0xc4c4c4, 85)) then
 				--有第二个关注的人
 				sucess = false;
 				repeat
 					mSleep(500);
-					tap(150,475);	--点击第2个关注的头像
+					tap(150,350);	--点击第2个关注的头像
 					repeat
 						mSleep(500)
 					until isColor( 540,  943, 0x5cd390, 85)

@@ -215,13 +215,13 @@ function geToAllCourcesPage_iphone6p()
 		tap(580,496);	--点击关注
 		mSleep(1000)
 		nLog("正在加载关注列表")
-	until isColor(1052,474, 0xc4c4c4,85) and isColor(634,893, 0xffffff, 85)
+	until isColor(1052,284,0xc4c4c4,85) and isColor(634,893, 0xffffff, 85)
 	
 	sucess = false;
 	repeat
 		mSleep(500);
 		repeat
-			tap(130,480);	--点击第一个关注的头像
+			tap(130,296);	--点击第一个关注的头像
 			mSleep(1000)
 			nLog("正在加载私教小屋")
 		until isColor(952,2132,0x5cd390,90)
@@ -232,7 +232,7 @@ function geToAllCourcesPage_iphone6p()
 		step = 0;
 		repeat
 		-- body
-			tap(1138,1700+step*20); --每次下滑20px，尝试点击改点坐标
+			tap(1138,1500+step*20); --每次下滑20px，尝试点击改点坐标
 			mSleep(50)
 			step = step + 1;
 		until isColor(952,2132,0x5cd390,90) == false
@@ -385,14 +385,14 @@ function doTheWork_xiadan_iphone6p(...)
 			
 			--回到关注列表页
 			mSleep(500);
-			if (isColor(1056, 650, 0xc4c4c4, 85)) then
+			if (isColor(1056, 470, 0xc4c4c4, 85)) then
 				mSleep(1000)
 				--有第二个关注的人
 				sucess = false;
 				repeat
 					mSleep(500);
 					repeat
-						tap(130,660);	--点击第二个关注的头像
+						tap(130,478);	--点击第二个关注的头像
 						mSleep(1000)
 						nLog("正在加载私教小屋")
 					until isColor(952,2132,0x5cd390,90)
@@ -403,7 +403,7 @@ function doTheWork_xiadan_iphone6p(...)
 					step = 0;
 					repeat
 					-- body
-						tap(1138,1700+step*20); --每次下滑20px，尝试点击改点坐标
+						tap(1138,1500+step*20); --每次下滑20px，尝试点击改点坐标
 						mSleep(50)
 						step = step + 1;
 					until isColor(952,2132,0x5cd390,90) == false

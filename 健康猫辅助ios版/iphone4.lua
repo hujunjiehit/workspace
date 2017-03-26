@@ -236,13 +236,13 @@ function geToAllCourcesPage_iphone4()
 		tap(320,334);	--点击关注
 		mSleep(1000)
 		nLog("正在加载关注列表")
-	until isColor(335,200,0xffffff,90) and isColor(320,430,0xffffff, 90) and isColor(514,315,0xc4c4c4, 90)
+	until isColor(335,184,0xffffff,90) and isColor(320,430,0xffffff, 90) and isColor(514,189,0xc4c4c4, 90)
 
 	sucess = false;
 	repeat
 		mSleep(500);
 		repeat
-			tap(86,315);	--点击第一个关注的头像
+			tap(86,190);	--点击第一个关注的头像
 			mSleep(1000)
 			nLog("正在加载私教小屋")
 		until isColor(480,910,0x5cd390,90)
@@ -398,14 +398,14 @@ function doTheWork_xiadan_iphone4(...)
 			
 			--回到关注列表页
 			mSleep(500);
-			if (isColor(513, 504, 0xc4c4c4, 85)) then
+			if (isColor(513, 314, 0xc4c4c4, 85)) then
 				--有第二个关注的人
 				sucess = false;
 				repeat
 					
 					mSleep(500);
 					repeat
-						tap(92,507);	--点击第二个关注的头像
+						tap(92,317);   --点击第二个关注的头像
 						mSleep(1000)
 					until isColor(480,910,0x5cd390,90)
 					

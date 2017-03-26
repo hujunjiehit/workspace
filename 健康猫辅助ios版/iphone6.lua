@@ -213,7 +213,7 @@ function geToAllCourcesPage_iphone6(position)
 		mSleep(500);
 		repeat
 			--old 80,190
-			tap(80,313+123*(position-1));	--点击第一个关注的头像
+			tap(80,190+123*(position-1));	--点击第一个关注的头像
 			mSleep(2000)
 			nLog("正在加载私教小屋")
 		until isColor(566,1287,0x5cd390,90)
@@ -366,9 +366,11 @@ function startToXiadan_new_iphone6(begin)
 					goBack_iphone6(500);
 				elseif isColor(651,1289,0x33c774,85) then
 					nLog("可以选课")
+					mSleep(500)
 					repeat
-						mSleep(500)
-						tap(586,1284);  --点击稍后支付
+						if isColor( 449,517, 0xffffff, 95) or isColor(449,577,0xffffff,95) then 
+							tap(586,1284);  --点击稍后支付
+						end
 						mSleep(1000)
 					until isColor(460,1280,0x1f7746,95) or isColor(710,624,0x999999,95)
 					
@@ -411,7 +413,7 @@ function doTheWork_xiadan_new_iphone6(...)
 			tap(351,332);	--点击关注
 			mSleep(1000)
 			nLog("正在加载关注列表")
-		until isColor(390,198,0xffffff,90) and isColor(375,600,0xffffff, 90) and isColor(622,316,0xc4c4c4, 90)
+		until isColor(384,182,0xffffff,90) and isColor(375,600,0xffffff, 90) and isColor(624,190,0xc4c4c4, 90)
 		
 		--进入关注列表页
 		if yueke_mode == nil then
@@ -443,7 +445,7 @@ function doTheWork_xiadan_new_iphone6(...)
 				goBack_iphone6(500);
 				position = position + 1;
 				mSleep(500)
-			until isColor(623,313+123*(position-1),0xc4c4c4,90) == false
+			until isColor(623,189+123*(position-1),0xc4c4c4,90) == false
 			
 			nLog("没有更多关注的私教了。。end")
 		else
