@@ -10,6 +10,7 @@ function login_iphone4(userName,passWord)
 	
 	nLog("now begin to login iphone4");
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
+	mSleep(1500)
 	tap(560,908);	 --点击我的tab，拉起登陆界面 
 	mSleep(1500)
 	

@@ -9,6 +9,7 @@ end
 function login_ipadair(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
+	mSleep(1500)
 	tap(1248,1876);	 --点击我的tab，拉起登陆界面 
 	mSleep(1500)
 	

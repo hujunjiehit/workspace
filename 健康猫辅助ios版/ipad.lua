@@ -9,6 +9,7 @@ end
 function login_ipad(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
+	mSleep(1500)
 	tap(625,935);	 --点击我的tab，拉起登陆界面 
 	mSleep(1500)
 	

@@ -20,9 +20,9 @@ end
 function login(userName,passWord)
 	
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
-	tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	repeat
-		mSleep(500)
+		mSleep(1000)
+		tap(560,1083);	 --点击我的tab，拉起登陆界面 
 	until isColor(322,570,0xf2f2f2,95)
 	
 	tap(524,206) --收起输入法键盘

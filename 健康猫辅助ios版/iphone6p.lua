@@ -14,9 +14,9 @@ function login_iphone6p(userName,passWord)
 	
 	nLog("now begin to login iphone6p");
 	--r = runApp("com.AHdzrjk.healthmall");    --启动健康猫应用
-	tap(1088, 2126);	 --点击我的tab，拉起登陆界面 
 	repeat
-		mSleep(500)
+		mSleep(1000)
+		tap(1088, 2126);	 --点击我的tab，拉起登陆界面 
 	until isColor(614,888,0xf2f2f2,95)
 	
 	tap(1000,344) --收起输入法键盘
